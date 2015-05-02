@@ -1,0 +1,499 @@
+%YAML 1.2
+---
+name: Imba
+file_extensions: [imba,imbac]
+scope: source.imba
+
+# plain identifier-key (for object)
+# ([\w\-]+)[ \t]*(\:)
+
+contexts:
+  main:
+    - match: \b(import)\b
+      scope: keyword.control.imba
+      push: import
+
+    - match: \b(extern)\b
+      scope: keyword.control.imba
+
+    - match: \b(export )(var\s*|let\s*)\b
+      captures:
+        1: keyword.control.imba
+        2: keyword.control.imba
+      push: vardef
+
+    - include: body
+
+  keyword:
+    - match: \b(if|else|elif|unless|for( own)?|while|return|until|switch|then|when|try|catch|finally|continue|break|do|await)\b(?![\:\-])
+      scope: keyword.control.imba
+
+  body:
+    - include: keyword
+    - match: \b(var\s+|let\s+)\b
+      scope: keyword.control.imba
+      push: vardef
+
+    - match: \{
+      push: brackets
+
+    - match: \#\#\#
+      push: herecomment
+
+    - match: \)
+      scope: invalid.illegal.stray-bracket-end
+
+    - include: class
+    - include: tagdef
+    - include: def
+    - include: expr
+
+
+  alphanumerics:
+    - match: \b(true|yes)\b
+      scope: constant.language.boolean.true.imba
+    - match: \b(false|no)\b
+      scope: constant.language.boolean.false.imba
+    - match: \b(null|undefined)\b
+      scope: constant.language.boolean.null.imba
+
+  selector:
+    - match: (\$\$|\%\%|\$|\%)\(
+      push:
+        - meta_scope: meta.selector.all.imba
+        - include: selector_query
+        - match: \.
+          push: selector_class
+        - match: \)
+          pop: true
+    - match: (\%)(?=[a-z\.\#])
+      push:
+        - meta_scope: meta.selector.single.imba
+        - match: (?=[\s\t\)\]])
+          pop: true
+
+
+  selector_query:
+    - include: interpolation
+
+  selector_class:
+    - meta_scope: meta.selector.class.imba
+    - match: (?=\))
+      pop: true
+
+  tag:
+      - match: '(<)([\w\-\:]+)'
+        captures:
+         1: punctuation.section.tag.open.imba
+         2: entity.name.tag.type.imba
+         # should not include these in the document?
+        push: tag_content
+
+      - match: '(<)(?=[a-z\#\.\{])'
+        scope: punctuation.section.tag.open.imba
+        push: tag_content
+      - match: '(<)([ ]*)(>)'
+        captures:
+          1: punctuation.section.tag.open.imba
+          2: entity.name.tag.type.imba
+          3: punctuation.section.tag.close.imba
+        scope: meta.tag.imba
+
+  tag_content:
+    - meta_scope: meta.tag.imba
+    
+
+    - match: '\.{'
+      scope: entity.name.tag.class.evaled.imba
+      push:
+        - meta_content_scope: meta.interpolation.imba
+        - include: expr
+        - match: '}'
+          scope: entity.name.tag.class.evaled.imba
+          pop: true
+        
+
+    - match: '\#\{'
+      scope: entity.name.tag.id.evaled.imba
+      push:
+        - meta_content_scope: meta.interpolation.imba
+        - match: \}
+          scope: entity.name.tag.id.evaled.imba
+          pop: true
+        - include: expr
+    
+    - match: (\.)(-*[a-zA-Z][\w]*)?
+      scope: entity.name.tag.class.imba
+
+    - match: (\#)([a-zA-Z][\w]*)?
+      scope: entity.name.tag.id.imba
+
+    - match: \s([a-zA-Z][\w]*)\s*(\=)\s*
+      scope: entity.name.tag.attribute.imba
+      push:
+        - meta_scope: entity.name.tag.attributevalue.imba
+        - match: (?=(\s|\>))
+          pop: true
+        - include: unspaced_expr
+
+    - match: ([ ]+)
+      scope: meta.whitespace.imba
+
+    - match: '>'
+      scope: punctuation.section.tag.close.imba
+      pop: true
+
+  number:
+    - match: \b[0-9]+\.[0-9]+\b
+      scope: constant.numeric.float.imba
+    - match: \b[0-9]+\b
+      scope: constant.numeric.int.imba
+
+  array:
+    - match: \[
+      push:
+        - meta_scope: array.imba
+        - match: \]
+          pop: true
+        - include: body
+
+  special:
+    - match: \b(self)\b
+      scope: variable.language.scope.self.imba
+    - match: \b(this)\b
+      scope: variable.language.scope.this.imba
+    - match: \b(super)\b
+      scope: keyword.special.imba
+
+  operator:
+    - match: <=>|<(?!<|=)|>(?!<|=|>)|<=|>=| is | isa | isnt | not |===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈
+      scope: keyword.operator.comparison.imba
+    - match: \bnot\b|&&| and |\|\|| or | of | in |\^|\s:\\s|\?\|{1,2}|\?\&{1,2}|[\?\&]\>|∩|∪|∈|∉|∋|∌
+      scope: keyword.operator.logical.imba
+    - match: \=|\?\=|\&\&?\= 
+      scope: keyword.operator.assignment.imba
+    - match: (%|&|\*\*|\*|\+|\-|\/|×|÷|√)
+      scope: keyword.operator.arithmetic.imba
+
+  # comparison: /<=>|<(?!<|=)|>(?!<|=|>)|<=|>=| is | isnt | not |===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈/
+  # logical: /\bnot\b|&&| and |\|\|| or | in |\^|\s:\\s|\?\|{1,2}|\?\&{1,2}|[\?\&]\>|∩|∪|∈|∉|∋|∌/
+  # arithmetic: /(%|&|\*\*|\*|\+|\-|\/|×|÷|√)/
+  # assignment: /\=|\?\=|\&\&?\=/
+
+  value:
+    - include: selector
+    - include: number
+    - include: string
+    - include: symbol
+    - include: richstring
+    - include: alphanumerics
+    - include: singletag
+    - include: special
+    - include: assignable
+    - include: require
+    - include: tag
+    - include: heregex
+    - include: regex
+
+  punctuation:
+    - match: \.
+      scope: punctuation.access.imba
+
+  key:
+    - match: ((\$|@|_)?[\w\-]+)[ \t]*(\:)(?!\w)
+      captures:
+        3: punctuation.keyset.imba
+      scope: identifier.key.imba
+
+  symbol:
+    - match: (\:[@$\w_][\w\-_$]*)
+      scope: string.symbol.imba
+
+  accessor:
+    - match: (\.)(new)(?![\-\w])
+      scope: accessor.invocation.imba
+      captures:
+        1: punctuation.invoke.imba
+        2: keyword.special.imba
+          
+
+    - match: (\.)([a-z\_][\w\-]*)
+      scope: accessor.invocation.imba
+      captures:
+          1: punctuation.invoke.imba
+
+  identifier:
+    - match: ([a-z\_][\w\-]*)(\:)(?=\w)
+      scope: identifier.basic.imba
+      captures:
+          2: punctuation.access.imba
+
+    - match: ([a-z\_][\w\-]*)
+      scope: identifier.basic.imba
+
+  singletag:
+    - match: '(#[A-Za-z\_][\w\-]*)'
+      scope: identifier.singletag.imba
+
+  assignable:
+    - include: const
+    - include: ivar
+    - include: array
+    - include: accessor
+    - include: identifier
+
+  expr:
+    - include: key
+    - include: keyword
+    - include: value
+    - include: operator
+    - include: parens
+    - include: comment
+    - include: accessor
+    - include: identifier
+    - include: punctuation
+
+
+  unspaced_expr:
+    - include: value
+    - include: operator
+    - include: parens
+    - match: (?=\s)
+      pop: true
+
+  const:
+    - match: \b([A-Z][\w]*)\b
+      scope: identifier.class.imba
+
+  ivar: 
+    - match: (\@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*)(\:)(?=\w)
+      scope: variable.instance.imba
+      captures:
+          3: punctuation.access.imba
+
+    - match: \@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*
+      scope: variable.instance.imba
+
+
+  options:
+    - match: ([\w\-]+)[ \t]*(\:)
+      captures:
+        1: identifier.key.imba
+        2: identifier.key.imba
+      push:
+        - meta_scope: meta.option.imba
+        - meta_content_scope: meta.option.value.imba
+        - match: \,
+          pop: true
+        - match: (?=#[\t ]) # comment
+          pop: true
+        - match: (\n)
+          scope: meta.option.value.imba
+          pop: true
+        - include: value
+
+  vardef:
+    - meta_scope: vardef.imba
+    - include: expr
+    - match: \n
+      pop: true
+
+  richstring:
+    - match: '"'
+      push:
+        - meta_scope: string.quoted.double.imba
+        - include: interpolation
+        - match: \"
+          pop: true
+
+  string:
+    - match: \'
+      push:
+        - meta_scope: string.quoted.single.imba
+        - match: \'
+          pop: true
+
+  # should rather insert the classname
+  class:
+    - match: (\t*)(export |extend )?(global )?(class)[ ](([\w\.]+)?( (\<) ([\w\.]+))?)([ ]*)
+      captures:
+        2: keyword.control.imba
+        3: keyword.control.imba
+        4: keyword.control.imba
+        5: entity.name.type.class.imba
+        8: keyword.control.imba
+        # 6: entity.name.type.class.imba
+      scope: scope.classdef.imba
+      push:
+        - meta_content_scope: scope.class.imba
+        - match: ^(?!(\1\t+|\s*$))
+          pop: true
+        - include: class_body
+  # - match: \G[ ]+([A-Za-z\_][\w\#\.\-]*\=?)
+
+  class_head:
+    # - meta_scope: scope.classhead.imba
+    - match: (?=(\n|$))
+      pop: true
+
+  class_body:
+    - include: prop
+    - include: body
+
+
+  tagdef:
+    - match: (\t*)(extend )?(tag)[ ]((#?[\w\:\-]+)?( (\<) (#?[\w\:\-]+))?)
+      captures:
+        2: keyword.control.imba
+        3: keyword.control.imba
+        4: entity.name.type.tag.imba
+        5: entity.name.type.tagdef.imba
+        7: keyword.control.imba
+        # 6: entity.name.type.class.imba
+      scope: scope.tagdef.imba
+      push:
+        - meta_scope: scope.tag.imba
+        - match: ^(?!(\1\t+|\s*$))
+          pop: true
+        - include: tagdef_body
+
+  tagdef_body:
+    - include: prop
+    - include: body
+
+  def:
+    - match: (\t*)(def)(?=\s+[A-Za-z\_][\w\#\.\-]*)
+      captures:
+        2: keyword.control.imba
+
+      push:
+        - meta_content_scope: scope.method.imba
+        - match: ^(?!(\1\t+|\s*$))
+          pop: true
+        - match: \G[ ]+([A-Za-z\_][\w\#\.\-]*\=?)
+          captures:
+            1: entity.name.function.imba
+          push: def_params
+
+        - include: method_body
+
+  def_params:
+    - meta_scope: scope.methodparams.imba
+    - meta_content_scope: variable.parameter.function.imba
+    - match: (do)[ ]*
+      captures:
+        1: keyword.control.imba
+      pop: true
+      
+    - match: (?=(\n|$))
+      pop: true
+    - include: expr
+
+  method_body:
+    - include: body
+
+  prop:
+    - match: (\t*)(prop|attr)[ \t]+([A-Za-z_][\w\-]*)
+      captures:
+        2: keyword.control.imbac
+        3: entity.name.property.imba
+      push: 
+        - meta_content_scope: scope.property.imba
+        - match: ^(?!(\1\t+))
+          pop: true
+        - include: options
+        - include: comment
+
+  # simply accepts a propname and pops otherwise
+  _propname:
+    - match: \G([A-Za-z_][\w\-]*)\s+
+      scope: entity.name.property.imba
+      pop: true
+    - match: (?=.|$)
+      pop: true
+
+  # could go over multiple lines(!)
+  _propconfig:
+    - match: \G([A-Za-z_][\w\-]*)
+      scope: entity.name.propertyoption.imba
+    - match: ($)
+      pop: true
+
+  interpolation:
+    - match: \{
+      push:
+        - meta_scope: meta.interpolation
+        - include: expr
+        - match: \}
+          pop: true
+
+
+  filepath:
+    - match: \"
+      push:
+        - meta_scope: string.quoted.double.path.imba
+        - include: interpolation
+        - match: \"
+          pop: true
+    - match: \'
+      push:
+        - meta_scope: string.quoted.single.path.imba
+        - match: \'
+          pop: true
+    - match: (?=(\n|\)))
+      pop: true
+
+  parens: 
+    - match: \(
+      push:
+        - meta_scope: parens.imba
+        - match: \)
+          pop: true
+        - include: body
+      
+
+  brackets: 
+    - meta_scope: brackets.imba
+    - match: \}
+      pop: true
+    - include: body
+
+  herecomment:
+    - meta_scope: comment.block.imba
+    - match: \#\#\#
+      pop: true
+
+  comment:
+    - match: \#([ \t].*)?$
+      scope: comment.line.imba
+
+  heregex:
+    - match: \/\/\/
+      push:
+        - meta_scope: string.regexp.multiline.imba
+        - match: \/\/\/
+          pop: true
+
+  regex:
+    - match: \/(?=.*\/[gimy]?[ ]*([\,\)\]\>\#]|and\b|or\b|if\b|unless\b|\|\||&|=|$))
+      push:
+        - meta_scope: string.regexp.simple.imba
+        - match: \\\/
+          scope: escaped.imba
+        - match: \/
+          pop: true
+
+  forof:
+    - match: /(for) ([\w_][\-\w_]*)
+
+  import:
+    - match: \n
+      pop: true
+    - match: \bfrom\b
+      scope: keyword.control.c
+    - include: filepath
+
+  require:
+    - match: \b(require\s*)\b
+      scope: keyword.control.imba
+      push: filepath

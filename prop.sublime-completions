@@ -1,0 +1,11 @@
+{
+   "scope": "scope.property.imba - meta.option.value",
+
+	"completions": [
+		{ "trigger": "delegate", "contents": "delegate: ${1:object}$0" },
+		{ "trigger": "default\tdefault value of prop", "contents": "default: ${1:object}$0" },
+		{ "trigger": "guard\ttrigger method before change", "contents": "guard: ${1:yes}$0" },
+		{ "trigger": "type\tannotate expected type", "contents": "type: ${1:Object}$0" },
+		{ "trigger": "watch\ttrigger method on change", "contents": "watch: ${1:yes}$0" }
+	]
+}

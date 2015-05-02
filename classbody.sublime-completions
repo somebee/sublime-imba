@@ -1,0 +1,8 @@
+{
+   "scope": "scope.class.imba - (scope.method.imba,scope.property)",
+
+	"completions": [
+		{ "trigger": "prop\tadd property", "contents": "prop ${1:name}$0" },
+		{ "trigger": "attr\tadd attribute", "contents": "attr ${1:name}$0" }
+	]
+}

@@ -1,0 +1,69 @@
+[
+	{ "keys": ["{"], "command": "insert_snippet", "args": {"contents": "{${1:$SELECTION}}$0"}, "context":
+		[
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{
+				"operand": "(string.quoted.double.imba | string.interpolated.imba) - string source",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{ "keys": ["{"], "command": "insert_snippet", "args": {"contents": "{${1:$SELECTION}}$0"}, "context":
+		[
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{
+				"operand": "(string.regexp.simple.imba | string.regexp.multiline.imba) - string source",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{ "keys": [","], "command": "imba_comma", "args": {}, "context":
+		[{
+				"operand": "scope.property.imba",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+		}]
+	},
+
+	{ "keys": ["shift+enter"], "command": "insert_snippet", "args": {"contents": " ${1:yes} catch e ${2:null}$0"}, "context":[
+		{ "key": "preceding_text", "operator": "regex_contains", "operand": "(^|\t|\\s)try$", "match_all": true }
+	]},
+
+	{ "keys": ["shift+enter"], "command": "insert_snippet", "args": {"contents": " ${1:condition}\n\t${2:yes}"}, "context":[
+		{ "key": "preceding_text", "operator": "regex_contains", "operand": "(^|\t|\\s)if$", "match_all": true }
+	]},
+
+	{ "keys": ["backspace"], "command": "imba_delete_tag", "args": {}, "context":
+		[
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+			{ "key": "preceding_text", "operator": "regex_contains", "operand": "<$", "match_all": true },
+			{ "key": "following_text", "operator": "regex_contains", "operand": "^>", "match_all": true }
+		]
+	},
+	
+	{ "keys": ["<"], "command": "imba_open_tag", "context": [
+		{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+		{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+		{ "key": "preceding_text", "operator": "regex_contains", "operand": "(^|=|>|\\(|\\[|append )([ \t]*)$", "match_all": false }
+	]},
+	
+	{ "keys": ["<"], "command": "imba_open_tag", "context": [
+		{ "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true },
+		{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true }
+	]},
+
+	{ "keys": ["ctrl+super+g"], "command": "show_goto_definition", "context":
+		[
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
+		]
+	}
+]
