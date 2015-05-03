@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 name: Imba
-file_extensions: [imba,imbac]
+file_extensions: [imba]
 scope: source.imba
 
 # plain identifier-key (for object)
@@ -12,6 +12,8 @@ contexts:
     - match: \b(import)\b
       scope: keyword.control.imba
       push: import
+
+    - include: require
 
     - match: \b(extern)\b
       scope: keyword.control.imba
@@ -431,13 +433,15 @@ contexts:
   filepath:
     - match: \"
       push:
-        - meta_scope: string.quoted.double.path.imba
+        - meta_scope: string.quoted.filepath.double.imba
+        - meta_content_scope: meta.filepath.imba
         - include: interpolation
         - match: \"
           pop: true
     - match: \'
       push:
-        - meta_scope: string.quoted.single.path.imba
+        - meta_scope: string.quoted.filepath.single.imba
+        - meta_content_scope: meta.filepath.imba
         - match: \'
           pop: true
     - match: (?=(\n|\)))
@@ -490,7 +494,7 @@ contexts:
     - match: \n
       pop: true
     - match: \bfrom\b
-      scope: keyword.control.c
+      scope: keyword.control.imba
     - include: filepath
 
   require:

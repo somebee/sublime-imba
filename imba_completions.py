@@ -1,6 +1,59 @@
 import sublime, sublime_plugin
 import re
 
+import os
+import os.path
+import re
+import glob
+
+
+if sublime.version() < '3000':
+    # we are on ST2 and Python 2.X
+    _ST3 = False
+    # from fsutils import *
+else:
+    _ST3 = True
+    # from .fsutils import *
+
+
+
+def getviewcwd(view):
+    default = '/' ## What to return if nothing else found
+    cwd     = view.file_name() ## Try to get the current view's filename
+    if cwd == None:
+        cwd = default
+        if debug:
+            print("FSAutocompletion: getviewcwd: No view filename found")
+        ## File is not saved to disk, look for project dir
+        window = sublime.active_window()
+        if window == None:
+            if debug:
+                print("FSAutocompletion: getviewcwd: No active window found")
+            return cwd ## Give up here if we can't even get an active window!
+        try:
+            folder = window.project_data()['folders'].pop()
+            if debug:
+                print("FSAutocompletion: getviewcwd: folder found", folder)
+            cwd = folder['path']
+        except AttributeError:
+            if debug:
+                print("FSAutocompletion: getviewcwd: project_data not found, or no folders found in data")
+            try:
+                folder = window.folders().pop()
+                if debug:
+                    print("FSAutocompletion: getviewcwd: folder found", folder)
+                cwd = folder.path
+            except AttributeError:
+                if debug:
+                    print("FSAutocompletion: getviewcwd: folders() not found, or was empty list")
+                pass
+        if debug:
+            print("FSAutocompletion: getviewcwd: returning cwd", cwd)
+        return cwd
+    else:
+        return os.path.dirname(cwd)
+
+
 
 def match(rex, str):
     m = rex.match(str)
@@ -230,6 +283,9 @@ class ImbaCompletions(sublime_plugin.EventListener):
         print('info:',prefix,loc,char,in_tag,spaced)
 
         # if view.match_selector(loc,"identifier.singletag.imba")
+        if view.match_selector(loc,"string.quoted.filepath"):
+            print('ispath!')
+            return self.get_path_completions(view,prefix,locations)
 
         if char == '@':
             items = self.get_ivars(view,locations[0])
@@ -303,6 +359,35 @@ class ImbaCompletions(sublime_plugin.EventListener):
     def on_window_command(self,view, command_name, args):
         # print("on_window_command from completions!" + command_name)
         pass
+
+    def get_path_completions(self, view, prefix, locations):
+
+
+        region = view.extract_scope(locations[0])
+        region = sublime.Region(region.a + 1, region.b - 1)
+        base = sublime.Region(region.a,locations[0] - len(prefix))
+        path = view.substr(region)
+        word = view.word(region)
+
+        rel = getviewcwd(view) + '/'
+
+        if rel == '//':
+            return []
+
+        realpath = os.path.realpath(rel + view.substr(base))
+        # print(path,region,word,view.substr(base),rel,realpath)
+
+        items = []
+
+        for f in glob.iglob(realpath + "/*"): # generator, search immediate subdirectories 
+            name = f.replace(realpath + '/','')
+            if os.path.isdir(f):
+                name = name + '/'
+            
+            items.append((name + '\t' + f,name.replace('.imba','')))
+
+        return (items,sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+
 
     def get_completions(self, view, prefix, locations, is_inside_tag):
         # see if it is in tag.attr or tag#attr format

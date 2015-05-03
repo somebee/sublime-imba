@@ -7,8 +7,10 @@ class ImbaCommaCommand(sublime_plugin.TextCommand):
     	loc = self.view.sel()[0]
     	if self.view.match_selector(loc.a,"scope.property.imba"):
     		self.view.run_command("insert",{"characters": ", "})
-    		self.view.run_command("auto_complete")
+    		self.view.run_command("auto_complete", {'disable_auto_insert': True,'next_completion_if_showing': False})
+    		self.view.end_edit(edit)
     	else:
+
     		pass
 
 class ImbaDeleteTagCommand(sublime_plugin.TextCommand):

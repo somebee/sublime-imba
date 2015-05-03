@@ -17,6 +17,7 @@
 
     "auto_complete_triggers": [
         {"selector": "source.imba - comment", "characters": "@"},
+        {"selector": "string.quoted.filepath", "characters": "/"},
     	{"selector": "source.imba scope.property", "characters": " ,"},
         {"selector": "source.imba meta.tag", "characters": ".# "},
     	{"selector": "source.imba meta.selector.imba.all", "characters": ".:# "},
