@@ -7,6 +7,9 @@ scope: source.imba
 # plain identifier-key (for object)
 # ([\w\-]+)[ \t]*(\:)
 
+variables:
+  ident: '[A-Za-z_][A-Za-z_0-9]*'
+
 contexts:
   main:
     - match: \b(import)\b
@@ -27,7 +30,7 @@ contexts:
     - include: body
 
   keyword:
-    - match: \b(if|else|elif|unless|for( own)?|while|return|until|switch|then|when|try|catch|finally|continue|break|do|await)\b(?![\:\-])
+    - match: \b(if|else|elif|unless|for( own)?|while|return|until|switch|then|when|try|catch|finally|continue|break|throw|do|await|typeof)\b(?![\:\-])
       scope: keyword.control.imba
 
   body:
@@ -160,15 +163,21 @@ contexts:
         - include: body
 
   special:
-    - match: \b(self)\b
+    - match: \b(self)\b(\:)?(?![\-])
       scope: variable.language.scope.self.imba
-    - match: \b(this)\b
+      captures:
+        2: punctuation.access.imba
+    - match: \b(this)\b(\:)?(?![\-])
       scope: variable.language.scope.this.imba
-    - match: \b(super)\b
+      captures:
+        2: punctuation.access.imba
+    - match: \b(super)\b(\:)?(?![\-])
       scope: keyword.special.imba
+      captures:
+        2: punctuation.access.imba
 
   operator:
-    - match: <=>|<(?!<|=)|>(?!<|=|>)|<=|>=| is | isa | isnt | not |===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈
+    - match: <=>|<(?!<|=)|>(?!<|=|>)|<=|>=| is | isa | isnt | not |\btypeof\b|===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈
       scope: keyword.operator.comparison.imba
     - match: \bnot\b|&&| and |\|\|| or | of | in |\^|\s:\\s|\?\|{1,2}|\?\&{1,2}|[\?\&]\>|∩|∪|∈|∉|∋|∌
       scope: keyword.operator.logical.imba
@@ -191,6 +200,7 @@ contexts:
     - include: alphanumerics
     - include: singletag
     - include: special
+    - include: accessable
     - include: assignable
     - include: require
     - include: tag
@@ -224,6 +234,8 @@ contexts:
       captures:
           1: punctuation.invoke.imba
 
+
+
   identifier:
     - match: ([a-z\_][\w\-]*)(\:)(?=\w)
       scope: identifier.basic.imba
@@ -234,8 +246,19 @@ contexts:
       scope: identifier.basic.imba
 
   singletag:
-    - match: '(#[A-Za-z\_][\w\-]*)'
-      scope: identifier.singletag.imba
+    - match: '(#[A-Za-z\_][\w\-]*)(\:)?'
+      captures:
+        1: identifier.singletag.imba
+        2: punctuation.access.imba
+
+  accessable:
+    - include: identifier
+    - include: ivar
+    - include: const
+    # - match: \b([A-Z][\w]*)\b
+    #   scope: identifier.const.imba
+    # - match: (\:)
+    #   scope: punctuation.access.imba
 
   assignable:
     - include: const
@@ -264,13 +287,15 @@ contexts:
       pop: true
 
   const:
-    - match: \b([A-Z][\w]*)\b
-      scope: identifier.class.imba
+    - match: \b([A-Z][\w]*)\b(\:)?
+      captures:
+        1: identifier.class.imba
+        2: punctuation.access.imba
 
   ivar: 
     - match: (\@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*)(\:)(?=\w)
-      scope: variable.instance.imba
       captures:
+          1: variable.instance.imba
           3: punctuation.access.imba
 
     - match: \@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*
@@ -364,9 +389,10 @@ contexts:
     - include: body
 
   def:
-    - match: (\t*)(def)(?=\s+[A-Za-z\_][\w\#\.\-]*)
+    - match: (\t*)(export |async )?(def)(?=\s+[A-Za-z\_][\w\#\.\-]*)
       captures:
         2: keyword.control.imba
+        3: keyword.control.imba
 
       push:
         - meta_content_scope: scope.method.imba
