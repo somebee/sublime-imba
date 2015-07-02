@@ -408,7 +408,7 @@ contexts:
   def_params:
     - meta_scope: scope.methodparams.imba
     - meta_content_scope: variable.parameter.function.imba
-    - match: (do)[ ]*
+    - match: (do)\b[ ]*
       captures:
         1: keyword.control.imba
       pop: true
