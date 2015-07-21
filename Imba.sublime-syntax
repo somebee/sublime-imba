@@ -183,6 +183,8 @@ contexts:
       scope: keyword.operator.logical.imba
     - match: \=|\?\=|\&\&?\= 
       scope: keyword.operator.assignment.imba
+    - match: (\?\.|\?\:)
+      scope: keyword.operator.accessor.imba
     - match: (%|&|\*\*|\*|\+|\-|\/|×|÷|√)
       scope: keyword.operator.arithmetic.imba
 
@@ -225,14 +227,16 @@ contexts:
     - match: (\.)(new)(?![\-\w])
       scope: accessor.invocation.imba
       captures:
-        1: punctuation.invoke.imba
+        # 1: punctuation.invoke.imba
+        1: keyword.operator.accessor.imba
         2: keyword.special.imba
           
 
     - match: (\.)([a-z\_][\w\-]*)
       scope: accessor.invocation.imba
       captures:
-          1: punctuation.invoke.imba
+          1: keyword.operator.accessor.imba
+          # 1: punctuation.invoke.imba
 
 
 
@@ -240,7 +244,8 @@ contexts:
     - match: ([a-z\_][\w\-]*)(\:)(?=\w)
       scope: identifier.basic.imba
       captures:
-          2: punctuation.access.imba
+          # 2: punctuation.access.imba
+          2: keyword.operator.accessor.imba
 
     - match: ([a-z\_][\w\-]*)
       scope: identifier.basic.imba
@@ -249,7 +254,8 @@ contexts:
     - match: '(#[A-Za-z\_][\w\-]*)(\:)?'
       captures:
         1: identifier.singletag.imba
-        2: punctuation.access.imba
+        # 2: punctuation.access.imba
+        2: keyword.operator.accessor.imba
 
   accessable:
     - include: identifier
@@ -290,13 +296,15 @@ contexts:
     - match: \b([A-Z][\w]*)\b(\:)?
       captures:
         1: identifier.class.imba
-        2: punctuation.access.imba
+        # 2: punctuation.access.imba
+        2: keyword.operator.accessor.imba
 
   ivar: 
     - match: (\@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*)(\:)(?=\w)
       captures:
           1: variable.instance.imba
-          3: punctuation.access.imba
+          # 3: punctuation.access.imba
+          3: keyword.operator.accessor.imba
 
     - match: \@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*
       scope: variable.instance.imba
