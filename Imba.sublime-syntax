@@ -133,7 +133,7 @@ contexts:
     - match: (\#)([a-zA-Z][\w]*)?
       scope: entity.name.tag.id.imba
 
-    - match: \s([a-zA-Z][\w]*)\s*(\=)\s*
+    - match: \s([@\:]?[a-zA-Z][\w\-]*)\s*(\=)\s*
       scope: entity.name.tag.attribute.imba
       push:
         - meta_scope: entity.name.tag.attributevalue.imba
@@ -166,15 +166,15 @@ contexts:
     - match: \b(self)\b(\:)?(?![\-])
       scope: variable.language.scope.self.imba
       captures:
-        2: punctuation.access.imba
+        2: keyword.operator.accessor.imba
     - match: \b(this)\b(\:)?(?![\-])
       scope: variable.language.scope.this.imba
       captures:
-        2: punctuation.access.imba
+        2: keyword.operator.accessor.imba
     - match: \b(super)\b(\:)?(?![\-])
       scope: keyword.special.imba
       captures:
-        2: punctuation.access.imba
+        2: keyword.operator.accessor.imba
 
   operator:
     - match: <=>|<(?!<|=)|>(?!<|=|>)|<=|>=| is | isa | isnt | not |\btypeof\b|===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈
@@ -211,7 +211,7 @@ contexts:
 
   punctuation:
     - match: \.
-      scope: punctuation.access.imba
+      scope: keyword.operator.accessor.imba
 
   key:
     - match: ((\$|@|_)?[\w\-]+)[ \t]*(\:)(?!\w)
@@ -513,12 +513,14 @@ contexts:
           pop: true
 
   regex:
-    - match: \/(?=.*\/[gimy]?[ ]*([\,\)\]\>\#]|and\b|or\b|if\b|unless\b|\|\||&|=|$))
+    - match: \/(?=.*\/[gimy]*[ ]*([\,\)\]\>\#]|and\b|or\b|if\b|unless\b|\|\||&|=|$))
       push:
         - meta_scope: string.regexp.simple.imba
-        - match: \\\/
+        - match: '\\\\'
           scope: escaped.imba
-        - match: \/
+        - match: '\\\/'
+          scope: escaped.imba
+        - match: \/[gimy]*
           pop: true
 
   forof:
