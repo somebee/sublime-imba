@@ -4,13 +4,13 @@
         {
             "name": "Imba",
             "description": "Syntax highlighting,commands, snippets and more for Imba",
-            "author": "aponxi",
+            "author": "somebee",
             "homepage": "https://github.com/somebee/sublime-imba",
             "last_modified": "2015-07-27 12:01:32",
             "platforms": {
                 "*": [{
                     "version": "0.1.0",
-                    "url": "https://github.com/somebee/sublime-imba/zip/master"
+                    "url": "https://nodeload.github.com/somebee/sublime-imba/zip/master"
                 }]
             }
         }
