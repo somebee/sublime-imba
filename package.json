@@ -1,18 +1,15 @@
 {
-    "schema_version": "1.2",
+    "schema_version": "3.0.0",
     "packages": [
         {
             "name": "Imba",
-            "description": "Syntax highlighting,commands, snippets and more for Imba",
-            "author": "somebee",
-            "homepage": "https://github.com/somebee/sublime-imba",
-            "last_modified": "2015-07-27 12:01:32",
-            "platforms": {
-                "*": [{
-                    "version": "0.1.0",
-                    "url": "https://nodeload.github.com/somebee/sublime-imba/zip/master"
-                }]
-            }
+            "details": "https://github.com/somebee/sublime-imba",
+            "releases": [
+                {
+                    "sublime_text": ">=3000",
+                    "tags": true
+                }
+            ]
         }
     ]
 }
