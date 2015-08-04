@@ -45,7 +45,6 @@ class ImbaEventTrigger(object):
 				# print("rescheduled" + str(delta))
 				return
 
-		print("local run_event")
 		self.running = False
 		self.run()
 		pass
@@ -110,8 +109,7 @@ class ImbaDocumentListener(sublime_plugin.EventListener):
 
 	def on_post_save_async(self, view):
 		# self.log('document was saved')
-		self.log(view.file_name())
-
+		# self.log(view.file_name())
 		name, ext = os.path.splitext(view.file_name())
 
 		# only if it has changed
@@ -119,8 +117,15 @@ class ImbaDocumentListener(sublime_plugin.EventListener):
 		if ext == '.imba':
 			data = self.get_annotations_for_view(view)
 			show_annotations_for_view(view,data)
-		else:
-			self.log('dont do anything')
+
+	def on_load_async(self,view):
+		name, ext = os.path.splitext(view.file_name())
+
+		if ext == '.imba':
+			data = self.get_annotations_for_view(view)
+			show_annotations_for_view(view,data)
+
+		pass
 
 	def get_annotations_for_view(self, view):
 		return get_annotations_for_file(view.file_name())
