@@ -185,7 +185,7 @@ contexts:
       scope: keyword.operator.assignment.imba
     - match: (\?\.|\?\:)
       scope: keyword.operator.accessor.imba
-    - match: (%|&|\*\*|\*|\+|\-|\/|×|÷|√)
+    - match: (%|&|\*\*|\*|\+|\-|\/|×|÷|√|\+\+|\-\-)
       scope: keyword.operator.arithmetic.imba
 
   # comparison: /<=>|<(?!<|=)|>(?!<|=|>)|<=|>=| is | isnt | not |===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈/
