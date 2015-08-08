@@ -247,9 +247,15 @@ def get_annotations_for_file(path):
 	pars = "analyze %s"  % path
 	args = [cmd,'analyze',path]
 
-	proc = subprocess.Popen(args, stdin=subprocess.PIPE,
-	stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-	env={"PATH": "/usr/local/bin:$PATH"})
+	# what about on windows?
+	proc = subprocess.Popen(args,
+		stdin=subprocess.PIPE,
+		stdout=subprocess.PIPE,
+		stderr=subprocess.STDOUT,
+		env={"PATH": "/usr/local/bin:$PATH"}
+	)
+
+
 	output, err = proc.communicate()
 	output = output.decode("utf-8")
 	return json.loads(output)# str(output).rstrip(os.linesep).decode('ascii').strip()
