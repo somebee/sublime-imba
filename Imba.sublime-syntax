@@ -106,7 +106,7 @@ contexts:
 
   tag_content:
     - meta_scope: meta.tag.imba
-    
+    - include: parens
 
     - match: '\.{'
       scope: entity.name.tag.class.evaled.imba
@@ -116,7 +116,15 @@ contexts:
         - match: '}'
           scope: entity.name.tag.class.evaled.imba
           pop: true
-        
+    
+    - match: '\@{'
+      scope: entity.name.tag.key.evaled.imba
+      push:
+        - meta_content_scope: meta.interpolation.imba
+        - include: expr
+        - match: '}'
+          scope: entity.name.tag.key.evaled.imba
+          pop: true
 
     - match: '\#\{'
       scope: entity.name.tag.id.evaled.imba
@@ -133,7 +141,7 @@ contexts:
     - match: (\#)([a-zA-Z][\w]*)?
       scope: entity.name.tag.id.imba
 
-    - match: \s([@\:]?[a-zA-Z][\w\-]*)\s*(\=)\s*
+    - match: \s+([@\:]?[a-zA-Z][\w\-]*)\s*(\=)\s*
       scope: entity.name.tag.attribute.imba
       push:
         - meta_scope: entity.name.tag.attributevalue.imba
