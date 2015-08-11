@@ -135,10 +135,10 @@ contexts:
           pop: true
         - include: expr
     
-    - match: (\.)(-*[a-zA-Z][\w]*)?
+    - match: (\.)(-*[a-zA-Z][\w\-]*)?
       scope: entity.name.tag.class.imba
 
-    - match: (\#)([a-zA-Z][\w]*)?
+    - match: (\#)([a-zA-Z][\w\-]*)?
       scope: entity.name.tag.id.imba
 
     - match: \s+([@\:]?[a-zA-Z][\w\-]*)\s*(\=)\s*
