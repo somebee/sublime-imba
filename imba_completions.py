@@ -251,7 +251,7 @@ class ImbaCompletions(sublime_plugin.EventListener):
 
         if len(prefix) > 1 and prefix.startswith(self.prev_prefix):
             # is this right?
-            # print('prefix starts with the previous(!)')
+            print('prefix starts with the previous(!)')
             return ([],sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
 
         self.prev_prefix = prefix
@@ -284,7 +284,6 @@ class ImbaCompletions(sublime_plugin.EventListener):
 
         # if view.match_selector(loc,"identifier.singletag.imba")
         if view.match_selector(loc,"string.quoted.filepath"):
-            print('ispath!')
             return self.get_path_completions(view,prefix,locations)
 
         if char == '@':
@@ -321,19 +320,19 @@ class ImbaCompletions(sublime_plugin.EventListener):
                 items = self.default_pseudo_selectors
             elif char == " ":
                 items = self.default_html_tags
+
         elif char == "<":
-            print('show tag prefixes!!')
             return self.prefix_tag_completion
             # items = (items,sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
             # return items
+
         elif char == "#" or view.match_selector(loc - 1,"identifier.singletag.imba"):
             items = self.get_selector_ids(view,'#')
-        elif view.match_selector(loc - 1,"comment"):
-            True
-        else:
-            return (items,sublime.INHIBIT_WORD_COMPLETIONS)
 
-        print('test',self.complete_context)
+        elif view.match_selector(loc - 1,"comment"):
+            return (items,sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+        else:
+            return (items,sublime.INHIBIT_EXPLICIT_COMPLETIONS)
 
         return (items,sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
         # basically returning nothing?!?
@@ -411,7 +410,7 @@ class ImbaCompletions(sublime_plugin.EventListener):
 
         if prefix == '':
             # need completion list to match
-            return ([], sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+            return ([])
 
         # match completion list using prefix
         completion_list = self.prefix_completion_dict.get(prefix[0], [])
@@ -421,6 +420,7 @@ class ImbaCompletions(sublime_plugin.EventListener):
             completion_list = [(pair[0], '<' + pair[1]) for pair in completion_list]
 
         flags = 0
+
         if is_inside_tag:
             sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS
 
