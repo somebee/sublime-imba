@@ -145,7 +145,7 @@ def add_reg(view,data,regions,name,style,options,icon = ""):
 	pass
 
 def show_annotations_for_view(view,data):
-
+	start = time()
 	prev = get_cached_annotations_for_view(view) # IMBA_HINT_CACHE[str(view.id())] or {}
 
 	if prev and "regions" in prev:
@@ -156,9 +156,9 @@ def show_annotations_for_view(view,data):
 	data["regions"] = []
 	# add helper-class for different regions?
 	# a class that wraps the format output by imba would be very helpful
+	icon = ""
 
 	options = sublime.PERSISTENT
-	icon = ""
 	options |= sublime.DRAW_NO_OUTLINE
 	options |= sublime.DRAW_SOLID_UNDERLINE
 	style = "hint.var"
@@ -236,13 +236,15 @@ def show_annotations_for_view(view,data):
 
 
 	IMBA_HINT_CACHE[str(view.id())] = data
-
+	elapsed = time() - start
+	print("took " + str(elapsed))
 	pass
 
 def get_annotations_for_file(path):
 
 	# cmd = "/usr/local/bin/imba"
 	# cmd = "/Users/sindre/Code/imba/bin/imba"
+	start = time()
 	cmd = "imba"
 	pars = "analyze %s"  % path
 	args = [cmd,'analyze',path]
@@ -258,6 +260,8 @@ def get_annotations_for_file(path):
 
 	output, err = proc.communicate()
 	output = output.decode("utf-8")
+	elapsed = time() - start
+	print("analyze took " + str(elapsed) + "s")
 	return json.loads(output)# str(output).rstrip(os.linesep).decode('ascii').strip()
 
 def get_cached_annotations_for_view(view):
