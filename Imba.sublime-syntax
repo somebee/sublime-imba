@@ -282,6 +282,7 @@ contexts:
     - include: identifier
 
   expr:
+    - include: require
     - include: key
     - include: keyword
     - include: value
@@ -537,9 +538,10 @@ contexts:
   import:
     - match: \n
       pop: true
-    - match: \bfrom\b
+    - match: \b(from|as)\b
       scope: keyword.control.imba
     - include: filepath
+    - include: const
 
   require:
     - match: \b(require\s*)\b
