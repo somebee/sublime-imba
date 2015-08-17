@@ -98,25 +98,17 @@ class ImbaDocumentListener(sublime_plugin.EventListener):
 		IMBA_CARET_HOLD_HANDLER.delay(1000)
 		return
 
-	# def on_text_command(self,view, cmd, args):
-	# 	print("run command " + cmd)
-	# 	if cmd == "commit_completion":
-	# 		warn = view.get_status("hint.warning")
-	# 		if warn:
-	# 			print("cancel command!")
-	# 			return ("noop",())
-	# 	pass
-
 	def on_post_save_async(self, view):
-		# self.log('document was saved')
-		# self.log(view.file_name())
 		name, ext = os.path.splitext(view.file_name())
 
 		# only if it has changed
 
 		if ext == '.imba':
+			start = time()
 			data = self.get_annotations_for_view(view)
+			print("getting took " + str(time() - start) + "s")
 			show_annotations_for_view(view,data)
+			
 
 	def on_load_async(self,view):
 		name, ext = os.path.splitext(view.file_name())
@@ -148,10 +140,8 @@ def show_annotations_for_view(view,data):
 	start = time()
 	prev = get_cached_annotations_for_view(view) # IMBA_HINT_CACHE[str(view.id())] or {}
 
-	if prev and "regions" in prev:
-		for region in prev["regions"]:
-			# print("remove region from prev!")
-			view.erase_regions(region)
+	prev_regions = view.settings().get("imba.regions",[])
+	clear_regions_for_view(view)
 
 	data["regions"] = []
 	# add helper-class for different regions?
@@ -234,6 +224,7 @@ def show_annotations_for_view(view,data):
 	view.add_regions("hint.warning",Regs.warn,style,icon,options)
 	view.add_regions("hint.error",Regs.err,style,icon,options)
 
+	view.settings().set("imba.regions", data["regions"])
 
 	IMBA_HINT_CACHE[str(view.id())] = data
 	elapsed = time() - start
@@ -266,6 +257,18 @@ def get_annotations_for_file(path):
 
 def get_cached_annotations_for_view(view):
 	return IMBA_HINT_CACHE.get(str(view.id()),None)
+
+def clear_regions_for_view(view):
+	view.erase_regions("hint.warning")
+	view.erase_regions("hint.error")
+	view.erase_regions("hint.var")
+
+	regions = view.settings().get("imba.regions",[])
+	
+	for region in regions:
+		view.erase_regions(region)
+
+	pass
 
 def show_err(view,region,msg):
 	global CURRENT_ERR_REGION
