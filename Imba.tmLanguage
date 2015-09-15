@@ -387,9 +387,9 @@
 		<dict>
 		<key>name</key>
 		<string>meta.class.imba</string>
-		<key>begin</key>
-		<string>(\t*)(local\s|export\s|extend\s)*(class)\s+(([A-Z]\w*\.)*([A-Z]\w*))(\s*(&lt;)\s*(([A-Z]\w*\.)*([A-Z]\w*)))?</string>
-		<key>beginCaptures</key>
+		<key>match</key>
+		<string>(\t*)(export\s|extend\s|global\s)*(class)\s+(([A-Z]\w*\.)*([A-Z]\w*))(\s*(&lt;)\s*(([A-Z]\w*\.)*([A-Z]\w*)))?</string>
+		<key>captures</key>
 		<dict>
 		<key>2</key>
 		<dict>
@@ -452,18 +452,6 @@
 		</dict>
 		
 		</dict>
-		
-		<key>end</key>
-		<string>^(?!(\1\t+|\t*$))</string>
-		<key>contentName</key>
-		<string>meta.class.body.imba</string>
-		<key>patterns</key>
-		<array>
-		<dict>
-		<key>include</key>
-		<string>$self</string>
-		</dict>
-		</array>
 		
 		</dict>
 		

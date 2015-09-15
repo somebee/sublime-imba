@@ -342,20 +342,28 @@ contexts:
     - match: \n
       pop: true
 
+  string-content:
+    - match: \\\s*\n
+      scope: constant.character.escape.newline.js
+    - match: '\\(x[\da-fA-F]{2}|u[\da-fA-F]{4}|.)'
+      scope: constant.character.escape.js
+
   richstring:
     - match: '"'
       push:
         - meta_scope: string.quoted.double.imba
         - include: interpolation
-        - match: \"
+        - match: '"'
           pop: true
+        - include: string-content
 
   string:
     - match: \'
       push:
         - meta_scope: string.quoted.single.imba
-        - match: \'
+        - match: "'"
           pop: true
+        - include: string-content
 
   # should rather insert the classname
   class:
@@ -487,6 +495,7 @@ contexts:
         - meta_content_scope: meta.filepath.imba
         - match: \'
           pop: true
+    - include: comment
     - match: (?=(\n|\)))
       pop: true
 
