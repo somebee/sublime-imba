@@ -79,7 +79,11 @@ class ImbaDocumentListener(sublime_plugin.EventListener):
 		return view.settings().get('is_widget')
 
 	def on_modified(self, view):
-		# print('document was modified')
+		print('document was modified')
+		return
+
+	def on_text_command(self, view, cmd, args):
+		print('received text command')
 		return
 
 	def on_selection_modified(self,view):
@@ -102,11 +106,13 @@ class ImbaDocumentListener(sublime_plugin.EventListener):
 		name, ext = os.path.splitext(view.file_name())
 
 		# only if it has changed
+		print("annotate post_save_async?")
 
 		if ext == '.imba':
 			start = time()
 			data = self.get_annotations_for_view(view)
 			print("getting took " + str(time() - start) + "s")
+			if view.is_dirty(): return
 			show_annotations_for_view(view,data)
 			
 
@@ -115,6 +121,7 @@ class ImbaDocumentListener(sublime_plugin.EventListener):
 
 		if ext == '.imba':
 			data = self.get_annotations_for_view(view)
+			if view.is_dirty(): return
 			show_annotations_for_view(view,data)
 
 		pass
