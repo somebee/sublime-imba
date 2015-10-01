@@ -414,7 +414,7 @@ contexts:
     - include: body
 
   def:
-    - match: (\t*)(export |async )?(def)(?=\s+[A-Za-z\_][\w\#\.\-]*)
+    - match: (\t*)(export |async | global)?(def)(?=\s+[A-Za-z\_][\w\#\.\-]*)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
