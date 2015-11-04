@@ -35,7 +35,7 @@ contexts:
 
   body:
     - include: keyword
-    - match: \b(var\s+|let\s+)\b
+    - match: \b(var|let)\b
       scope: keyword.control.imba
       push: vardef
 
