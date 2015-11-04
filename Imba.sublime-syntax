@@ -94,7 +94,7 @@ contexts:
          # should not include these in the document?
         push: tag_content
 
-      - match: '(<)(?=[a-z\#\.\{])'
+      - match: '(<)(?=[a-z\#\.\{\@])'
         scope: punctuation.section.tag.open.imba
         push: tag_content
       - match: '(<)([ ]*)(>)'
@@ -135,6 +135,9 @@ contexts:
           pop: true
         - include: expr
     
+    - match: (\@)(-*[a-zA-Z][\w\-]*)?
+      scope: entity.name.tag.ref.imba
+
     - match: (\.)(-*[a-zA-Z][\w\-]*)?
       scope: entity.name.tag.class.imba
 
