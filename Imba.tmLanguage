@@ -12,7 +12,7 @@
 		<key>name</key>
 		<string>comment.block.imba</string>
 		<key>begin</key>
-		<string>^[\t]*###</string>
+		<string>^[ \t]*###</string>
 		<key>end</key>
 		<string>###(?:[ \t]*\n)</string>
 		<key>captures</key>
@@ -388,7 +388,7 @@
 		<key>name</key>
 		<string>meta.class.imba</string>
 		<key>match</key>
-		<string>(\t*)(export\s|extend\s|global\s)*(class)\s+(([A-Z]\w*\.)*([A-Z]\w*))(\s*(&lt;)\s*(([A-Z]\w*\.)*([A-Z]\w*)))?</string>
+		<string>([ \t]*)(export\s|extend\s|global\s)*(class)\s+(([A-Z]\w*\.)*([A-Z]\w*))(\s*(&lt;)\s*(([A-Z]\w*\.)*([A-Z]\w*)))?</string>
 		<key>captures</key>
 		<dict>
 		<key>2</key>
@@ -523,7 +523,7 @@
 		<key>name</key>
 		<string>meta.function.method.imba</string>
 		<key>begin</key>
-		<string>^(\t*)(local\s|export\s|global\s)*(def)\s(([A-Za-z][A-Za-z0-9_]*[\.\#])?([A-Za-z\_][A-Za-z0-9_\-]*[\=\?\!]?))(?=([\s\t]|$))</string>
+		<string>^([ \t]*)(local\s|export\s|global\s)*(def)\s(([A-Za-z][A-Za-z0-9_]*[\.\#])?([A-Za-z\_][A-Za-z0-9_\-]*[\=\?\!]?))(?=([\s\t]|$))</string>
 		<key>beginCaptures</key>
 		<dict>
 		<key>0</key>
@@ -921,14 +921,7 @@
 		<key>name</key>
 		<string>meta.indent.imba</string>
 		<key>match</key>
-		<string>^(\t+)</string>
-		</dict>
-		
-		<dict>
-		<key>name</key>
-		<string>meta.invalid.indent.imba</string>
-		<key>match</key>
-		<string>^([ ]+)</string>
+		<string>^([ \t]+)</string>
 		</dict>
 		
 		</array>

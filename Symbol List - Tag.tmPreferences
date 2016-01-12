@@ -5,13 +5,13 @@
 	<key>name</key>
 	<string>Symbol List: Tag</string>
 	<key>scope</key>
-	<string>source.imba entity.name.type.tag</string>
+	<string>source.imba entity.name.type.tagdef</string>
 	<key>settings</key>
 	<dict>
 		<key>symbolTransformation</key>
 		<string>s/^/tag /</string>
 	</dict>
 	<key>uuid</key>
-	<string>4D4AB120-00EC-11E4-9191-0800200C9A66</string>
+	<string>4D4AB120-00EC-11E4-9191-0800200C9A67</string>
 </dict>
 </plist>

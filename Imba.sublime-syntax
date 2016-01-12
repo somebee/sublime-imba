@@ -370,7 +370,7 @@ contexts:
 
   # should rather insert the classname
   class:
-    - match: (\t*)(export |extend )?(global )?(class)[ ](([\w\.]+)?( (\<) ([\w\.]+))?)([ ]*)
+    - match: ([\t ]*)(export |extend )?(global )?(class)[ ](([\w\.]+)?( (\<) ([\w\.]+))?)([ ]*)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
@@ -381,7 +381,7 @@ contexts:
       scope: scope.classdef.imba
       push:
         - meta_content_scope: scope.class.imba
-        - match: ^(?!(\1\t+|\s*$))
+        - match: ^(?!(\1[\t ]+|\s*$))
           pop: true
         - include: class_body
   # - match: \G[ ]+([A-Za-z\_][\w\#\.\-]*\=?)
@@ -397,7 +397,7 @@ contexts:
 
 
   tagdef:
-    - match: (\t*)(extend )?(tag)[ ]((#?[\w\:\-]+)?( (\<) (#?[\w\:\-]+))?)
+    - match: ([\t ]*)(extend )?(tag)[ ]((#?[\w\:\-]+)?( (\<) (#?[\w\:\-]+))?)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
@@ -408,7 +408,7 @@ contexts:
       scope: scope.tagdef.imba
       push:
         - meta_scope: scope.tag.imba
-        - match: ^(?!(\1\t+|\s*$))
+        - match: ^(?!(\1[\t ]+|\s*$))
           pop: true
         - include: tagdef_body
 
@@ -417,16 +417,16 @@ contexts:
     - include: body
 
   def:
-    - match: (\t*)(export |async |global )?(def)(?=\s+[A-Za-z\_][\w\#\.\-]*)
+    - match: ([\t ]*)(export |async |global )?(def)(?=\s[A-Za-z\_][\w\#\.\-]*)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
 
       push:
         - meta_content_scope: scope.method.imba
-        - match: ^(?!(\1\t+|\s*$))
+        - match: ^(?!(\1[\t ]+|\s*$))
           pop: true
-        - match: \G[ ]+([A-Za-z\_][\w\#\.\-]*\=?)
+        - match: \G[ ]([A-Za-z\_][\w\#\.\-]*\=?)
           captures:
             1: entity.name.function.imba
           push: def_params
@@ -449,13 +449,13 @@ contexts:
     - include: body
 
   prop:
-    - match: (\t*)(prop|attr)[ \t]+([A-Za-z_][\w\-]*)
+    - match: ([\t\ ]*)(prop|attr)[ \t]+([A-Za-z_][\w\-]*)
       captures:
         2: keyword.control.imbac
         3: entity.name.property.imba
       push: 
         - meta_content_scope: scope.property.imba
-        - match: ^(?!(\1\t+))
+        - match: ^(?!(\1[\t ]+))
           pop: true
         - include: options
         - include: comment
