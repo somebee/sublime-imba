@@ -22,6 +22,9 @@ class ImbaGoto(sublime_plugin.TextCommand):
             if self.view.match_selector(region.a,"accessor.invocation,identifier.basic"):
                 highlighted = "def " + highlighted
 
+            if self.view.match_selector(region.a,"identifier.class"):
+                highlighted = "class " + highlighted
+
             # Get definition locations of word
             self.options = self.view.window().lookup_symbol_in_index(highlighted)
 

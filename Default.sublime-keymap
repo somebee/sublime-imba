@@ -62,14 +62,12 @@
 		{ "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true },
 		{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true }
 	]},
-
-	{ "keys": ["ctrl+super+g"], "command": "show_goto_definition", "context":
+	{ "keys": ["super+alt+down"], "command": "imba_goto", "context":
 		[
-			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
-			{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
+			{"key": "selector", "operator": "equal", "operand": "source.imba"}
 		]
 	},
-	{ "keys": ["super+alt+down"], "command": "imba_goto", "context":
+	{ "keys": ["f12"], "command": "imba_goto", "context":
 		[
 			{"key": "selector", "operator": "equal", "operand": "source.imba"}
 		]
