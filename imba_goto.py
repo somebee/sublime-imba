@@ -12,6 +12,10 @@ class ImbaGoto(sublime_plugin.TextCommand):
         if selections:
             # Get required search word
             region = selections[0]
+
+            if not self.view.match_selector(region.a,"source.imba"):
+                return
+
             if region.a == region.b:
                 region = self.view.word(region)
             highlighted = self.view.substr(region)
@@ -27,8 +31,6 @@ class ImbaGoto(sublime_plugin.TextCommand):
 
             # Get definition locations of word
             self.options = self.view.window().lookup_symbol_in_index(highlighted)
-
-            print(self.options)
 
             if not self.options:
                 sublime.status_message(

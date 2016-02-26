@@ -4,6 +4,9 @@
         "count": 1, 
         "modifiers": ["ctrl"],
         "press_command": "drag_select",
-        "command": "imba_goto"
+        "command": "imba_goto",
+        "context": [
+            {"key": "selector", "operator": "equal", "operand": "source.imba"}
+        ]
     }
 ]
