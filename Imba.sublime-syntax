@@ -425,14 +425,13 @@ contexts:
 
       push:
         - meta_content_scope: scope.method.imba
+        - include: method_body
         - match: ^(?!(\1[\t ]+|\s*$))
           pop: true
         - match: \G[ ]([A-Za-z\_][\w\#\.\-]*\=?)
           captures:
             1: entity.name.function.imba
           push: def_params
-
-        - include: method_body
 
   def_params:
     - meta_scope: scope.methodparams.imba
