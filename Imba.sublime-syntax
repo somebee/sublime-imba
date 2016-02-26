@@ -225,7 +225,7 @@ contexts:
       scope: keyword.operator.accessor.imba
 
   key:
-    - match: ((\$|@|_)?[\w\-]+)[ \t]*(\:)(?!\w)
+    - match: ((\$|@|_)?[\w\-]+)[ \t]*(\:)(?![@$\w_])
       captures:
         3: punctuation.keyset.imba
       scope: identifier.key.imba
@@ -252,14 +252,28 @@ contexts:
 
 
   identifier:
-    - match: ([a-z\_][\w\-]*)(\:)(?=\w)
+    - match: ([a-z\_][\w\-]*)(?=\:[@$\w_])
       scope: identifier.basic.imba
-      captures:
-          # 2: punctuation.access.imba
-          2: keyword.operator.accessor.imba
+      # captures:
+      #     # 2: punctuation.access.imba
+      #     # 3: keyword.operator.accessor.imba
+      push: symaccess
 
     - match: ([a-z\_][\w\-]*)
+
       scope: identifier.basic.imba
+
+  symaccess:
+    - meta_scope: accessor.access.imba
+    - match: (\:)([@$\w_][\w\-_$]*)(?!\:)
+      captures:
+        1: keyword.operator.accessor.imba
+        2: accessor.access.imba
+      pop: true
+    - match: (\:)([@$\w_][\w\-_$]*)
+      captures:
+        1: keyword.operator.accessor.imba
+        2: accessor.access.imba
 
   singletag:
     - match: '(#[A-Za-z\_][\w\-]*)(\:)?'
@@ -312,11 +326,12 @@ contexts:
         2: keyword.operator.accessor.imba
 
   ivar: 
-    - match: (\@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*)(\:)(?=\w)
+    - match: (\@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*)(?=\:[@$\w_])
       captures:
           1: variable.instance.imba
           # 3: punctuation.access.imba
-          3: keyword.operator.accessor.imba
+          # 3: keyword.operator.accessor.imba
+      push: symaccess
 
     - match: \@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*
       scope: variable.instance.imba
@@ -425,9 +440,9 @@ contexts:
 
       push:
         - meta_content_scope: scope.method.imba
-        - include: method_body
         - match: ^(?!(\1[\t ]+|\s*$))
           pop: true
+        - include: method_body
         - match: \G[ ]([A-Za-z\_][\w\#\.\-]*\=?)
           captures:
             1: entity.name.function.imba
