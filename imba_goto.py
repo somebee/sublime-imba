@@ -20,7 +20,7 @@ class ImbaGoto(sublime_plugin.TextCommand):
                 region = self.view.word(region)
             highlighted = self.view.substr(region)
 
-            if self.view.match_selector(region.a,"entity.name.tag.type"):
+            if self.view.match_selector(region.a,"entity.name.tag.type,entity.name.tagdef"):
                 highlighted = "tag " + highlighted
 
             if self.view.match_selector(region.a,"accessor.invocation,identifier.basic"):

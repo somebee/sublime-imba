@@ -8,5 +8,15 @@
         "context": [
             {"key": "selector", "operator": "equal", "operand": "source.imba"}
         ]
+    },
+    {
+        "button": "button1", 
+        "count": 1, 
+        "modifiers": ["shift","ctrl"],
+        "press_command": "drag_select",
+        "command": "imba_goto",
+        "context": [
+            {"key": "selector", "operator": "equal", "operand": "source.imba"}
+        ]
     }
 ]
