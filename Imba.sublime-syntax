@@ -401,9 +401,10 @@ contexts:
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
-        4: entity.name.type.tag.imba
-        5: entity.name.type.tagdef.imba
+        # 4: entity.name.type.tag.imba
+        5: entity.name.type.tag.imba
         7: keyword.control.imba
+        8: entity.name.tagdef.imba
         # 6: entity.name.type.class.imba
       scope: scope.tagdef.imba
       push:

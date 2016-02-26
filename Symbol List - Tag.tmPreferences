@@ -5,10 +5,16 @@
 	<key>name</key>
 	<string>Symbol List: Tag</string>
 	<key>scope</key>
-	<string>source.imba entity.name.type.tagdef</string>
+	<string>source.imba entity.name.type.tag.imba</string>
 	<key>settings</key>
 	<dict>
+		<key>showInIndexedSymbolList</key>
+		<integer>1</integer>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
 		<key>symbolTransformation</key>
+		<string>s/^/tag /</string>
+		<key>symbolIndexTransformation</key>
 		<string>s/^/tag /</string>
 	</dict>
 	<key>uuid</key>

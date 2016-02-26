@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Symbol List: Method</string>
+	<string>Symbol List: Class</string>
 	<key>scope</key>
-	<string>source.imba scope.classdef.imba, scope.methodparams.imba</string>
+	<string>source.imba scope.classdef.imba</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
