@@ -4,11 +4,12 @@ name: Imba
 file_extensions: [imba]
 scope: source.imba
 
-# plain identifier-key (for object)
-# ([\w\-]+)[ \t]*(\:)
-
 variables:
-  ident: '[A-Za-z_][A-Za-z_0-9]*'
+  ident: '[A-Za-z_][A-Za-z\d\-]*'
+  ivar: '\@{{ident}}'
+  const: '[A-Z][A-Za-z\d\-]*'
+  tag_id: '#[A-Za-z\_][\w\-]*'
+  tag_class: '\.([A-Za-z\_][\w\-]*)'
 
 contexts:
   main:
@@ -29,6 +30,43 @@ contexts:
 
     - include: body
 
+  symbol:
+    - match: (?<![\w\)\]\}])(\:[@$\w_][\w\-_$]*)
+      scope: string.symbol.imba
+  
+  const:
+    - match: \b([A-Z][\w]*)\b
+      captures:
+        1: identifier.class.imba
+  
+  ivar:
+    - match: '{{ivar}}'
+      scope: variable.instance.imba
+
+  array:
+    - match: \[
+      push:
+        - meta_scope: array.imba
+        - match: \]
+          pop: true
+        - include: body
+  
+  parens: 
+    - match: \(
+      push:
+        - meta_scope: parens.imba
+        - match: \)
+          pop: true
+        - include: body
+      
+  brackets:
+    - match: \{
+      push:
+      - meta_scope: brackets.imba
+      - match: \}
+        pop: true
+      - include: body
+
   keyword:
     - match: \b(if|else|elif|unless|for( own)?|while|return|until|switch|then|when|try|catch|finally|continue|break|throw|do|await|typeof)\b(?![\:\-])
       scope: keyword.control.imba
@@ -38,9 +76,6 @@ contexts:
     - match: \b(var|let)\b
       scope: keyword.control.imba
       push: vardef
-
-    - match: \{
-      push: brackets
 
     - match: \#\#\#
       push: herecomment
@@ -165,13 +200,9 @@ contexts:
     - match: \b[0-9]+\b
       scope: constant.numeric.int.imba
 
-  array:
-    - match: \[
-      push:
-        - meta_scope: array.imba
-        - match: \]
-          pop: true
-        - include: body
+  identifier:
+    - match: ([a-z\_][\w\-]*)
+      scope: identifier.basic.imba
 
   special:
     - match: \b(self)\b(\:)?(?![\-])
@@ -188,7 +219,9 @@ contexts:
         2: keyword.operator.accessor.imba
 
   operator:
-    - match: <=>|<(?!<|=)|>(?!<|=|>)|<=|>=| is | isa | isnt | not |\btypeof\b|===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈
+    - match: <=>|<(?!<|=)|>(?!<|=|>)|<=|>=|\btypeof\b|===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈
+      scope: keyword.operator.comparison.imba
+    - match: (is|isa|isnt|not|typeof)(?= )
       scope: keyword.operator.comparison.imba
     - match: \bnot\b|&&| and |\|\|| or | of | in |\^|\s:\\s|\?\|{1,2}|\?\&{1,2}|[\?\&]\>|∩|∪|∈|∉|∋|∌
       scope: keyword.operator.logical.imba
@@ -199,10 +232,7 @@ contexts:
     - match: (%|&|\*\*|\*|\+|\-|\/|×|÷|√|\+\+|\-\-)
       scope: keyword.operator.arithmetic.imba
 
-  # comparison: /<=>|<(?!<|=)|>(?!<|=|>)|<=|>=| is | isnt | not |===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈/
-  # logical: /\bnot\b|&&| and |\|\|| or | in |\^|\s:\\s|\?\|{1,2}|\?\&{1,2}|[\?\&]\>|∩|∪|∈|∉|∋|∌/
-  # arithmetic: /(%|&|\*\*|\*|\+|\-|\/|×|÷|√)/
-  # assignment: /\=|\?\=|\&\&?\=/
+    - include: ternary
 
   value:
     - include: selector
@@ -210,6 +240,7 @@ contexts:
     - include: number
     - include: string
     - include: symbol
+    - include: access
     - include: richstring
     - include: alphanumerics
     - include: singletag
@@ -224,6 +255,8 @@ contexts:
   punctuation:
     - match: \.
       scope: keyword.operator.accessor.imba
+    - match: ':'
+      scope: keyword.operator.accessor.raw.imba
 
   key:
     - match: ((\$|@|_)?[\w\-]+)[ \t]*(\:)(?![@$\w_])
@@ -231,9 +264,24 @@ contexts:
         3: punctuation.keyset.imba
       scope: identifier.key.imba
 
-  symbol:
-    - match: (\:[@$\w_][\w\-_$]*)
-      scope: string.symbol.imba
+  
+
+  access:
+    - match: (\:)({{const}})
+      scope: accessor.access.const.imba
+      captures:
+        1: keyword.operator.accessor.imba
+        2: identifier.class.imba
+    - match: (\:)({{ivar}})
+      scope: accessor.access.ivar.imba
+      captures:
+        1: keyword.operator.accessor.imba
+        2: variable.instance.imba
+    - match: (\:)({{ident}})
+      scope: accessor.access.identifier.imba
+      captures:
+        1: keyword.operator.accessor.imba
+        2: identifier.basic.imba
 
   accessor:
     - match: (\.)(new)(?![\-\w])
@@ -250,32 +298,6 @@ contexts:
           1: keyword.operator.accessor.imba
           # 1: punctuation.invoke.imba
 
-
-
-  identifier:
-    - match: ([a-z\_][\w\-]*)(?=\:[@$\w_])
-      scope: identifier.basic.imba
-      # captures:
-      #     # 2: punctuation.access.imba
-      #     # 3: keyword.operator.accessor.imba
-      push: symaccess
-
-    - match: ([a-z\_][\w\-]*)
-
-      scope: identifier.basic.imba
-
-  symaccess:
-    - meta_scope: accessor.access.imba
-    - match: (\:)([@$\w_][\w\-_$]*)(?!\:)
-      captures:
-        1: keyword.operator.accessor.imba
-        2: accessor.access.imba
-      pop: true
-    - match: (\:)([@$\w_][\w\-_$]*)
-      captures:
-        1: keyword.operator.accessor.imba
-        2: accessor.access.imba
-
   singletag:
     - match: '(#[A-Za-z\_][\w\-]*)(\:)?'
       captures:
@@ -287,10 +309,6 @@ contexts:
     - include: identifier
     - include: ivar
     - include: const
-    # - match: \b([A-Z][\w]*)\b
-    #   scope: identifier.const.imba
-    # - match: (\:)
-    #   scope: punctuation.access.imba
 
   assignable:
     - include: const
@@ -300,11 +318,13 @@ contexts:
     - include: identifier
 
   expr:
+    - include: tag
     - include: require
     - include: key
     - include: keyword
-    - include: value
     - include: operator
+    - include: value
+    - include: brackets
     - include: parens
     - include: comment
     - include: accessor
@@ -313,35 +333,41 @@ contexts:
 
 
   unspaced_expr:
-    - include: value
+    - include: tag
     - include: operator
+    - include: value
     - include: parens
     - match: (?=\s)
       pop: true
-
-  const:
-    - match: \b([A-Z][\w]*)\b(\:)?
-      captures:
-        1: identifier.class.imba
-        # 2: punctuation.access.imba
-        2: keyword.operator.accessor.imba
 
   predefines:
     - match: (\$\w+\$)
       captures:
         1: keyword.special.imba
 
-  ivar: 
-    - match: (\@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*)(?=\:[@$\w_])
-      captures:
-          1: variable.instance.imba
-          # 3: punctuation.access.imba
-          # 3: keyword.operator.accessor.imba
-      push: symaccess
+  ternary:
+    - match: '\?'
+      scope: keyword.operator.ternary.imba
+      push: in_ternary
 
-    - match: \@[A-Z\_a-z\d]+(\-[A-Z\_a-z\d]+)*
-      scope: variable.instance.imba
+  in_ternary:
+    - include: symbol
+    - include: access
 
+    - match: '\:'
+      scope: keyword.operator.ternary.imba
+      pop: true
+
+    - include: tag
+    - include: const
+    - include: ivar
+    - include: array
+    - include: accessor
+    - include: identifier
+    - include: parens
+    - include: brackets
+    - include: punctuation
+    - include: operator
 
   options:
     - match: ([\w\-]+)[ \t]*(\:)
@@ -529,21 +555,6 @@ contexts:
     - include: comment
     - match: (?=(\n|\)))
       pop: true
-
-  parens: 
-    - match: \(
-      push:
-        - meta_scope: parens.imba
-        - match: \)
-          pop: true
-        - include: body
-      
-
-  brackets: 
-    - meta_scope: brackets.imba
-    - match: \}
-      pop: true
-    - include: body
 
   herecomment:
     - meta_scope: comment.block.imba

@@ -254,30 +254,6 @@
 			</dict>
 		</dict>
 
-
-
-		<dict>
-			<key>name</key>
-			<string>Identifier - Interpolated Key</string>
-			<key>scope</key>
-			<string>identifier.key.interpolatedDISABLED</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#1c2222</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Identifier - Interpolated Key (around)</string>
-			<key>scope</key>
-			<string>identifier.key.interpolated.rootDISABLED</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#000000</string>
-			</dict>
-		</dict>
 		<dict>
 			<key>name</key>
 			<string>Identifier - Basic</string>
@@ -316,17 +292,13 @@
 
 		<dict>
 			<key>name</key>
-			<string>Local Identifier</string>
+			<string>Identifier accessor</string>
 			<key>scope</key>
-			<string>identifier.local2</string>
+			<string>accessor.access.disabled identifier.basic</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#000001</string>
 				<key>foreground</key>
-				<string>#fff4c2</string>
-				<key>fontStyle</key>
-				<string>normal</string>
+				<string>#E1D3BE</string>
 			</dict>
 		</dict>
 
