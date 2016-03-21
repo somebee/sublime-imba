@@ -44,6 +44,10 @@ contexts:
     - match: '{{ivar}}'
       scope: variable.instance.imba
 
+  argvar:
+    - match: '\$\d+'
+      scope: variable.special.imba
+
   array:
     - match: \[
       push:
@@ -74,7 +78,7 @@ contexts:
 
   body:
     - include: keyword
-    - match: \b(var|let)\b
+    - match: \b(var|let)(?=\s)
       scope: keyword.control.imba
       push: vardef
 
@@ -328,6 +332,7 @@ contexts:
     - include: keyword
     - include: operator
     - include: value
+    - include: argvar
     - include: brackets
     - include: parens
     - include: comment
