@@ -603,7 +603,7 @@
 			<key>name</key>
 			<string>♦ String.regexp.«special»</string>
 			<key>scope</key>
-			<string>string.regexp constant.character.escape, string.regexp source.ruby.embedded, string.regexp string.regexp.arbitrary-repitition</string>
+			<string>string.regexp constant.character.escape, string.regexp source.imba.embedded, string.regexp string.regexp.arbitrary-repitition, string.regexp constant.other</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>

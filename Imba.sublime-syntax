@@ -6,6 +6,7 @@ scope: source.imba
 
 variables:
   ident: '[A-Za-z_][A-Za-z\d\-]*'
+  identifier: '[A-Za-z_][A-Za-z\d\-]*'
   ivar: '\@{{ident}}'
   const: '[A-Z][A-Za-z\d\-]*'
   tag_id: '#[A-Za-z\_][\w\-]*'
@@ -250,7 +251,6 @@ contexts:
     - include: require
     - include: tag
     - include: heregex
-    - include: regex
 
   punctuation:
     - match: \.
@@ -316,8 +316,12 @@ contexts:
     - include: array
     - include: accessor
     - include: identifier
-
+  
   expr:
+    - include: literal-regexp
+    - include: expr_no_regex
+
+  expr_no_regex:
     - include: tag
     - include: require
     - include: key
@@ -582,6 +586,39 @@ contexts:
           scope: escaped.imba
         - match: \/[gimy]*
           pop: true
+
+  literal-regexp:
+    # Lookahead and prevent incorrect matches by finding a / following an
+    # identifier or number. Not perfect, but stops most incorrect matches
+    - match: '(?=({{identifier}}|0[xob]\d+|\d+|\d*\.\d*(e[-+]?\d+)?)\s*/[^/])'
+      push:
+        - include: comments
+        - match: '/'
+          scope: keyword.operator.arithmetic.imba
+          pop: true
+        - include: expressions-no-regexp
+    - match: '/(?=.+/[gimy]*(?!\s*[a-zA-Z0-9_$]))'
+      scope: punctuation.definition.string.begin.imba
+      push:
+        - meta_scope: string.regexp.imba
+        - match: "(/)([gimy]*)"
+          captures:
+            1: punctuation.definition.string.end.imba
+            2: keyword.other.imba
+          pop: true
+        - match: '(?=.|\n)'
+          with_prototype:
+            - match: '(?=/)'
+              pop: true
+          push: scope:source.regexp.imba
+
+  # Consume a division operator to prevent incorrect highlighting as a regexp
+  prevent-incorrect-regexp:
+    - include: comments
+    - match: '/'
+      scope: keyword.operator.arithmetic.imba
+    - match: '(?=[\S\n])'
+      pop: true
 
   forof:
     - match: /(for) ([\w_][\-\w_]*)
