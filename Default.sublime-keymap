@@ -42,6 +42,11 @@
 		{ "key": "preceding_text", "operator": "regex_contains", "operand": "(^|\t|\\s)if$", "match_all": true }
 	]},
 
+	{ "keys": ["shift+enter"], "command": "insert_snippet", "args": {"contents": "\n# ${1}"}, "context":[
+		{"key": "selector", "operator": "equal", "operand": "source.imba"},
+		{ "key": "preceding_text", "operator": "regex_contains", "operand": "(^|\t|\\s)# ", "match_all": true }
+	]},
+
 	{ "keys": ["backspace"], "command": "imba_delete_tag", "args": {}, "context": [
 		{"key": "selector", "operator": "equal", "operand": "source.imba"},
 		{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
