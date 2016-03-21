@@ -1,0 +1,7 @@
+<snippet>
+    <content><![CDATA[do |${1:params}|
+	$0]]></content>
+    <tabTrigger>do</tabTrigger>
+    <scope>source.imba - (comment,identifier.singletag,punctuation,accessor,meta.tag)</scope>
+    <description>do</description>
+</snippet>
