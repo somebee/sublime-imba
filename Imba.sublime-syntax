@@ -373,6 +373,7 @@ contexts:
     - include: array
     - include: accessor
     - include: identifier
+    - include: value
     - include: parens
     - include: brackets
     - include: punctuation
