@@ -330,6 +330,7 @@ contexts:
     - include: require
     - include: key
     - include: keyword
+    - include: selector
     - include: operator
     - include: value
     - include: argvar
@@ -343,6 +344,7 @@ contexts:
 
   unspaced_expr:
     - include: tag
+    - include: selector
     - include: operator
     - include: value
     - include: parens
@@ -355,7 +357,7 @@ contexts:
         1: keyword.special.imba
 
   ternary:
-    - match: '\?'
+    - match: '\?(?!\=)'
       scope: keyword.operator.ternary.imba
       push: in_ternary
 

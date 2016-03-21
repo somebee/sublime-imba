@@ -624,6 +624,17 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>♦ String.regexp.[brackets]</string>
+			<key>scope</key>
+			<string>string.regexp punctuation.definition</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#E9C062</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>♦ String variable</string>
 			<key>scope</key>
 			<string>string variable</string>
