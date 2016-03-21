@@ -11,7 +11,7 @@ $0</string>
 	<key>name</key>
 	<string>If Else</string>
 	<key>scope</key>
-	<string>source.imba - (comment,identifier.singletag,punctuation,accessor,)</string>
+	<string>source.imba - (comment,identifier.singletag,punctuation,accessor)</string>
 	<key>tabTrigger</key>
 	<string>ifel</string>
 </dict>
