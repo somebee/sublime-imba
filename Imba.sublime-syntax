@@ -600,11 +600,11 @@ contexts:
     # identifier or number. Not perfect, but stops most incorrect matches
     - match: '(?=({{identifier}}|0[xob]\d+|\d+|\d*\.\d*(e[-+]?\d+)?)\s*/[^/])'
       push:
-        - include: comments
+        - include: comment
         - match: '/'
           scope: keyword.operator.arithmetic.imba
           pop: true
-        - include: expressions-no-regexp
+        - include: expr_no_regex
     - match: '/(?=.+/[gimy]*(?!\s*[a-zA-Z0-9_$]))'
       scope: punctuation.definition.string.begin.imba
       push:
@@ -622,7 +622,7 @@ contexts:
 
   # Consume a division operator to prevent incorrect highlighting as a regexp
   prevent-incorrect-regexp:
-    - include: comments
+    - include: comment
     - match: '/'
       scope: keyword.operator.arithmetic.imba
     - match: '(?=[\S\n])'
