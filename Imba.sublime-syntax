@@ -73,7 +73,7 @@ contexts:
       - include: body
 
   keyword:
-    - match: \b(if|else|elif|unless|for( own)?|while|return|until|switch|then|when|try|catch|finally|continue|break|throw|do|await|typeof)\b(?![\:\-])
+    - match: \b(if|else|elif|unless|for( own)?|while|return|until|switch|then|when|try|catch|finally|continue|break|throw|do|await|typeof|delete)\b(?![\:\-])
       scope: keyword.control.imba
 
   body:
