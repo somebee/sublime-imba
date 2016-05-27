@@ -322,6 +322,7 @@ contexts:
     - include: identifier
   
   expr:
+    - include: heregex
     - include: literal-regexp
     - include: expr_no_regex
 
