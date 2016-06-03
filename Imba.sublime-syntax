@@ -204,6 +204,8 @@ contexts:
       scope: constant.numeric.float.imba
     - match: \b[0-9]+\b
       scope: constant.numeric.int.imba
+    - match: \b0x[0-9A-Fa-f]+\b
+      scope: constant.numeric.hex.imba
 
   identifier:
     - match: ([a-z\_][\w\-]*)
@@ -234,8 +236,10 @@ contexts:
       scope: keyword.operator.assignment.imba
     - match: (\?\.|\?\:)
       scope: keyword.operator.accessor.imba
-    - match: (%|&|\*\*|\*|\+|\-|\/|×|÷|√|\+\+|\-\-)
+    - match: (%|\*\*|\*|\+|\-|\/|×|÷|√|\+\+|\-\-)
       scope: keyword.operator.arithmetic.imba
+    - match: (\>\>\>|&|\<\<|\>\>|\^|\~)
+      scope: keyword.operator.bitop.imba
 
     - include: ternary
 
