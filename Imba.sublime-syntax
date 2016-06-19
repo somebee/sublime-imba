@@ -188,9 +188,16 @@ contexts:
       scope: entity.name.tag.attribute.imba
       push:
         - meta_scope: entity.name.tag.attributevalue.imba
-        - match: (?=(\s|\>))
+        - match: (?=(\s|[\-\=]?\>))
           pop: true
         - include: unspaced_expr
+
+    - match: \[
+      push:
+        - meta_scope: meta.tagobject.imba
+        - match: \]
+          pop: true
+        - include: body
 
     - match: ([ ]+)
       scope: meta.whitespace.imba
@@ -310,6 +317,7 @@ contexts:
       scope: accessor.invocation.imba
       captures:
           1: keyword.operator.accessor.imba
+          2: identifier.basic.imba
           # 1: punctuation.invoke.imba
 
   singletag:
