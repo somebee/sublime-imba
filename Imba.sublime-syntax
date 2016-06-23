@@ -381,6 +381,7 @@ contexts:
       push: in_ternary
 
   in_ternary:
+    - include: special
     - include: symbol
     - include: access
 
