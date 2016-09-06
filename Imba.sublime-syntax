@@ -23,7 +23,7 @@ contexts:
     - match: \b(extern)\b
       scope: keyword.control.imba
 
-    - match: \b(export )(var\s*|let\s*)\b
+    - match: \b(export |export default )(var\s*|let\s*)\b
       captures:
         1: keyword.control.imba
         2: keyword.control.imba
@@ -184,7 +184,7 @@ contexts:
     - match: (\#)([a-zA-Z][\w\-]*)?
       scope: entity.name.tag.id.imba
 
-    - match: \s+([@\:]?[a-zA-Z][\w\-]*)\s*(\=)\s*
+    - match: \s+([@\:]?[a-zA-Z][\w\-]*(\:[a-zA-Z][\w\-]*)?)\s*(\=)\s*
       scope: entity.name.tag.attribute.imba
       push:
         - meta_scope: entity.name.tag.attributevalue.imba
@@ -305,7 +305,7 @@ contexts:
         2: identifier.basic.imba
 
   accessor:
-    - match: (\.)(new)(?![\-\w])
+    - match: (\.)(new|len)(?![\-\w])
       scope: accessor.invocation.imba
       captures:
         # 1: punctuation.invoke.imba
@@ -449,7 +449,7 @@ contexts:
 
   # should rather insert the classname
   class:
-    - match: ([\t ]*)(export |extend )?(global )?(class)[ ](([\w\.]+)?( (\<) ([\w\.]+))?)([ ]*)
+    - match: ([\t ]*)(export |extend |export default )?(global )?(class)[ ](([\w\.]+)?( (\<) ([\w\.]+))?)([ ]*)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
@@ -476,7 +476,7 @@ contexts:
 
 
   tagdef:
-    - match: ([\t ]*)(export |extend |global )?(tag)[ ]((#?[\w\:\-]+)?( (\<) (#?[\w\:\-]+))?)
+    - match: ([\t ]*)(export |export default |extend |global )?(tag)[ ]((#?[\w\:\-]+)?( (\<) (#?[\w\:\-]+))?)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
@@ -497,7 +497,7 @@ contexts:
     - include: body
 
   def:
-    - match: ([\t ]*)(export |async |global )?(def)(?=\s[A-Za-z\_][\w\#\.\-]*)
+    - match: ([\t ]*)(export |export default |async |global )?(def)(?=\s[A-Za-z\_][\w\#\.\-]*)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
