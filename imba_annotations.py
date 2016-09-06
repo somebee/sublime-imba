@@ -6,6 +6,7 @@ import subprocess
 import threading
 import _thread as thread
 from time import time, sleep
+from distutils.spawn import find_executable
 
 IMBA_WARN_CACHE = []
 IMBA_HINT_CACHE = {}
@@ -240,12 +241,13 @@ def show_annotations_for_view(view,data):
 
 def get_annotations_for_file(path):
 
-	# cmd = "/usr/local/bin/imba"
-	# cmd = "/Users/sindre/Code/imba/bin/imba"
 	start = time()
-	cmd = "imba"
-	pars = "analyze %s"  % path
-	args = [cmd,'analyze',path]
+	args = ['imba','analyze',path]
+
+	executable = find_executable("imbac", path="/usr/local/bin:$PATH")
+
+	if executable:
+		args = ['imbac','--analyze','--print',path]
 
 	# what about on windows?
 	proc = subprocess.Popen(args,
@@ -255,12 +257,12 @@ def get_annotations_for_file(path):
 		env={"PATH": "/usr/local/bin:$PATH"}
 	)
 
-
 	output, err = proc.communicate()
 	output = output.decode("utf-8")
 	elapsed = time() - start
 	print("analyze took " + str(elapsed) + "s")
-	return json.loads(output)# str(output).rstrip(os.linesep).decode('ascii').strip()
+	return json.loads(output)
+	# str(output).rstrip(os.linesep).decode('ascii').strip()
 
 def get_cached_annotations_for_view(view):
 	return IMBA_HINT_CACHE.get(str(view.id()),None)
