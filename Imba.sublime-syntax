@@ -243,7 +243,7 @@ contexts:
       scope: keyword.operator.comparison.imba
     - match: \!?(is|isa|isnt|not|typeof)(?= )
       scope: keyword.operator.comparison.imba
-    - match: \bnot\b|&&| and |\|\|| or | of | in |\^|\s:\\s|\?\|{1,2}|\?\&{1,2}|[\?\&]\>|∩|∪|∈|∉|∋|∌
+    - match: \bnot\b|&&| and |\|\|| or | of | \!?in |\^|\s:\\s|\?\|{1,2}|\?\&{1,2}|[\?\&]\>|∩|∪|∈|∉|∋|∌
       scope: keyword.operator.logical.imba
     - match: \=|\?\=|\&\&?\=|\|=
       scope: keyword.operator.assignment.imba
@@ -280,7 +280,7 @@ contexts:
       scope: keyword.operator.accessor.raw.imba
 
   key:
-    - match: ((\$|@|_)?[\w\-]+)[ \t]*(\:)(?![@$\w_])
+    - match: ((\$|@|_)?[\w\-]+)[ \t]*(\:)(?![@$A-Za-z_])
       captures:
         3: punctuation.keyset.imba
       scope: identifier.key.imba
