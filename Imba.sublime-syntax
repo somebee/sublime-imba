@@ -5,8 +5,8 @@ file_extensions: [imba]
 scope: source.imba
 
 variables:
-  ident: '[A-Za-z_][A-Za-z\d\-]*'
-  identifier: '[A-Za-z_][A-Za-z\d\-]*'
+  ident: '[A-Za-z_][A-Za-z\d\-\_]*'
+  identifier: '[A-Za-z_][A-Za-z\d\-\_]*'
   ivar: '\@{{ident}}'
   const: '[A-Z][A-Za-z\d\-]*'
   tag_id: '#[A-Za-z\_][\w\-]*'
@@ -241,7 +241,7 @@ contexts:
   operator:
     - match: <=>|<(?!<|=)|>(?!<|=|>)|<=|>=|\btypeof\b|===|==|\?=|=~|!=|!~\?|≤|≥|≡|≈|\|
       scope: keyword.operator.comparison.imba
-    - match: (is|isa|isnt|not|typeof)(?= )
+    - match: \!?(is|isa|isnt|not|typeof)(?= )
       scope: keyword.operator.comparison.imba
     - match: \bnot\b|&&| and |\|\|| or | of | in |\^|\s:\\s|\?\|{1,2}|\?\&{1,2}|[\?\&]\>|∩|∪|∈|∉|∋|∌
       scope: keyword.operator.logical.imba
