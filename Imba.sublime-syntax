@@ -5,8 +5,8 @@ file_extensions: [imba]
 scope: source.imba
 
 variables:
-  ident: '[A-Za-z_][A-Za-z\d\-\_]*'
-  identifier: '[A-Za-z_][A-Za-z\d\-\_]*'
+  ident: '[A-Za-z_](-?[A-Za-z\d\_]+)*'
+  identifier: '[A-Za-z_](-?[A-Za-z\d\_]+)*'
   ivar: '\@{{ident}}'
   const: '[A-Z][A-Za-z\d\-]*'
   tag_id: '#[A-Za-z\_][\w\-]*'
@@ -221,7 +221,7 @@ contexts:
       scope: constant.numeric.hex.imba
 
   identifier:
-    - match: ([a-z\_][\w\-]*)
+    - match: ([a-z\_](-?\w+)*)
       scope: identifier.basic.imba
 
   special:
@@ -638,7 +638,7 @@ contexts:
           with_prototype:
             - match: '(?=/)'
               pop: true
-          push: scope:source.regexp.imba
+          push: scope:source.regexp.js
 
   # Consume a division operator to prevent incorrect highlighting as a regexp
   prevent-incorrect-regexp:
