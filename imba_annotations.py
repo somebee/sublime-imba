@@ -186,8 +186,7 @@ def show_annotations_for_view(view,data):
 				for ref in var["refs"]:
 					region = sublime.Region(ref["loc"][0],ref["loc"][1])
 					var_regions.append(region)
-
-				style = "hint.var" + "." + typ # + ".level" + str(level)
+				style = "hint.var" + "." + var.get("type","decl") + "." + typ # + ".level" + str(level)
 				add_reg(view,data,var_regions,str(regnr + 1),style,options)
 				regnr = regnr + 1
 				# print (style)
