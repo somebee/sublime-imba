@@ -434,13 +434,13 @@
 			<key>name</key>
 			<string>Hint Import Variables</string>
 			<key>scope</key>
-			<string>hint.var.import</string>
+			<string>hint.var.import,hint.var.module</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
 				<string>#000001</string>
 				<key>foreground</key>
-				<string>#e2b5e8</string>
+				<string>#61bdff</string>
 			</dict>
 		</dict>
 
