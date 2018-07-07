@@ -3,6 +3,7 @@
 name: Imba
 file_extensions: [imba]
 scope: source.imba
+first_line_match: ^#!/.*\bimba
 
 variables:
   ident: '[A-Za-z_](-?[A-Za-z\d\_]+)*'
