@@ -204,9 +204,20 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#329cff</string>
+				<string>#61bdff</string>
 				<key>fontStyle</key>
 				<string>normal</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Variable</string>
+			<key>scope</key>
+			<string>variable.language.scope</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#61bdff</string>
 			</dict>
 		</dict>
 		<dict>
@@ -444,7 +455,20 @@
 			</dict>
 		</dict>
 
-		
+		<dict>
+			<key>name</key>
+			<string>Hint Autoself Identifiers</string>
+			<key>scope</key>
+			<string>hint.var.autoself</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#000001</string>
+				<key>foreground</key>
+				<string>#61bdff</string>
+			</dict>
+		</dict>
+
 
 
 

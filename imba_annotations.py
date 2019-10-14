@@ -173,25 +173,44 @@ def show_annotations_for_view(view,data):
 	scope_opts = sublime.PERSISTENT
 
 	# regions = []
+	varcounts = 0
+	selfcounts = 0
 
-	if "scopes" in data:
-		for scope in data["scopes"]:
-			level = scope.get("level",0)
-			typ = scope.get("type","Scope")
-			region = sublime.Region(scope["loc"][0],scope["loc"][1])
-			scopes.append(region)
+	if False:
+		if "scopes" in data:
+			for scope in data["scopes"]:
+				level = scope.get("level",0)
+				typ = scope.get("type","Scope")
+				region = sublime.Region(scope["loc"][0],scope["loc"][1])
+				scopes.append(region)
 
-			for var in scope["vars"]:
-				var_regions = []		
-				for ref in var["refs"]:
-					region = sublime.Region(ref["loc"][0],ref["loc"][1])
-					var_regions.append(region)
-				style = "hint.var" + "." + var.get("type","decl") + "." + typ # + ".level" + str(level)
-				add_reg(view,data,var_regions,str(regnr + 1),style,options)
-				regnr = regnr + 1
+				for var in scope["vars"]:
+					var_regions = []		
+					for ref in var["refs"]:
+						region = sublime.Region(ref["loc"][0],ref["loc"][1])
+						var_regions.append(region)
+						varcounts = varcounts + 1
+					style = "hint.var" + "." + var.get("type","decl") + "." + typ # + ".level" + str(level)
+					add_reg(view,data,var_regions,str(regnr + 1),style,options)
+					regnr = regnr + 1
 				# print (style)
+	# print("add autoself?",data)
+
+	autoselfs = []
+	if "autoself" in data:
+		for implicit in data["autoself"]:
+			style = "hint.var.autoself"
+			region = sublime.Region(implicit["loc"][0],implicit["loc"][1])
+			autoselfs.append(region)
+			selfcounts = selfcounts + 1
+
+
+	add_reg(view,data,autoselfs,str(regnr + 1),"hint.var.autoself",options)
 
 	view.erase_regions("hint.var")
+
+	# print("added self",selfcounts)
+	# print("added vars",varcounts)
 
 	options = sublime.PERSISTENT
 	options |= sublime.DRAW_NO_FILL
