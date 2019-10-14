@@ -11,6 +11,10 @@
             "cmd": ["imba", "$file"]
         },
         {
+            "name": "Compile",
+            "cmd": ["imbac", "-p", "$file"]
+        },
+        {
             "name": "Analyze tokens",
             "cmd": ["imbac", "-t", "$file"]
         }

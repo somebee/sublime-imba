@@ -8,7 +8,7 @@ first_line_match: ^#!/.*\bimba
 variables:
   ident: '[A-Za-z_](-?[A-Za-z\d\_]+)*'
   identifier: '[A-Za-z_](-?[A-Za-z\d\_]+)*'
-  ivar: '\@{{ident}}'
+  ivar: '\@\@?{{ident}}'
   const: '[A-Z][A-Za-z\d\-]*'
   tag_id: '#[A-Za-z\_][\w\-]*'
   tag_class: '\.([A-Za-z\_][\w\-]*)'
@@ -37,12 +37,12 @@ contexts:
   symbol:
     - match: (?<![\w\)\]\}])(\:[@$\w_][\w\-_$]*)
       scope: string.symbol.imba
-  
+
   const:
     - match: \b([A-Z][\w]*)\b
       captures:
         1: identifier.class.imba
-  
+
   ivar:
     - match: '{{ivar}}'
       scope: variable.instance.imba
@@ -58,15 +58,15 @@ contexts:
         - match: \]
           pop: true
         - include: body
-  
-  parens: 
+
+  parens:
     - match: \(
       push:
         - meta_scope: parens.imba
         - match: \)
           pop: true
         - include: body
-      
+
   brackets:
     - match: \{
       push:
@@ -159,7 +159,7 @@ contexts:
         - match: '}'
           scope: entity.name.tag.class.evaled.imba
           pop: true
-    
+
     - match: '\@{'
       scope: entity.name.tag.key.evaled.imba
       push:
@@ -177,7 +177,7 @@ contexts:
           scope: entity.name.tag.id.evaled.imba
           pop: true
         - include: expr
-    
+
     - match: (\@)(-*[a-zA-Z][\w\-]*)?
       scope: entity.name.tag.ref.imba
 
@@ -288,7 +288,7 @@ contexts:
         3: punctuation.keyset.imba
       scope: identifier.key.imba
 
-  
+
 
   access:
     - match: (\:)({{const}})
@@ -314,7 +314,7 @@ contexts:
         # 1: punctuation.invoke.imba
         1: keyword.operator.accessor.imba
         2: keyword.special.imba
-          
+
 
     - match: (\.)([a-z\_][\w\-]*)
       scope: accessor.invocation.imba
@@ -341,7 +341,7 @@ contexts:
     - include: array
     - include: accessor
     - include: identifier
-  
+
   expr:
     - include: heregex
     - include: literal-regexp
@@ -500,7 +500,7 @@ contexts:
     - include: body
 
   def:
-    - match: ([\t ]*)(export |export default )?(var |let |const )?(def)(?=\s[A-Za-z\_][\w\#\.\-]*)
+    - match: ([\t ]*)(export |export default )?(var |let |const )?(def|get|set)(?=\s[A-Za-z\_][\w\#\.\-]*)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
@@ -523,7 +523,7 @@ contexts:
       captures:
         1: keyword.control.imba
       pop: true
-      
+
     - match: (?=(\n|$))
       pop: true
     - include: expr
@@ -536,7 +536,7 @@ contexts:
       captures:
         2: keyword.control.imbac
         3: entity.name.property.imba
-      push: 
+      push:
         - meta_content_scope: scope.property.imba
         - match: ^(?!(\1[\t ]+))
           pop: true
