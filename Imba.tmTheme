@@ -167,7 +167,7 @@
 				<key>fontStyle</key>
 				<string></string>
 				<key>foreground</key>
-				<string>#c5e1a8</string>
+				<string>#bee2c4</string>
 			</dict>
 		</dict>
 
@@ -204,7 +204,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#61bdff</string>
+				<string>#329cff</string>
 				<key>fontStyle</key>
 				<string>normal</string>
 			</dict>
@@ -465,7 +465,7 @@
 				<key>background</key>
 				<string>#000001</string>
 				<key>foreground</key>
-				<string>#61bdff</string>
+				<string>#a3d3fd</string>
 			</dict>
 		</dict>
 
@@ -720,7 +720,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#E0C589</string>
+				<string>#a08e62</string>
 			</dict>
 		</dict>
 
@@ -855,6 +855,20 @@
 			<dict>
 				<key>foreground</key>
 				<string>#E0C589</string>
+			</dict>
+		</dict>
+
+		<dict>
+			<key>name</key>
+			<string>Tag events</string>
+			<key>scope</key>
+			<string>source entity.name.tag.event</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#e9dcaf</string>
+				<key>fontStyle</key>
+				<string></string>
 			</dict>
 		</dict>
 		<dict>

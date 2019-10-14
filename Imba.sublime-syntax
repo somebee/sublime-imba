@@ -187,6 +187,9 @@ contexts:
     - match: (\#)([a-zA-Z][\w\-]*)?
       scope: entity.name.tag.id.imba
 
+    - match: (\:)(-*[a-zA-Z][\w\-]*)?
+      scope: entity.name.tag.event.imba
+
     - match: \s+([@\:]?[a-zA-Z][\w\-]*([\:\.][a-zA-Z][\w\-]*)?)\s*(\=)\s*
       scope: entity.name.tag.attribute.imba
       push:

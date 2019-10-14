@@ -176,7 +176,7 @@ def show_annotations_for_view(view,data):
 	varcounts = 0
 	selfcounts = 0
 
-	if False:
+	if True:
 		if "scopes" in data:
 			for scope in data["scopes"]:
 				level = scope.get("level",0)
