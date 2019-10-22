@@ -24,15 +24,15 @@ contexts:
       push: inline-css
 
     - match: "### (sass)( scoped)?"
-      scope: comment.block.imba
+      scope: keyword.control
       push: inline-sass
 
     - match: "### (stylus)( scoped)?"
-      scope: comment.block.imba
+      scope: keyword.control
       push: inline-stylus
 
     - match: "### (scss)( scoped)?"
-      scope: comment.block.imba
+      scope: keyword.control
       push: inline-scss
 
     - match: \b(import)\b
@@ -60,13 +60,14 @@ contexts:
       scope: comment.block.imba
 
   inline-css:
+    - meta_scope: source.imba.embedded.css
     - include: pop-style
     - match: (?=\S)
       embed: scope:source.css
-      embed_scope: source.imba.embedded.css
       escape: (?i)(?=###)
 
   inline-less:
+    - meta_scope: source.imba.embedded.css
     - include: pop-style
     - match: (?=\S)
       embed: scope:source.less
@@ -74,6 +75,7 @@ contexts:
       escape: (?i)(?=###)
 
   inline-sass:
+    - meta_scope: source.imba.embedded.css
     - include: pop-style
     - match: (?=\S)
       embed: scope:source.sass
@@ -81,6 +83,7 @@ contexts:
       escape: (?i)(?=###)
 
   inline-stylus:
+    - meta_scope: source.imba.embedded.css
     - include: pop-style
     - match: (?=\S)
       embed: scope:source.stylus
@@ -88,6 +91,7 @@ contexts:
       escape: (?i)(?=###)
 
   inline-scss:
+    - meta_scope: source.imba.embedded.css
     - include: pop-style
     - match: (?=\S)
       embed: scope:source.scss

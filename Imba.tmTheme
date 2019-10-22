@@ -355,7 +355,7 @@
 
 		 <dict>
 	        <key>name</key>
-	        <string>JS_Source</string>
+	        <string>Imba Embedded Styles</string>
 	        <key>scope</key>
 	        <string>source.imba.embedded.css</string>
 	        <key>settings</key>
