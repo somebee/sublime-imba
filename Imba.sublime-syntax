@@ -15,6 +15,26 @@ variables:
 
 contexts:
   main:
+    - match: "### (less)( scoped)?"
+      scope: comment.block.imba
+      push: inline-less
+
+    - match: "### (css)( scoped)?"
+      scope: comment.block.imba
+      push: inline-css
+
+    - match: "### (sass)( scoped)?"
+      scope: comment.block.imba
+      push: inline-sass
+
+    - match: "### (stylus)( scoped)?"
+      scope: comment.block.imba
+      push: inline-stylus
+
+    - match: "### (scss)( scoped)?"
+      scope: comment.block.imba
+      push: inline-scss
+
     - match: \b(import)\b
       scope: keyword.control.imba
       push: import
@@ -33,6 +53,46 @@ contexts:
       push: vardef
 
     - include: body
+
+  pop-style:
+    - match: "###"
+      pop: true
+      scope: comment.block.imba
+
+  inline-css:
+    - include: pop-style
+    - match: (?=\S)
+      embed: scope:source.css
+      embed_scope: source.imba.embedded.css
+      escape: (?i)(?=###)
+
+  inline-less:
+    - include: pop-style
+    - match: (?=\S)
+      embed: scope:source.less
+      embed_scope: source.imba.embedded.css
+      escape: (?i)(?=###)
+
+  inline-sass:
+    - include: pop-style
+    - match: (?=\S)
+      embed: scope:source.sass
+      embed_scope: source.imba.embedded.css
+      escape: (?i)(?=###)
+
+  inline-stylus:
+    - include: pop-style
+    - match: (?=\S)
+      embed: scope:source.stylus
+      embed_scope: source.imba.embedded.css
+      escape: (?i)(?=###)
+
+  inline-scss:
+    - include: pop-style
+    - match: (?=\S)
+      embed: scope:source.scss
+      embed_scope: source.imba.embedded.css
+      escape: (?i)(?=###)
 
   symbol:
     - match: (?<![\w\)\]\}])(\:[@$\w_][\w\-_$]*)

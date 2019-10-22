@@ -353,7 +353,17 @@
 			</dict>
 		</dict>
 
-
+		 <dict>
+	        <key>name</key>
+	        <string>JS_Source</string>
+	        <key>scope</key>
+	        <string>source.imba.embedded.css</string>
+	        <key>settings</key>
+	        <dict>
+	            <key>background</key>
+	            <string>#0f1011</string>
+	        </dict>
+	    </dict>
 
 
 		<dict>
