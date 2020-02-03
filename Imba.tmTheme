@@ -134,7 +134,7 @@
 			<key>name</key>
 			<string>Keyword Var</string>
 			<key>scope</key>
-			<string>keyword.control.vass</string>
+			<string>keyword.control.var</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -157,6 +157,21 @@
 				<string>#E28964</string>
 			</dict>
 		</dict>
+
+		<dict>
+			<key>name</key>
+			<string>Storage</string>
+			<key>scope</key>
+			<string>storage.modifier.decorator</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>normal</string>
+				<key>foreground</key>
+				<string>#eee7bb</string>
+			</dict>
+		</dict>
+
 		<dict>
 			<key>name</key>
 			<string>String</string>
@@ -512,6 +527,35 @@
 				<string>normal</string>
 			</dict>
 		</dict>
+
+		<dict>
+			<key>name</key>
+			<string>Private field</string>
+			<key>scope</key>
+			<string>variable.other.private</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#d9d3b7</string>
+				<key>fontStyle</key>
+				<string>normal</string>
+			</dict>
+		</dict>
+
+		<dict>
+			<key>name</key>
+			<string>Instance field</string>
+			<key>scope</key>
+			<string>variable.other.instance</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#afc7e4</string>
+				<key>fontStyle</key>
+				<string>normal</string>
+			</dict>
+		</dict>
+
 		<dict>
 			<key>name</key>
 			<string>Accessor</string>

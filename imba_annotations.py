@@ -8,6 +8,8 @@ import _thread as thread
 from time import time, sleep
 from distutils.spawn import find_executable
 
+
+
 IMBA_WARN_CACHE = []
 IMBA_HINT_CACHE = {}
 CURRENT_ERR_REGION = None
@@ -57,7 +59,6 @@ class ImbaEventTrigger(object):
 		pass
 
 IMBA_CARET_HOLD_HANDLER = ImbaEventTrigger()
-
 
 class ImbaDocumentListener(sublime_plugin.EventListener):
 

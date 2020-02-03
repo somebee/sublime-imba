@@ -12,7 +12,7 @@
         },
         {
             "name": "Compile",
-            "cmd": ["imbac", "-p", "$file"]
+            "cmd": ["imbac", "$file"]
         },
         {
             "name": "Analyze tokens",

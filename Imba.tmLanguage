@@ -3,7 +3,11 @@
 <plist version="1.0">
 	<dict>
 		<key>fileTypes</key>
-		<array><string>imba</string></array>
+		<array>
+			<string>imba</string>
+			<string>imba1</string>
+			<string>imba2</string>
+		</array>
 		<key>name</key>
 		<string>Imba</string>
 		<key>patterns</key>

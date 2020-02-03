@@ -1,15 +1,16 @@
 %YAML 1.2
 ---
 name: Imba
-file_extensions: [imba]
+file_extensions: [imba,imba1,imba2]
 scope: source.imba
 first_line_match: ^#!/.*\bimba
 
 variables:
-  ident: '[A-Za-z_](-?[A-Za-z\d\_]+)*'
-  identifier: '[A-Za-z_](-?[A-Za-z\d\_]+)*'
+  ident: '[A-Za-z_\$](-?[A-Za-z\d\_\$]+)*'
+  identifier: '[a-z_\$](-?[A-Za-z\d\_\$]+)*'
   ivar: '\@\@?{{ident}}'
-  const: '[A-Z][A-Za-z\d\-]*'
+  const: '[A-Z][A-Za-z\d\-\$]*'
+  private_field: '#[A-Za-z\_][\w\-]*'
   tag_id: '#[A-Za-z\_][\w\-]*'
   tag_class: '\.([A-Za-z\_][\w\-]*)'
 
@@ -39,6 +40,7 @@ contexts:
       scope: keyword.control.imba
       push: import
 
+    - include: css-block
     - include: require
 
     - match: \b(extern)\b
@@ -53,6 +55,23 @@ contexts:
       push: vardef
 
     - include: body
+
+    - match: \)
+      scope: invalid.illegal.stray-bracket-end
+
+    - match: \}
+      scope: invalid.illegal.stray-bracket-end
+
+  css-block:
+    - match: '(css)\s*(?=\{)'
+      scope: keyword.control.imba
+      push:
+        - match: \{
+          scope: keyword.control.imba
+          push: ImbaCSS.sublime-syntax
+        - match: \}
+          scope: keyword.control.imba
+          pop: true
 
   pop-style:
     - match: "###"
@@ -107,9 +126,15 @@ contexts:
       captures:
         1: identifier.class.imba
 
+  decorator:
+    - match: '(@@)({{ident}})'
+      scope: storage.modifier.decorator
+
   ivar:
-    - match: '{{ivar}}'
-      scope: variable.instance.imba
+    - match: '(@)({{ident}})'
+      captures:
+          1: variable.other.instance.imba
+          2: variable.other.instance.imba
 
   argvar:
     - match: '\$\d+'
@@ -140,7 +165,7 @@ contexts:
       - include: body
 
   keyword:
-    - match: \b(if|else|elif|unless|for( own)?|while|return|until|switch|then|when|try|catch|finally|continue|break|throw|do|await|typeof|delete)\b(?![\:\-])
+    - match: \b(if|else|elif|unless|for( own)?|while|return|until|switch|then|when|try|catch|finally|continue|break|throw|do|await|typeof|delete|static)\b(?![\:\-])
       scope: keyword.control.imba
 
   body:
@@ -156,10 +181,12 @@ contexts:
     - match: \)
       scope: invalid.illegal.stray-bracket-end
 
+    - match: /\t\ /
+      scope: invalid.illegal.inconsistent-indentation
+
     - include: class
     - include: tagdef
     - include: expr
-
 
   alphanumerics:
     - match: \b(true|yes)\b
@@ -177,11 +204,6 @@ contexts:
         - match: \.
           push: selector_class
         - match: \)
-          pop: true
-    - match: (\%)(?=[a-z\.\#])
-      push:
-        - meta_scope: meta.selector.single.imba
-        - match: (?=[\s\t\)\]])
           pop: true
 
 
@@ -211,17 +233,20 @@ contexts:
           3: punctuation.section.tag.close.imba
         scope: meta.tag.imba
 
+  tag_params:
+    - match: (\$[\$\w\.\-]+)
+      captures:
+        1: keyword.special.imba
+    - include: body
+
   tag_content:
-    - meta_scope: meta.tag.imba
-    - include: parens
+    - meta_scope: entity.name.tag.imba
 
     - match: '\.{'
-      scope: entity.name.tag.class.evaled.imba
       push:
         - meta_content_scope: meta.interpolation.imba
         - include: expr
         - match: '}'
-          scope: entity.name.tag.class.evaled.imba
           pop: true
 
     - match: '\@{'
@@ -242,6 +267,13 @@ contexts:
           pop: true
         - include: expr
 
+    - match: '{'
+      push:
+        - meta_content_scope: meta.interpolation.imba
+        - include: expr
+        - match: '}'
+          pop: true
+
     - match: (\@)(-*[a-zA-Z][\w\-]*)?
       scope: entity.name.tag.ref.imba
 
@@ -254,18 +286,29 @@ contexts:
     - match: (\:)(-*[a-zA-Z][\w\-]*)?
       scope: entity.name.tag.event.imba
 
-    - match: \s+([@\:]?[a-zA-Z][\w\-]*([\:\.][a-zA-Z][\w\-]*)?)\s*(\=)\s*
+    - match: \s+([@\:]?[a-zA-Z][\w\-])
       scope: entity.name.tag.attribute.imba
+    
+    - match: \=\s*
       push:
-        - meta_scope: entity.name.tag.attributevalue.imba
+        - meta_scope: meta.tagobject.imba
         - match: (?=(\s|[\-\=]?\>))
           pop: true
-        - include: unspaced_expr
+        - include: body
 
     - match: \[
       push:
         - meta_scope: meta.tagobject.imba
         - match: \]
+          pop: true
+        - include: body
+
+    - match: \(
+      push:
+        - meta_scope: meta.tagparams.imba
+        - match: \$[\w\.\-]+
+          scope: variable.special.imba
+        - match: \)
           pop: true
         - include: body
 
@@ -291,7 +334,7 @@ contexts:
       scope: constant.numeric.hex.imba
 
   identifier:
-    - match: ([a-z\_](-?\w+)*)
+    - match: ([a-z\_](-?[\w\$]+)*)
       scope: identifier.basic.imba
 
   special:
@@ -334,8 +377,9 @@ contexts:
     - include: symbol
     - include: access
     - include: richstring
+    - include: templatestring
     - include: alphanumerics
-    - include: singletag
+    - include: private_field
     - include: special
     - include: accessable
     - include: assignable
@@ -383,19 +427,18 @@ contexts:
         2: keyword.special.imba
 
 
-    - match: (\.)([a-z\_][\w\-]*)
+    - match: (\.)({{identifier}})
       scope: accessor.invocation.imba
       captures:
           1: keyword.operator.accessor.imba
           2: identifier.basic.imba
           # 1: punctuation.invoke.imba
 
-  singletag:
-    - match: '(#[A-Za-z\_][\w\-]*)(\:)?'
+  private_field:
+    - match: '(#)([A-Za-z\_][\w\-]*)'
       captures:
-        1: identifier.singletag.imba
-        # 2: punctuation.access.imba
-        2: keyword.operator.accessor.imba
+        1: variable.other.private.imba
+        2: variable.other.private.imba
 
   accessable:
     - include: identifier
@@ -410,6 +453,7 @@ contexts:
     - include: identifier
 
   expr:
+    - include: comment
     - include: heregex
     - include: literal-regexp
     - include: expr_no_regex
@@ -429,6 +473,7 @@ contexts:
     - include: accessor
     - include: identifier
     - include: punctuation
+    - include: decorator
 
 
   unspaced_expr:
@@ -509,6 +554,15 @@ contexts:
           pop: true
         - include: string-content
 
+  templatestring:
+    - match: '`'
+      push:
+        - meta_scope: string.quoted.template.imba
+        - include: interpolation
+        - match: '`'
+          pop: true
+        - include: string-content
+
   string:
     - match: \'
       push:
@@ -542,6 +596,7 @@ contexts:
 
   class_body:
     - include: prop
+    - include: css-block
     - include: body
 
 
@@ -564,10 +619,11 @@ contexts:
 
   tagdef_body:
     - include: prop
+    - include: css-block
     - include: body
 
   def:
-    - match: ([\t ]*)(export |export default )?(var |let |const )?(def|get|set)(?=\s[A-Za-z\_][\w\#\.\-]*)
+    - match: ([\t ]*)(export |export default |global |static )?(var |let |const )?(def|get|set)(?=\s[A-Za-z\_\[][\w\#\.\-]*)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
@@ -578,6 +634,14 @@ contexts:
         - match: ^(?!(\1[\t ]+|\s*$))
           pop: true
         - include: method_body
+        - match: \G[ ]\[
+          scope: entity.name.function.imba
+          push:
+            - meta_scope: entity.name.function.imba
+            - match: \]
+              scope: entity.name.function.imba
+              set: def_params
+            - include: body
         - match: \G[ ]([A-Za-z\_][\w\#\.\-]*\=?)
           captures:
             1: entity.name.function.imba
@@ -603,12 +667,7 @@ contexts:
       captures:
         2: keyword.control.imbac
         3: entity.name.property.imba
-      push:
-        - meta_content_scope: scope.property.imba
-        - match: ^(?!(\1[\t ]+))
-          pop: true
-        - include: options
-        - include: comment
+
 
   # simply accepts a propname and pops otherwise
   _propname:
@@ -666,6 +725,8 @@ contexts:
 
   comment:
     - match: \#([ \t].*)?$
+      scope: comment.line.imba
+    - match: \/\/([^\/].*)?$
       scope: comment.line.imba
 
   heregex:

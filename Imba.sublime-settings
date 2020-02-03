@@ -6,6 +6,8 @@
 
     "tab_completion": false,
 
+    "auto_complete_commit_on_tab": true,
+
     // Set to true to insert spaces when tab is pressed
     "translate_tabs_to_spaces": false,
 

@@ -10,11 +10,13 @@ class ImbaCommaCommand(sublime_plugin.TextCommand):
     		self.view.run_command("auto_complete", {'disable_auto_insert': True,'next_completion_if_showing': False})
     		self.view.end_edit(edit)
     	else:
-
     		pass
+
+
 
 class ImbaDeleteTagCommand(sublime_plugin.TextCommand):
 	def run(self, edit, args = None):
+		print('running delete command')
 		self.view.run_command("right_delete")
 		self.view.run_command("left_delete")
 		self.view.run_command("hide_auto_complete")

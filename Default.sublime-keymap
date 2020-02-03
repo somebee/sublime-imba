@@ -47,7 +47,10 @@
 		{ "key": "preceding_text", "operator": "regex_contains", "operand": "(^|\t|\\s)# ", "match_all": true }
 	]},
 
-	{ "keys": ["backspace"], "command": "imba_delete_tag", "args": {}, "context": [
+	{ "keys": ["backspace"],
+		"command": "imba_delete_tag",
+		"args": {},
+		"context": [
 		{"key": "selector", "operator": "equal", "operand": "source.imba"},
 		{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
 		{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
@@ -55,14 +58,14 @@
 		{ "key": "following_text", "operator": "regex_contains", "operand": "^>", "match_all": true }
 	]},
 	
-	{ "keys": ["<"], "command": "imba_open_tag", "context": [
+	{ "keys": ["<"], "command": "insert_snippet", "args": {"contents": "<${1:$SELECTION}>"},"context": [
 		{"key": "selector", "operator": "equal", "operand": "source.imba"},
 		{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
 		{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
 		{ "key": "preceding_text", "operator": "regex_contains", "operand": "(^|=|>|\\(|\\[|append )([ \t]*)$", "match_all": false }
 	]},
 	
-	{ "keys": ["<"], "command": "imba_open_tag", "context": [
+	{ "keys": ["<"], "command": "insert_snippet", "args": {"contents": "<${1:$SELECTION}>"}, "context": [
 		{"key": "selector", "operator": "equal", "operand": "source.imba"},
 		{ "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true },
 		{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true }
