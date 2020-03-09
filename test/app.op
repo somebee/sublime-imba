@@ -5,8 +5,35 @@ import './components/app-li'
 import './components/app-pane'
 import './components/sheet'
 
+tag testser
+	get test
+		self
+
+let a = {
+	a: 1
+	b: 2
+	c: 4
+
+	def hello
+		yes
+
+}
+let other = [
+	1
+	2
+	3
+	4
+	'test'
+]
+
+let obj =
+	a: 1
+	b: 2
+	c: 3
+
 let store = Store.new
 let {aa,bb,cc} = {a: 1, b: 2, c: 3}
+
 
 tag hello
 	get test
@@ -21,6 +48,18 @@ tag hello
 		$1
 		console
 		again.test
+		var object = {
+			a: 1
+			b: 2
+			c: 3,
+			d: 1,
+		}
+
+		var other =
+			a: 1
+			b: 2
+			c: 3
+
 		<div> test ? 10 : <div>
 		<self>
 			<div> "Hello there"

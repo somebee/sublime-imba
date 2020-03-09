@@ -1536,6 +1536,11 @@ repository:
       end: (?=,|\}|$|\/\/|\/\*)
       patterns:
       - include: '#expression'
+    - name: meta.object.member.imba
+      begin: ^(\s*)({{identifier}})\s*(\:)
+      end: ^(?!(\1\s+|\s*$))
+      patterns:
+      - include: '#expression'
     # object member body:
     - name:  meta.object.member.imba
       begin: ':'

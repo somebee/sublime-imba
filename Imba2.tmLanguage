@@ -4914,6 +4914,21 @@
             <key>name</key>
             <string>meta.object.member.imba</string>
             <key>begin</key>
+            <string>^(\s*)([_$[:alpha:]][_$[:alnum:]]*)\s*(\:)</string>
+            <key>end</key>
+            <string>^(?!(\1\s+|\s*$))</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#expression</string>
+              </dict>
+            </array>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>meta.object.member.imba</string>
+            <key>begin</key>
             <string>:</string>
             <key>beginCaptures</key>
             <dict>
