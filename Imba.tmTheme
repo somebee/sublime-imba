@@ -166,9 +166,9 @@
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
-				<string>normal</string>
+				<string>bold</string>
 				<key>foreground</key>
-				<string>#eee7bb</string>
+				<string>#E28964</string>
 			</dict>
 		</dict>
 

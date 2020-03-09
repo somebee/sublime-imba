@@ -6,7 +6,7 @@ scope: source.imba
 first_line_match: ^#!/.*\bimba
 
 variables:
-  ident: '[A-Za-z_\$](-?[A-Za-z\d\_\$]+)*'
+  ident: '[A-Za-z_\$](-?[A-Za-z\d\_\$]+)*([\!\?])?'
   identifier: '[a-z_\$](-?[A-Za-z\d\_\$]+)*'
   ivar: '\@\@?{{ident}}'
   const: '[A-Z][A-Za-z\d\-\$]*'
@@ -129,9 +129,21 @@ contexts:
   decorator:
     - match: '(@@)({{ident}})'
       scope: storage.modifier.decorator
+      
+    - match: '(\&)({{ident}})(\.{{ident}})*'
+      captures:
+        1: storage.modifier.decorator
+      #  2: keyword.control.imba
+      # scope: storage.modifier.decorator
 
   ivar:
     - match: '(@)({{ident}})'
+      captures:
+          1: variable.other.instance.imba
+          2: variable.other.instance.imba
+          
+  svar:
+    - match: '(\$)({{ident}})'
       captures:
           1: variable.other.instance.imba
           2: variable.other.instance.imba
@@ -334,7 +346,7 @@ contexts:
       scope: constant.numeric.hex.imba
 
   identifier:
-    - match: ([a-z\_](-?[\w\$]+)*)
+    - match: ({{ident}})
       scope: identifier.basic.imba
 
   special:
@@ -394,7 +406,7 @@ contexts:
       scope: keyword.operator.accessor.raw.imba
 
   key:
-    - match: ((\$|@|_)?[\w\-]+)[ \t]*(\:)(?![@$A-Za-z_])
+    - match: ((\$|@|_)?[\w\-\$]+)[ \t]*(\:)
       captures:
         3: punctuation.keyset.imba
       scope: identifier.key.imba
@@ -427,7 +439,7 @@ contexts:
         2: keyword.special.imba
 
 
-    - match: (\.)({{identifier}})
+    - match: (\.)({{ident}})
       scope: accessor.invocation.imba
       captures:
           1: keyword.operator.accessor.imba
@@ -441,13 +453,16 @@ contexts:
         2: variable.other.private.imba
 
   accessable:
-    - include: identifier
-    - include: ivar
     - include: const
+    - include: ivar
+    - include: svar
+    - include: identifier
+
 
   assignable:
     - include: const
     - include: ivar
+    - include: svar
     - include: array
     - include: accessor
     - include: identifier
@@ -464,17 +479,16 @@ contexts:
     - include: key
     - include: keyword
     - include: selector
+    - include: decorator
     - include: operator
-    - include: value
     - include: argvar
+    - include: value
     - include: brackets
     - include: parens
     - include: comment
     - include: accessor
     - include: identifier
     - include: punctuation
-    - include: decorator
-
 
   unspaced_expr:
     - include: tag
@@ -623,7 +637,7 @@ contexts:
     - include: body
 
   def:
-    - match: ([\t ]*)(export |export default |global |static )?(var |let |const )?(def|get|set)(?=\s[A-Za-z\_\[][\w\#\.\-]*)
+    - match: ([\t ]*)(export |export default |global |static )?(var |let |const )?(def|get|set)(?=\s\#?[A-Za-z\_\[\$][\w\#\.\-\$]*)
       captures:
         2: keyword.control.imba
         3: keyword.control.imba
@@ -642,7 +656,7 @@ contexts:
               scope: entity.name.function.imba
               set: def_params
             - include: body
-        - match: \G[ ]([A-Za-z\_][\w\#\.\-]*\=?)
+        - match: \G[ ](\#?[A-Za-z\_\$][\w\#\.\-\$]*[\=\!\?]?)
           captures:
             1: entity.name.function.imba
           push: def_params
