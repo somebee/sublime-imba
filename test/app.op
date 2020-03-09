@@ -1,0 +1,56 @@
+import Store from './store'
+
+import './components/app-filter-bar'
+import './components/app-li'
+import './components/app-pane'
+import './components/sheet'
+
+let store = Store.new
+let {aa,bb,cc} = {a: 1, b: 2, c: 3}
+
+tag hello
+	get test
+		hello
+
+	def render a,b,test = 100
+
+		var {a = 10,b} = {a,b}
+		var test = `abadba`
+		@hello
+		$hello
+		$1
+		console
+		again.test
+		<div> test ? 10 : <div>
+		<self>
+			<div> "Hello there"
+
+		<self>
+			<test-{hello}-there.test>
+			<div.hello :test.there.again(10,20) >
+			<div :click.stop.here>
+			<div title="hello">
+			<div .{10 + 20}> "Testing {Math.random}"
+			<div
+				.state-{Math.test(10)}-here
+				hello=(10 > 20) .test
+				other=/testser/
+				disabled
+				>
+				<tag-{type}-here>
+		return 100
+
+	def hello
+
+class LocalStream
+	
+	def render
+		self
+
+	prop name = Math.random(20)
+	prop state
+	prop reference
+
+class Test < Array
+	def render
+		yes

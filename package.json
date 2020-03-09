@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "js-yaml": "^3.13.1",
+    "plist": "^3.0.1"
+  }
+}

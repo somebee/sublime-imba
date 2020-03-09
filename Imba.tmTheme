@@ -320,7 +320,7 @@
 			<key>name</key>
 			<string>Punctuation access</string>
 			<key>scope</key>
-			<string>punctuation.access</string>
+			<string>punctuation.accessor</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -940,7 +940,7 @@
 			<key>name</key>
 			<string>§ css tag-name</string>
 			<key>scope</key>
-			<string>meta.selector.css entity.name.tag</string>
+			<string>meta.selector.css entity.name.tag,meta.tag.imba entity.other</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
