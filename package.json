@@ -1,6 +1,10 @@
 {
-  "dependencies": {
-    "js-yaml": "^3.13.1",
-    "plist": "^3.0.1"
-  }
+ "scripts": {
+  "build-theme": "imba scripts/build-theme.imba"
+ },
+ "dependencies": {
+  "chroma-js": "^2.1.0",
+  "js-yaml": "^3.13.1",
+  "plist": "^3.0.1"
+ }
 }

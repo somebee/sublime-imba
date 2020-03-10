@@ -1,0 +1,171 @@
+{
+  "name": "Imba Color Scheme",
+  "globals": {
+    "activeGuide": "#3b5567",
+    "background": "#111111",
+    "caret": "#A7A7A7",
+    "foreground": "#F8F8F8",
+    "guide": "#202e37",
+    "invisibles": "#CAE2FB2B",
+    "selection": "#2b383f",
+    "stackGuide": "#202e37"
+  },
+  "rules": [
+    {
+      "name": "comment",
+      "scope": "comment",
+      "foreground": "#718096",
+      "font_style": "italic"
+    },
+    {
+      "name": "keyword",
+      "scope": "keyword",
+      "foreground": "#e88f76"
+    },
+    {
+      "name": "storage",
+      "scope": "storage",
+      "foreground": "#e88f76"
+    },
+    {
+      "name": "constant.numeric",
+      "scope": "constant.numeric",
+      "foreground": "#63b3ed"
+    },
+    {
+      "name": "constant.language.boolean",
+      "scope": "constant.language.boolean",
+      "foreground": "#4299e1"
+    },
+    {
+      "name": "constant.language.super",
+      "scope": "constant.language.super",
+      "foreground": "#e88f76"
+    },
+    {
+      "name": "entity.name",
+      "scope": "entity.name",
+      "foreground": "#90cdf4"
+    },
+    {
+      "name": "variable.other",
+      "scope": "variable.other",
+      "foreground": "#edf2f7"
+    },
+    {
+      "name": "variable.other.instance",
+      "scope": "variable.other.instance",
+      "foreground": "#9dcbeb"
+    },
+    {
+      "name": "variable.other.private",
+      "scope": "variable.other.private",
+      "foreground": "#f9ef9b"
+    },
+    {
+      "name": "variable.other.property",
+      "scope": "variable.other.property",
+      "foreground": "#f7fafc"
+    },
+    {
+      "name": "variable.language.super",
+      "scope": "variable.language.super",
+      "foreground": "#e88f76"
+    },
+    {
+      "name": "variable.language.this",
+      "scope": "variable.language.this",
+      "foreground": "#63b3ed"
+    },
+    {
+      "name": "meta.import variable.other",
+      "scope": "meta.import variable.other",
+      "foreground": "#ccb2f0"
+    },
+    {
+      "name": "meta.embedded.line",
+      "scope": "meta.embedded.line",
+      "foreground": "#edf2f7"
+    },
+    {
+      "name": "meta.definition.method entity.name.function",
+      "scope": "meta.definition.method entity.name.function",
+      "foreground": "#8bcef7"
+    },
+    {
+      "name": "meta.definition.property",
+      "scope": "meta.definition.property",
+      "foreground": "#8bcef7"
+    },
+    {
+      "name": "meta.tag",
+      "scope": "meta.tag",
+      "foreground": "#c5bd6c"
+    },
+    {
+      "name": "meta.tag.content",
+      "scope": "meta.tag.content",
+      "foreground": "#eee591"
+    },
+    {
+      "name": "entity.name.tag",
+      "scope": "entity.name.tag",
+      "foreground": "#f9ef9b"
+    },
+    {
+      "name": "entity.other.tag.class-name",
+      "scope": "entity.other.tag.class-name",
+      "foreground": "#fefcbf"
+    },
+    {
+      "name": "support.class",
+      "scope": "support.class",
+      "foreground": "#ccb2f0"
+    },
+    {
+      "name": "support.variable",
+      "scope": "support.variable",
+      "foreground": "#ccb2f0"
+    },
+    {
+      "name": "support.constant",
+      "scope": "support.constant",
+      "foreground": "#ccb2f0"
+    },
+    {
+      "name": "string.quoted",
+      "scope": "string.quoted",
+      "foreground": "#c6f6d5"
+    },
+    {
+      "name": "string.template",
+      "scope": "string.template",
+      "foreground": "#c6f6d5"
+    },
+    {
+      "name": "string.regexp",
+      "scope": "string.regexp",
+      "foreground": "#f6ad55"
+    },
+    {
+      "name": "meta.type.annotation",
+      "scope": "meta.type.annotation",
+      "foreground": "#a0aec0"
+    },
+    {
+      "name": "meta.type.annotation entity.name",
+      "scope": "meta.type.annotation entity.name",
+      "foreground": "#a0aec0"
+    },
+    {
+      "name": "keyword.operator.type",
+      "scope": "keyword.operator.type",
+      "foreground": "#a0aec0"
+    },
+    {
+      "name": "punctuation.accessor",
+      "scope": "punctuation.accessor",
+      "foreground": "#e88f76"
+    }
+  ]
+}

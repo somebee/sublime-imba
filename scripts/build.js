@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
+var cp = require("child_process");
 var path = require("path");
 var yaml = require("js-yaml");
 var plist = require("plist");
@@ -119,12 +120,6 @@ function buildGrammar() {
     } catch (e) {
         console.log('could not write',e);
     }
-    // Write TypeScript.tmLanguage
-    // writePlistFile(tsGrammar, file(Language.Imba, Extension.TmLanguage));
-
-    // Write TypeScriptReact.tmLangauge
-    // var tsxGrammar = getTsxGrammar();
-    // writePlistFile(tsxGrammar, file(Language.TypeScriptReact, Extension.TmLanguage));
 }
 function changeTsToTsxTheme(theme) {
     var tsxUpdates = readYaml(file(Language.TypeScriptReact, Extension.YamlTmTheme));
@@ -156,5 +151,12 @@ fs.watchFile(src, (curr, prev) => {
   buildGrammar();
 });
 
+let themesrc = path.resolve(__dirname,'..','Imba.theme.imba')
+fs.watchFile(src, (curr, prev) => {
+  console.log(`${src} file Changed`);
+  cp.execSync('npm run build-theme')
+});
+
 buildGrammar();
+cp.execSync('npm run build-theme');
 // buildTheme();

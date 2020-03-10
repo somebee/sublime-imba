@@ -10,9 +10,9 @@ variables:
   endOfIdentifier: (?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.))
   propertyAccess: (?:(\.)|(\?\.(?!\s*[[:digit:]])))
   propertyAccessPreIdentifier: \??\.\s*
-  identifier: '[_$[:alpha:]][_$[:alnum:]]*'
+  identifier: '[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?'
   tagTypeIdentifier: '\w+(?:\-\w+)*'
-  tagAttrIdentifier: '[\w\$]+(?:\-[\w\$]+)*'
+  tagAttrIdentifier: '[\w$_]+(?:\-[\w$_]+)*'
   constantIdentifier: '[[:upper:]][_$[:digit:][:upper:]]*'
   propertyIdentifier: '\#?{{identifier}}'
   constantPropertyIdentifier: '\#?{{constantIdentifier}}'
@@ -60,7 +60,7 @@ variables:
   matchingBraces: (\{([^\{\}]|(\{[^\{\}]*\}))*\})
   matchingBrackets: (\[([^\[\]]|(\[[^\[\]]*\]))*\])
   inlineComment: \/\*([^\*]|(\*[^\/]))*\*\/
-  startOfDeclaration: '{{startOfIdentifier}}(?:(\bexport)\s+)?(?:(\bdeclare)\s+)?'
+  startOfDeclaration: '{{startOfIdentifier}}(?:(\bexport)\s+)?'
   lookBehindOfPossiblyMultilineArrowWithDestructuring: (?<=[(=,])
   lookBehindOfPossiblyMultilineArrow: (?<=[(=,]|=>|{{lookBehindReturn}})
   lookBehindOfObjectMemberPossiblyMultilineArrow: (?<=:)
@@ -151,6 +151,7 @@ repository:
     - include: '#after-operator-block-as-object-literal'
     - include: '#decl-block'
     - include: '#label'
+    - include: '#tag-tree'
     - include: '#expression'
     - include: '#punctuation-semicolon'
     - include: '#string'
@@ -198,7 +199,15 @@ repository:
       match: '{{startOfIdentifier}}(package){{endOfIdentifier}}'
     - name: keyword.other.debugger.imba
       match: '{{startOfIdentifier}}(debugger){{endOfIdentifier}}'
-
+  
+  tag-tree:
+    patterns:
+    - name: meta.tagtree.imba
+      begin: '^(\s*)(?=\<[\w\{\[])'
+      end: ^(?!(\1\s+|\s*$))
+      patterns:
+      - include: '#tag-instance'
+      - include: '#statements'
 
   tag-instance:
     patterns:
@@ -210,15 +219,19 @@ repository:
       endCaptures:
         '1': { name: punctuation.section.tag.close.imba }
       patterns:
+      - include: '#tag-content'
+      contentName: 'meta.tag.content.imba'
+    
+  tag-content:
+    patterns:
       - include: '#tag-expr-name'
       - include: '#tag-interpolated-content'
       - include: '#tag-interpolated-parens'
+      - include: '#tag-interpolated-brackets'
       - include: '#tag-event-handler'
       - include: '#tag-classname'
       - include: '#tag-attr-value'
       - include: '#tag-attr-name'
-      contentName: 'meta.tag.content.imba'
-
   tag-expr-name:
     begin: '(?<=<)'
     contentName: entity.name.tag.type.imba
@@ -249,6 +262,18 @@ repository:
     patterns:
       - include: '#expression'
     contentName: meta.embedded.line.imba
+  
+  tag-interpolated-brackets:
+    name: meta.tag.expression.imba
+    begin: \[
+    beginCaptures:
+      '0': { name: punctuation.section.tag.imba }
+    end: \]
+    endCaptures:
+      '0': { name: punctuation.section.tag.imba }
+    patterns:
+      - include: '#expression'
+    contentName: meta.embedded.line.imba
 
   tag-classname:
     begin: \.
@@ -271,6 +296,7 @@ repository:
         '0': { name: punctuation.section.tag }
       patterns:
       - include: '#tag-interpolated-parens'
+      - include: '#tag-interpolated-content'
       end: (?=[\.\[\>\s])
 
     end: (?=[\[\>])
@@ -715,7 +741,7 @@ repository:
 
   field-declaration:
     name: meta.field.declaration.imba
-    begin: (?x)(?<!\()(?:{{startOfIdentifier}}(readonly|prop|attr)\s+)?(?=\s*{{propertyNameWithPrivate}}\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|\}|$))
+    begin: (?x)(?<!\()(?:{{startOfIdentifier}}(readonly|prop|attr)\s+)?(?=\s*{{propertyNameWithPrivate}}\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|\}|\\|$))
     beginCaptures:
       '1': { name: storage.modifier.imba }
     end: (?x)(?=\}|;|,|$|(^(?!\s*{{propertyNameWithPrivate}}\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|$))))|(?<=\})
@@ -973,30 +999,39 @@ repository:
       match: ','
 
   tag-declaration:
-    name: meta.class.imba
-    begin: '(\s*){{startOfDeclaration}}\b(?:(abstract)\s+)?\b(tag)\s+({{tagTypeIdentifier}})'
-    beginCaptures:
-      '2': { name: keyword.control.export.imba }
-      '3': { name: storage.modifier.imba }
-      '4': { name: storage.modifier.imba }
-      '5': { name: storage.type.class.imba }
-      '6': { name: entity.name.type.class.tag.imba}
-    end: ^(?!(\1\s+|\s*$))
     patterns:
-    - include: '#class-or-tag-body'
+    - name: meta.class.imba
+      begin: '(\s*){{startOfDeclaration}}\b(tag)\s+({{tagTypeIdentifier}})\s+(\<)\s+({{tagTypeIdentifier}})'
+      beginCaptures:
+        '2': { name: keyword.control.export.imba }
+        '3': { name: storage.type.class.imba }
+        '4': { name: entity.name.type.class.tag.imba}
+        '5': { name: keyword.control.extends.imba}
+        '6': { name: entity.name.type.class.tag.imba}
+      end: ^(?!(\1\s+|\s*$))
+      patterns:
+      - include: '#class-or-tag-body'
+    - name: meta.class.imba
+      begin: '(\s*){{startOfDeclaration}}\b(tag)\s+({{tagTypeIdentifier}})'
+      beginCaptures:
+        '2': { name: keyword.control.export.imba }
+        '3': { name: storage.type.class.imba }
+        '4': { name: entity.name.type.class.tag.imba}
+      end: ^(?!(\1\s+|\s*$))
+      patterns:
+      - include: '#class-or-tag-body'
 
   #class declaration and expression, interface
   class-declaration:
     name: meta.class.imba
-    begin: '(\s*){{startOfDeclaration}}\b(?:(abstract)\s+)?\b(class)\s+({{tagTypeIdentifier}})'
+    begin: '(\s*){{startOfDeclaration}}\b(class)\s+({{tagTypeIdentifier}})'
     beginCaptures:
       '2': { name: keyword.control.export.imba }
-      '3': { name: storage.modifier.imba }
-      '4': { name: storage.modifier.imba }
-      '5': { name: storage.type.class.imba }
-      '6': { name: entity.name.type.class.imba}
+      '3': { name: storage.type.class.imba }
+      '4': { name: entity.name.type.class.imba}
     end: ^(?!(\1\s+|\s*$))
     patterns:
+    - include: '#class-or-interface-heritage'
     - include: '#class-or-tag-body'
 
   class-expression:
@@ -1039,10 +1074,10 @@ repository:
     - include: '#class-or-interface-body'
 
   class-or-interface-heritage:
-    begin: '{{startOfIdentifier}}(?:\b(extends|implements)\b){{endOfIdentifier}}'
+    begin: '{{startOfIdentifier}}(?:\b(<)\b){{endOfIdentifier}}'
     beginCaptures:
       '1': { name: storage.modifier.imba }
-    end: (?=\{)
+    end: (?=$)
     patterns:
     - include: '#comment'
     - include: '#class-or-interface-heritage'
@@ -1641,7 +1676,7 @@ repository:
     - include: '#type'
 
   instanceof-expr:
-    begin: '{{startOfIdentifier}}(instanceof){{endOfIdentifier}}'
+    begin: '{{startOfIdentifier}}(instanceof|\!?isa){{endOfIdentifier}}'
     beginCaptures:
       '1': { name: keyword.operator.expression.instanceof.imba }
     end: (?<=\))|(?=[;),}\]:?]|\|\||\&\&|$|({{startOfIdentifier}}function((\s+{{identifier}})|(\s*[\(]))))
@@ -1689,7 +1724,7 @@ repository:
       captures:
         '1': { name: storage.modifier.imba }
     - match: |-
-        (?x)(?:{{startOfIdentifier}}(public|private|protected|readonly)\s+)?(?:(\.\.\.)\s*)?(?<!=|:){{startOfIdentifier}}(?:(this)|({{identifier}})){{endOfIdentifier}}\s*(\??)(?={{functionLikeAssignmentOrType}})
+        (?x)(?:{{startOfIdentifier}}(public|private|protected|readonly)\s+)?(?:(\.\.\.)\s*)?(?<!=|:){{startOfIdentifier}}(?:(this|self)|({{identifier}})){{endOfIdentifier}}\s*(\??)(?={{functionLikeAssignmentOrType}})
       captures:
         '1': { name: storage.modifier.imba }
         '2': { name: keyword.operator.rest.imba }
@@ -1697,7 +1732,7 @@ repository:
         '4': { name: entity.name.function.imba }
         '5': { name: keyword.operator.optional.imba }
     - match: |-
-        (?x)(?:{{startOfIdentifier}}(public|private|protected|readonly)\s+)?(?:(\.\.\.)\s*)?(?<!=|:){{startOfIdentifier}}(?:(this)|({{identifier}})){{endOfIdentifier}}\s*(\??)(?=\s*[:,]|$)
+        (?x)(?:{{startOfIdentifier}}(public|private|protected|readonly)\s+)?(?:(\.\.\.)\s*)?(?<!=|:){{startOfIdentifier}}(?:(this|self)|({{identifier}})){{endOfIdentifier}}\s*(\??)(?=\s*[:,]|$)
       captures:
         '1': { name: storage.modifier.imba }
         '2': { name: keyword.operator.rest.imba }
@@ -1905,9 +1940,9 @@ repository:
   boolean-literal:
     patterns:
     - name: constant.language.boolean.true.imba
-      match: '{{startOfIdentifier}}true{{endOfIdentifier}}'
+      match: '{{startOfIdentifier}}(true|yes){{endOfIdentifier}}'
     - name: constant.language.boolean.false.imba
-      match: '{{startOfIdentifier}}false{{endOfIdentifier}}'
+      match: '{{startOfIdentifier}}(false|no){{endOfIdentifier}}'
 
   null-literal:
     name: constant.language.null.imba
@@ -1915,7 +1950,7 @@ repository:
 
   this-literal:
     name: variable.language.this.imba
-    match: '{{startOfIdentifier}}this\b(?!\$)'
+    match: '{{startOfIdentifier}}(this|self)\b(?!\$)'
 
   super-literal:
     name: variable.language.super.imba
@@ -2076,7 +2111,7 @@ repository:
         '1': { name: support.variable.dom.imba }
         '2': { name: support.class.dom.imba }
     - match: |-
-        (?x) {{propertyAccess}} \s* (?:
+        (?x) {{propertyAccess}}disabled \s* (?:
           (ATTRIBUTE_NODE|CDATA_SECTION_NODE|COMMENT_NODE|DOCUMENT_FRAGMENT_NODE|DOCUMENT_NODE|DOCUMENT_TYPE_NODE
           |DOMSTRING_SIZE_ERR|ELEMENT_NODE|ENTITY_NODE|ENTITY_REFERENCE_NODE|HIERARCHY_REQUEST_ERR|INDEX_SIZE_ERR
           |INUSE_ATTRIBUTE_ERR|INVALID_CHARACTER_ERR|NO_DATA_ALLOWED_ERR|NO_MODIFICATION_ALLOWED_ERR|NOT_FOUND_ERR
@@ -2251,6 +2286,9 @@ repository:
     # const
     - name: variable.other.constant.imba
       match: '{{constantVar}}'
+      
+    - name: keyword.other
+      match: 'for own|for'
 
     - name: variable.special.imba
       match: '\$\d+'
@@ -2263,7 +2301,9 @@ repository:
     # ivars
     - name: variable.other.instance.imba
       match: '\@{{identifier}}'
-    
+    # privates
+    - name: variable.other.private.imba
+      match: '\#{{identifier}}'
 
   object-identifiers:
     patterns:
@@ -2296,7 +2336,7 @@ repository:
     patterns:
     # if type starts on same line use end of line as end
     - name: meta.type.annotation.imba
-      begin: (:)(?=\s*\S)
+      begin: (\\)(?=\s*\S)
       beginCaptures:
         '1': { name: keyword.operator.type.annotation.imba }
       end: (?<![:|&])((?=$|^|[,);\}\]]|//)|(?==[^>])|((?<=[\}>\]\)]|[_$[:alpha:]])\s*(?=\{)))
@@ -2304,7 +2344,7 @@ repository:
       - include: '#type'
     # if type starts on next line use modified line endings as end of type annotation eg. complete empty line
     - name: meta.type.annotation.imba
-      begin: (:)
+      begin: (\\)
       beginCaptures:
         '1': { name: keyword.operator.type.annotation.imba }
       end: (?<![:|&])((?=[,);\}\]]|//)|(?==[^>])|(?=^\s*$)|((?<=\S)(?=\s*$))|((?<=[\}>\]\)]|[_$[:alpha:]])\s*(?=\{)))
