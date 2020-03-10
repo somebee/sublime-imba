@@ -110,20 +110,30 @@ for own name,hex of colors
 	//console.log('dimmed',hex,color)
 
 
-
-colors.prop = dim(colors.blue300,-0.1)
+colors.base = "#F8F8F8"
+colors.identifier = "#F8F8F8"
+colors.identifier = "#dfe9dc"
+colors.prop = colors.blue300 # dim(colors.blue300,-0.1)
 colors.keyword = dim(colors.red500,0.8)
 colors.keyword = mix(colors.red400,colors.orange400,0.5)
 colors.keyword = "#e88f76"
+colors.parameter = colors.identifier # "#cad7eb" # "#eae0ce"
+colors.comment = colors.gray600
+
+
+colors.private = dim(colors.yellow200,0.5) # dim(colors.yellow300,0.5)
 colors.ivar = dim(colors.blue300,0.3)
-colors.private = dim(colors.yellow300,0.5)
+colors.internal = dim(colors.blue300,0.5)
+colors.private = dim(colors.blue300,1) # dim(colors.yellow300,0.5)
 colors.imports = darken(colors.purple300,0.2)
 colors.pascal = darken(colors.purple300,0.2)
 colors.string = colors.green200
 colors.regexp = colors.orange400
 
+colors.event-modifier = "#f99d72"
+
 colors.tag = dim(colors.yellow300,0.5)
-colors.type = colors.gray500 // mix(colors.purple400,colors.blue400) // dim(colors.purple400,2)
+colors.type = colors.comment # "#a0aec0" // mix(colors.purple400,colors.blue400) // dim(colors.purple400,2)
 
 export var globals = {
 	activeGuide: '#3b5567'
@@ -137,34 +147,59 @@ export var globals = {
 	stackGuide: '#202e37'
 }
 
+export var vstheme = {
+	"editor.background": '#111111'
+}
+
 export var scopes = [
+	['source.imba',colors.base]
 	['comment',colors.gray600,'italic']
 	['keyword',colors.keyword]
 	['storage',colors.keyword]
 	['constant.numeric',colors.blue400]
 	['constant.language.boolean',colors.blue500]
+	['constant.language.undefined',colors.blue500]
+	['constant.language.null',colors.blue500]
 	['constant.language.super',colors.keyword]
-	['entity.name',colors.blue300]
-
-	['variable.other',colors.gray200]
+	['entity.name.type',colors.blue400]
+	['invalid.whitespace',background: colors.red400]
+	
+	['support.function',colors.base]
+	['support.function.require',colors.keyword]
+	
+	['variable.parameter',colors.parameter]
+	['variable.other.readwrite',colors.identifier]
+	['variable.other.object',colors.identifier]
 	['variable.other.instance',colors.ivar]
+	['variable.other.internal',colors.internal]
 	['variable.other.private',colors.private]
 	['variable.other.property',colors.gray100]
+	['variable.other.class',colors.imports]
+	['variable.other.constant',colors.imports]
+
 	['variable.language.super',colors.keyword]
 	['variable.language.this',colors.blue400]
 	['meta.import variable.other',colors.imports]
 			
 	['meta.embedded.line',colors.gray200]
-	['meta.definition.method entity.name.function',colors.prop]
-	['meta.definition.property',colors.prop]
+	['meta.definition.function entity.name.function',colors.prop]
+	['meta.definition entity.name.function',colors.prop]
+	['meta.definition.property variable.object.property',colors.prop]
+	
+	['meta.object-literal.key',colors.prop]
+	['meta.object.member',colors.prop]
 	
 	['meta.tag',darken(colors.tag,1)]
-	['meta.tag.content',darken(colors.tag,0.2)]
+	['meta.tag.attributes',darken(colors.tag,0)]
 	['entity.name.tag',colors.tag]
-	['entity.other.tag.class-name',colors.yellow200]
+	
+	['meta.selector',colors.tag]
+	// ['entity.other.tag.class-name',colors.yellow200]
+	// ['entity.other.tag.event',colors.event-modifier]
+	// ['entity.other.tag.event-modifier',colors.event-modifier]
 	
 	['support.class',colors.pascal]
-	['support.variable',colors.pascal]
+	['support.variable -support.variable.property',colors.pascal]
 	// ['support.function',colors.pascal]
 	['support.constant',colors.pascal]
 	
@@ -174,9 +209,12 @@ export var scopes = [
 	
 	['meta.type.annotation',colors.type]
 	['meta.type.annotation entity.name',colors.type]
+	['meta.type.annotation entity.name.type',colors.type]
 
 	['keyword.operator.type',colors.type]
+	['keyword.operator.type.annotation',darken(colors.type,1.5)]
 	['punctuation.accessor',colors.keyword]
+	
 	
 	// ['meta.tagtree string.quoted',colors.string]
 	// ['meta.import punctuation.definition.block',colors.keyword]

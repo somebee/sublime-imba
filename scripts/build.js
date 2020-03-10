@@ -152,11 +152,12 @@ fs.watchFile(src, (curr, prev) => {
 });
 
 let themesrc = path.resolve(__dirname,'..','Imba.theme.imba')
-fs.watchFile(src, (curr, prev) => {
-  console.log(`${src} file Changed`);
+fs.watchFile(themesrc, (curr, prev) => {
+  console.log(`${themesrc} file Changed`);
   cp.execSync('npm run build-theme')
 });
 
+console.log(src,themesrc);
 buildGrammar();
 cp.execSync('npm run build-theme');
 // buildTheme();

@@ -8,9 +8,13 @@ uuid: ef98eb90-bf9b-11e4-bb52-0800200c9a67
 variables:
   startOfIdentifier: (?<![_$[:alnum:]])(?:(?<=\.\.\.)|(?<!\.))
   endOfIdentifier: (?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.))
-  propertyAccess: (?:(\.)|(\?\.(?!\s*[[:digit:]])))
+  propertyAccess: (?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))
   propertyAccessPreIdentifier: \??\.\s*
   identifier: '[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?'
+  pascalIdentifier: '[[:upper:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*'
+  internalIdentifier: '\${{identifier}}'
+  instanceIdentifier: '\@{{identifier}}'
+  privateIdentifier: '\#{{identifier}}'
   tagTypeIdentifier: '\w+(?:\-\w+)*'
   tagAttrIdentifier: '[\w$_]+(?:\-[\w$_]+)*'
   constantIdentifier: '[[:upper:]][_$[:digit:][:upper:]]*'
@@ -38,7 +42,7 @@ variables:
   propertyName: ({{anyNumber}}|({{identifier}})|{{nonIdentifierPropertyName}})
   propertyNameWithPrivate: ({{anyNumber}}|({{propertyIdentifier}})|{{nonIdentifierPropertyName}})
   constantVar: ({{constantIdentifier}})(?![_$[:alnum:]])
-  constructsAndModifiers: '(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b'
+  constructsAndModifiers: '(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b'
   endOfStatement: ';|(?:^\s*{{constructsAndModifiers}})'
   varExprStart: '{{startOfDeclaration}}\b(var|let){{endOfIdentifier}}'
   constExprStart: '{{startOfDeclaration}}\b(const(?!\s+enum\b)){{endOfIdentifier}}'
@@ -146,6 +150,7 @@ patterns:
 repository:
   statements:
     patterns:
+    - include: '#invalid-indentation'
     - include: '#declaration'
     - include: '#control-statement'
     - include: '#after-operator-block-as-object-literal'
@@ -174,16 +179,23 @@ repository:
     - name: storage.modifier.imba
       match: '{{startOfIdentifier}}(declare|export){{endOfIdentifier}}'
 
+  invalid-indentation:
+    patterns:
+    - name: invalid.whitespace
+      match: ^[\ ]+
+
   control-statement:
     patterns:
     - include: '#switch-statement'
     - include: '#for-loop'
     - name: keyword.control.trycatch.imba
       match: '{{startOfIdentifier}}(catch|finally|throw|try){{endOfIdentifier}}'
-    - match: '{{startOfIdentifier}}(break|continue|goto)\s+({{identifier}}){{endOfIdentifier}}'
-      captures:
+    - begin: '{{startOfIdentifier}}(break|continue|goto)\s+'
+      beginCaptures:
         '1': { name: keyword.control.loop.imba }
-        '2': { name: entity.name.label.imba }
+      end: (?=$)
+      patterns:
+      - include: '#expression'
     - name: keyword.control.loop.imba
       match: '{{startOfIdentifier}}(break|continue|do|goto|while){{endOfIdentifier}}'
     - name: keyword.control.flow.imba
@@ -220,7 +232,7 @@ repository:
         '1': { name: punctuation.section.tag.close.imba }
       patterns:
       - include: '#tag-content'
-      contentName: 'meta.tag.content.imba'
+      contentName: 'meta.tag.attributes.imba'
     
   tag-content:
     patterns:
@@ -232,9 +244,10 @@ repository:
       - include: '#tag-classname'
       - include: '#tag-attr-value'
       - include: '#tag-attr-name'
+
   tag-expr-name:
     begin: '(?<=<)'
-    contentName: entity.name.tag.type.imba
+    contentName: entity.name.tag.imba
     end: '(?=[\.\[\>\s\(])'
     patterns:
     - include: '#tag-interpolated-content'
@@ -277,12 +290,10 @@ repository:
 
   tag-classname:
     begin: \.
-    beginCaptures:
-      '0': { name: punctuation.section.tag }
     patterns:
     - include: '#tag-interpolated-content'
-    end: (?=[\.\[\>\s\(])
-    contentName: entity.other.tag.class-name
+    end: (?=[\.\[\>\s\(\=])
+    contentName: entity.other.attribute-name.class.css
 
   tag-event-handler:
     begin: (?=\:)
@@ -300,7 +311,7 @@ repository:
       end: (?=[\.\[\>\s])
 
     end: (?=[\[\>])
-    contentName: entity.other.event
+    contentName: entity.other.tag.event
 
   tag-attr-name:
     begin: ({{tagAttrIdentifier}})
@@ -312,7 +323,7 @@ repository:
   tag-attr-value:
     begin: (\=)
     beginCaptures:
-      '0': { name: punctuation.section.tag }
+      '0': { name: keyword.operator.tag.assignment }
     end: (?=>|\s)
     contentName: meta.tag.attribute-value.imba
     patterns:
@@ -787,18 +798,21 @@ repository:
   #functions, methods, function expressions, arrows, indexers
   function-declaration:
     name: meta.function.imba
-    begin: '{{startOfDeclaration}}(?:(async)\s+)?(function\b)(?:\s*(\*))?(?:(?:\s+|(?<=\*))({{identifier}}))?\s*'
-    beginCaptures:
-      '1': { name: keyword.control.export.imba }
-      '2': { name: storage.modifier.imba }
-      '3': { name: storage.modifier.async.imba }
-      '4': { name: storage.type.function.imba }
-      '5': { name: keyword.generator.asterisk.imba }
-      '6': { name: meta.definition.function.imba entity.name.function.imba }
-    end: (?={{endOfStatement}})|(?<=\})
+    begin: ^(\t*)(?=(export\s+)?(static\s+)?(def|get|set)\b)
+    end: ^(?!(\1\t+|\s*$))
     patterns:
-    - include: '#function-name'
-    - include: '#function-body'
+    - name: meta.function.head
+      begin: '{{startOfDeclaration}}(?:(static)\s+)?(def\b|set\b|get\b)(?:\s*(\*))?(?:(?:\s+|(?<=\*))({{identifier}}))?\s*'
+      beginCaptures:
+        '1': { name: keyword.control.export.imba }
+        '2': { name: storage.modifier.imba }
+        '3': { name: storage.type.function.imba }
+        '4': { name: keyword.generator.asterisk.imba }
+        '5': { name: meta.definition.function.imba entity.name.function.imba }
+      end: (?=$)|(?=do\s)
+      patterns:
+      - include: '#function-parameters-body'
+    - include: '#statements'
 
   function-expression:
     name: meta.function.expression.imba
@@ -830,45 +844,7 @@ repository:
 
   method-declaration:
     patterns:
-    # constructor signature
-    - name: meta.method.declaration.imba
-      begin: '(?x){{startOfIdentifier}}(?:\b(public|private|protected)\s+)?(?:\b(abstract)\s+)?(?:\b(async)\s+)?\s*\b(constructor)\b(?!:){{endOfIdentifier}}'
-      beginCaptures:
-        '1': { name: storage.modifier.imba } # captures keyword (public or private or protected)
-        '2': { name: storage.modifier.imba } # captures keyword (abstract)
-        '3': { name: storage.modifier.async.imba } # captures keyword (async)
-        '4': { name: storage.type.imba } # captures keyword (constructor)
-      end: (?=\}|;|,|$)|(?<=\})
-      patterns:
-      - include: '#method-declaration-name'
-      - include: '#function-body'
-    # new or call signature
-    - name: meta.method.declaration.imba
-      begin: '(?x){{startOfIdentifier}}(?:\b(public|private|protected)\s+)?(?:\b(abstract)\s+)?(?:\b(async)\s+)?(?:(?:\s*\b(new)\b(?!:){{endOfIdentifier}})|(?:(\*)\s*)?)(?=\s*({{typeParameters}})?[\(])'
-      beginCaptures:
-        '1': { name: storage.modifier.imba } # captures keyword (public or private or protected)
-        '2': { name: storage.modifier.imba } # captures keyword (abstract)
-        '3': { name: storage.modifier.async.imba } # captures keyword (async)
-        '4': { name: keyword.operator.new.imba } # captures keyword (new)
-        '5': { name: keyword.generator.asterisk.imba } # captures keyword (*)
-      end: (?=\}|;|,|$)|(?<=\})
-      patterns:
-      - include: '#method-declaration-name'
-      - include: '#function-body'
-    # method, accessor
-    - name: meta.method.declaration.imba
-      begin: '(\s*)(?x){{startOfIdentifier}}(?:\b(static)\s+)?(get|set|def)\s+({{propertyName}})'
-      beginCaptures:
-        '2': { name: storage.modifier.imba } # captures keyword (static)
-        '3': { name: storage.type.property.imba } # captures keyword (get|set|def)
-        '4': { name: meta.definition.method.imba entity.name.function.imba } # captures keyword (*)
-      end: ^(?!(\1\s+|\s*$))
-      patterns:
-      - name: meta.method.body
-        begin: (\s+){{startOfIdentifier}}
-        end: ^(?!(\1\s+|\s*$))
-        patterns:
-        - include: '#statements'
+    - include: '#function-declaration'
 
   object-literal-method-declaration:
     name: meta.method.declaration.imba
@@ -1001,38 +977,49 @@ repository:
   tag-declaration:
     patterns:
     - name: meta.class.imba
-      begin: '(\s*){{startOfDeclaration}}\b(tag)\s+({{tagTypeIdentifier}})\s+(\<)\s+({{tagTypeIdentifier}})'
+      begin: '(\t*){{startOfDeclaration}}\b(tag)\s+({{tagTypeIdentifier}})\s+(\<)\s+({{tagTypeIdentifier}})'
       beginCaptures:
         '2': { name: keyword.control.export.imba }
         '3': { name: storage.type.class.imba }
         '4': { name: entity.name.type.class.tag.imba}
         '5': { name: keyword.control.extends.imba}
         '6': { name: entity.name.type.class.tag.imba}
-      end: ^(?!(\1\s+|\s*$))
+      end: ^(?!(\1\t+|\s*$))
       patterns:
       - include: '#class-or-tag-body'
     - name: meta.class.imba
-      begin: '(\s*){{startOfDeclaration}}\b(tag)\s+({{tagTypeIdentifier}})'
+      begin: '(\t*){{startOfDeclaration}}\b(tag)\s+({{tagTypeIdentifier}})'
       beginCaptures:
         '2': { name: keyword.control.export.imba }
         '3': { name: storage.type.class.imba }
         '4': { name: entity.name.type.class.tag.imba}
-      end: ^(?!(\1\s+|\s*$))
+      end: ^(?!(\1\t+|\s*$))
       patterns:
       - include: '#class-or-tag-body'
 
   #class declaration and expression, interface
   class-declaration:
-    name: meta.class.imba
-    begin: '(\s*){{startOfDeclaration}}\b(class)\s+({{tagTypeIdentifier}})'
-    beginCaptures:
-      '2': { name: keyword.control.export.imba }
-      '3': { name: storage.type.class.imba }
-      '4': { name: entity.name.type.class.imba}
-    end: ^(?!(\1\s+|\s*$))
     patterns:
-    - include: '#class-or-interface-heritage'
-    - include: '#class-or-tag-body'
+    - name: meta.class.imba
+      begin: '(\t*){{startOfDeclaration}}\b(class)\s+({{identifier}})\s+(\<)\s+({{identifier}})'
+      beginCaptures:
+        '2': { name: keyword.control.export.imba }
+        '3': { name: storage.type.class.imba }
+        '4': { name: entity.name.type.class.imba }
+        '5': { name: keyword.control.extends.imba}
+        '6': { name: entity.name.type.class.imba }
+      end: ^(?!(\1\t+|\s*$))
+      patterns:
+      - include: '#class-or-tag-body'
+    - name: meta.class.imba
+      begin: '(\t*){{startOfDeclaration}}\b(class)\s+({{identifier}})'
+      beginCaptures:
+        '2': { name: keyword.control.export.imba }
+        '3': { name: storage.type.class.imba }
+        '4': { name: entity.name.type.class.imba}
+      end: ^(?!(\1\t+|\s*$))
+      patterns:
+      - include: '#class-or-tag-body'
 
   class-expression:
     name: meta.class.imba
@@ -1469,7 +1456,7 @@ repository:
 
   indent-decl-block:
     name: meta.block.imba
-    begin: (?!(\1\s+|\s*$))
+    begin: (\s)
     beginCaptures:
       '0': { name: punctuation.definition.block.imba }
     end: \}
@@ -1481,7 +1468,7 @@ repository:
   #object literals
   after-operator-block-as-object-literal:
     name: meta.objectliteral.imba
-    begin: (?<!\+\+|--)(?<=[:=(,\[?+!>]|{{lookBehindAwait}}|{{lookBehindReturn}}|{{lookBehindYield}}|{{lookBehindThrow}}|{{lookBehindIn}}|{{lookBehindOf}}|{{lookBehindTypeof}}|&&|\|\||\*)\s*(\{)
+    begin: (?<!\+\+|--)(?<=[:=(,\[?+!>]|{{lookBehindAwait}}|{{lookBehindReturn}}|{{lookBehindYield}}|{{lookBehindThrow}}|{{lookBehindIn}}|{{lookBehindOf}}|{{lookBehindTypeof}}|&&|and|or|\|\||\*)\s*(\{)
     beginCaptures:
       '1': { name: punctuation.definition.block.imba }
     end: \}
@@ -1563,7 +1550,7 @@ repository:
       begin: '{{startOfIdentifier}}(as)\s+'
       beginCaptures:
         '1': { name: keyword.control.as.imba }
-      end: (?=$|^|[,}]|\|\||\&\&|({{startOfIdentifier}}(as)\s+))
+      end: (?=$|^|[,}]|\|\||\&\&|and|or|({{startOfIdentifier}}(as)\s+))
       patterns:
       - include: '#type'
     - name: meta.object.member.imba
@@ -1660,6 +1647,7 @@ repository:
     - include: '#literal'
     - include: '#support-objects'
     - include: '#object-identifiers'
+    - include: '#plain-identifiers'
     - include: '#punctuation-accessor'
     - name: keyword.operator.expression.import.imba
       match: (?:{{startOfIdentifier}}import(?=\s*[\(]\s*[\"\'\`]))
@@ -1850,7 +1838,7 @@ repository:
         '1': { name: keyword.operator.logical.imba }
         '2': { name: keyword.operator.arithmetic.imba }
     - name: keyword.operator.logical.imba
-      match: \!|&&|\|\||\?\?
+      match: \!|&&|\|\||\?\?|or|and
     - name: keyword.operator.bitwise.imba
       match: \&|~|\^|\|
     - name: keyword.operator.assignment.imba
@@ -2261,6 +2249,23 @@ repository:
         '5': { name: support.function.dom.imba }
         '6': { name: support.function.promise.imba }
 
+  plain-identifiers:
+    patterns:
+    - name: variable.other.constant.imba
+      match: '{{constantVar}}'
+    - name: variable.other.class.imba
+      match: '{{pascalIdentifier}}'
+    - name: variable.special.imba
+      match: '\$\d+'
+    - name: variable.other.internal.imba
+      match: '{{internalIdentifier}}'
+    - name: variable.other.readwrite.imba
+      match: '{{identifier}}'
+    - name: variable.other.instance.imba
+      match: '{{instanceIdentifier}}'
+    - name: variable.other.private.imba
+      match: '{{privateIdentifier}}'
+
   identifiers:
     patterns:
     - include: '#object-identifiers'
@@ -2270,7 +2275,7 @@ repository:
       captures:
         '1': { name: punctuation.accessor.imba }
         '2': { name: punctuation.accessor.optional.imba }
-        '3': { name: entity.name.function.imba }
+        '3': { name: entity.name.function.property.imba }
     # const properties
     - match: '{{propertyAccess}}\s*({{constantPropertyIdentifier}})(?![_$[:alnum:]])'
       captures:
@@ -2278,32 +2283,23 @@ repository:
         '2': { name: punctuation.accessor.optional.imba }
         '3': { name: variable.other.constant.property.imba }
     # properties
+    - match: '{{propertyAccess}}({{pascalIdentifier}})'
+      captures:
+        '1': { name: punctuation.accessor.imba }
+        '2': { name: punctuation.accessor.optional.imba }
+        '3': { name: variable.other.class.property.imba }
     - match: '{{propertyAccess}}({{propertyIdentifier}})'
       captures:
         '1': { name: punctuation.accessor.imba }
         '2': { name: punctuation.accessor.optional.imba }
         '3': { name: variable.other.property.imba }
-    # const
-    - name: variable.other.constant.imba
-      match: '{{constantVar}}'
-      
+
     - name: keyword.other
-      match: 'for own|for'
-
-    - name: variable.special.imba
-      match: '\$\d+'
-
-    - name: variable.other.instance.imba
-      match: '\${{identifier}}'
-    # vars
-    - name: variable.other.readwrite.imba
-      match: '{{identifier}}'
-    # ivars
-    - name: variable.other.instance.imba
-      match: '\@{{identifier}}'
-    # privates
-    - name: variable.other.private.imba
-      match: '\#{{identifier}}'
+      match: 'for own|for|if|unless|when'
+    - name: support.function.require
+      match: 'require'
+    - include: '#plain-identifiers'
+    
 
   object-identifiers:
     patterns:
@@ -2314,22 +2310,38 @@ repository:
     - match: |-
         (?x){{propertyAccess}}\s*(?:
           ({{constantPropertyIdentifier}}) |
+          ({{pascalIdentifier}}) |
+          ({{privateIdentifier}}) |
+          ({{internalIdentifier}}) |
+          ({{instanceIdentifier}}) |
           ({{propertyIdentifier}})
         )(?=\s*{{propertyAccessPreIdentifier}}{{propertyIdentifier}})
       captures:
         '1': { name: punctuation.accessor.imba }
         '2': { name: punctuation.accessor.optional.imba }
         '3': { name: variable.other.constant.object.property.imba }
-        '4': { name: variable.other.object.property.imba }
+        '4': { name: variable.other.class.object.property.imba }
+        '5': { name: variable.other.private.object.property.imba }
+        '6': { name: variable.other.internal.object.property.imba }
+        '7': { name: variable.other.instance.object.property.imba }
+        '8': { name: variable.other.object.property.imba }
     # objects
     - match: |-
         (?x)(?:
           ({{constantIdentifier}}) |
+          ({{pascalIdentifier}}) |
+          ({{privateIdentifier}}) |
+          ({{internalIdentifier}}) |
+          ({{instanceIdentifier}}) |
           ({{identifier}})
         )(?=\s*{{propertyAccessPreIdentifier}}{{propertyIdentifier}})
       captures:
         '1': { name: variable.other.constant.object.imba }
-        '2': { name: variable.other.object.imba }
+        '2': { name: variable.other.class.object.imba }
+        '3': { name: variable.other.private.object.imba }
+        '4': { name: variable.other.internal.object.imba }
+        '5': { name: variable.other.instance.object.imba }
+        '6': { name: variable.other.object.imba }
 
   #type annotation
   type-annotation:
@@ -2354,10 +2366,10 @@ repository:
   parameter-type-annotation:
     patterns:
     - name: meta.type.annotation.imba
-      begin: (:)
+      begin: (\\)
       beginCaptures:
         '1': { name: keyword.operator.type.annotation.imba }
-      end: (?=[,)])|(?==[^>])
+      end: (?=[,)])|(?==[^>])|$
       patterns:
       - include: '#type'
 
@@ -2934,7 +2946,20 @@ repository:
       end: \*/
       endCaptures:
         '0': { name: punctuation.definition.comment.imba }
-    - begin: (^[ \t]+)?((//)(?:\s*((@)internal)(?=\s|$))?)
+    - name: meta.embedded.block
+      begin: (###)\s(css)(?:\s+(scoped))?
+      beginCaptures:
+        '1': { name: punctuation.definition.comment.imba }
+        '2': { name: storage.type.css.imba }
+        '3': { name: storage.type.css.imba }
+      end: '###(?:[ \t]*\n)'
+      contentName: meta.embedded.block.css
+      endCaptures:
+        '0': { name: punctuation.definition.comment.imba }
+      patterns:
+      - include: 'source.css'
+
+    - begin: (^[ \t]+)?((//|#\s)(?:\s*((@)internal)(?=\s|$))?)
       beginCaptures:
         '1': { name: punctuation.whitespace.comment.leading.imba }
         '2': { name: comment.line.double-slash.imba }

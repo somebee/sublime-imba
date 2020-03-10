@@ -45,6 +45,10 @@
         <array>
           <dict>
             <key>include</key>
+            <string>#invalid-indentation</string>
+          </dict>
+          <dict>
+            <key>include</key>
             <string>#declaration</string>
           </dict>
           <dict>
@@ -145,6 +149,18 @@
           </dict>
         </array>
       </dict>
+      <key>invalid-indentation</key>
+      <dict>
+        <key>patterns</key>
+        <array>
+          <dict>
+            <key>name</key>
+            <string>invalid.whitespace</string>
+            <key>match</key>
+            <string>^[\ ]+</string>
+          </dict>
+        </array>
+      </dict>
       <key>control-statement</key>
       <dict>
         <key>patterns</key>
@@ -164,21 +180,25 @@
             <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(catch|finally|throw|try)(?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.))</string>
           </dict>
           <dict>
-            <key>match</key>
-            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(break|continue|goto)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.))</string>
-            <key>captures</key>
+            <key>begin</key>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(break|continue|goto)\s+</string>
+            <key>beginCaptures</key>
             <dict>
               <key>1</key>
               <dict>
                 <key>name</key>
                 <string>keyword.control.loop.imba</string>
               </dict>
-              <key>2</key>
-              <dict>
-                <key>name</key>
-                <string>entity.name.label.imba</string>
-              </dict>
             </dict>
+            <key>end</key>
+            <string>(?=$)</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#expression</string>
+              </dict>
+            </array>
           </dict>
           <dict>
             <key>name</key>
@@ -288,7 +308,7 @@
               </dict>
             </array>
             <key>contentName</key>
-            <string>meta.tag.content.imba</string>
+            <string>meta.tag.attributes.imba</string>
           </dict>
         </array>
       </dict>
@@ -335,7 +355,7 @@
         <key>begin</key>
         <string>(?&lt;=&lt;)</string>
         <key>contentName</key>
-        <string>entity.name.tag.type.imba</string>
+        <string>entity.name.tag.imba</string>
         <key>end</key>
         <string>(?=[\.\[\&gt;\s\(])</string>
         <key>patterns</key>
@@ -452,14 +472,6 @@
       <dict>
         <key>begin</key>
         <string>\.</string>
-        <key>beginCaptures</key>
-        <dict>
-          <key>0</key>
-          <dict>
-            <key>name</key>
-            <string>punctuation.section.tag</string>
-          </dict>
-        </dict>
         <key>patterns</key>
         <array>
           <dict>
@@ -468,9 +480,9 @@
           </dict>
         </array>
         <key>end</key>
-        <string>(?=[\.\[\&gt;\s\(])</string>
+        <string>(?=[\.\[\&gt;\s\(\=])</string>
         <key>contentName</key>
-        <string>entity.other.tag.class-name</string>
+        <string>entity.other.attribute-name.class.css</string>
       </dict>
       <key>tag-event-handler</key>
       <dict>
@@ -521,7 +533,7 @@
         <key>end</key>
         <string>(?=[\[\&gt;])</string>
         <key>contentName</key>
-        <string>entity.other.event</string>
+        <string>entity.other.tag.event</string>
       </dict>
       <key>tag-attr-name</key>
       <dict>
@@ -549,7 +561,7 @@
           <key>0</key>
           <dict>
             <key>name</key>
-            <string>punctuation.section.tag</string>
+            <string>keyword.operator.tag.assignment</string>
           </dict>
         </dict>
         <key>end</key>
@@ -753,7 +765,7 @@
             <key>begin</key>
             <string>(?=(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(var|let)(?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.)))</string>
             <key>end</key>
-            <string>(?!(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(var|let)(?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.)))((?=;|}|((?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(of|in)\s+)|^\s*$|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b))|((?&lt;!^let|[^\._$[:alnum:]]let|^var|[^\._$[:alnum:]]var)(?=\s*$)))</string>
+            <string>(?!(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(var|let)(?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.)))((?=;|}|((?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(of|in)\s+)|^\s*$|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b))|((?&lt;!^let|[^\._$[:alnum:]]let|^var|[^\._$[:alnum:]]var)(?=\s*$)))</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -863,7 +875,7 @@
               </dict>
             </dict>
             <key>end</key>
-            <string>(?!(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(const(?!\s+enum\b))(?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.)))((?=;|}|((?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(of|in)\s+)|^\s*$|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b))|((?&lt;!^const|[^\._$[:alnum:]]const)(?=\s*$)))</string>
+            <string>(?!(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(const(?!\s+enum\b))(?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.)))((?=;|}|((?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(of|in)\s+)|^\s*$|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b))|((?&lt;!^const|[^\._$[:alnum:]]const)(?=\s*$)))</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -2401,51 +2413,57 @@
         <key>name</key>
         <string>meta.function.imba</string>
         <key>begin</key>
-        <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?(?:(async)\s+)?(function\b)(?:\s*(\*))?(?:(?:\s+|(?&lt;=\*))([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?))?\s*</string>
-        <key>beginCaptures</key>
-        <dict>
-          <key>1</key>
-          <dict>
-            <key>name</key>
-            <string>keyword.control.export.imba</string>
-          </dict>
-          <key>2</key>
-          <dict>
-            <key>name</key>
-            <string>storage.modifier.imba</string>
-          </dict>
-          <key>3</key>
-          <dict>
-            <key>name</key>
-            <string>storage.modifier.async.imba</string>
-          </dict>
-          <key>4</key>
-          <dict>
-            <key>name</key>
-            <string>storage.type.function.imba</string>
-          </dict>
-          <key>5</key>
-          <dict>
-            <key>name</key>
-            <string>keyword.generator.asterisk.imba</string>
-          </dict>
-          <key>6</key>
-          <dict>
-            <key>name</key>
-            <string>meta.definition.function.imba entity.name.function.imba</string>
-          </dict>
-        </dict>
+        <string>^(\t*)(?=(export\s+)?(static\s+)?(def|get|set)\b)</string>
         <key>end</key>
-        <string>(?=;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b))|(?&lt;=\})</string>
+        <string>^(?!(\1\t+|\s*$))</string>
         <key>patterns</key>
         <array>
           <dict>
-            <key>include</key>
-            <string>#function-name</string>
+            <key>name</key>
+            <string>meta.function.head</string>
+            <key>begin</key>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?(?:(static)\s+)?(def\b|set\b|get\b)(?:\s*(\*))?(?:(?:\s+|(?&lt;=\*))([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?))?\s*</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.export.imba</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>storage.modifier.imba</string>
+              </dict>
+              <key>3</key>
+              <dict>
+                <key>name</key>
+                <string>storage.type.function.imba</string>
+              </dict>
+              <key>4</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.generator.asterisk.imba</string>
+              </dict>
+              <key>5</key>
+              <dict>
+                <key>name</key>
+                <string>meta.definition.function.imba entity.name.function.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>(?=$)|(?=do\s)</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#function-parameters-body</string>
+              </dict>
+            </array>
           </dict>
           <dict>
             <key>include</key>
-            <string>#function-body</string>
+            <string>#statements</string>
           </dict>
         </array>
       </dict>
@@ -2540,146 +2558,8 @@
         <key>patterns</key>
         <array>
           <dict>
-            <key>name</key>
-            <string>meta.method.declaration.imba</string>
-            <key>begin</key>
-            <string>(?x)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:\b(public|private|protected)\s+)?(?:\b(abstract)\s+)?(?:\b(async)\s+)?\s*\b(constructor)\b(?!:)(?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.))</string>
-            <key>beginCaptures</key>
-            <dict>
-              <key>1</key>
-              <dict>
-                <key>name</key>
-                <string>storage.modifier.imba</string>
-              </dict>
-              <key>2</key>
-              <dict>
-                <key>name</key>
-                <string>storage.modifier.imba</string>
-              </dict>
-              <key>3</key>
-              <dict>
-                <key>name</key>
-                <string>storage.modifier.async.imba</string>
-              </dict>
-              <key>4</key>
-              <dict>
-                <key>name</key>
-                <string>storage.type.imba</string>
-              </dict>
-            </dict>
-            <key>end</key>
-            <string>(?=\}|;|,|$)|(?&lt;=\})</string>
-            <key>patterns</key>
-            <array>
-              <dict>
-                <key>include</key>
-                <string>#method-declaration-name</string>
-              </dict>
-              <dict>
-                <key>include</key>
-                <string>#function-body</string>
-              </dict>
-            </array>
-          </dict>
-          <dict>
-            <key>name</key>
-            <string>meta.method.declaration.imba</string>
-            <key>begin</key>
-            <string>(?x)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:\b(public|private|protected)\s+)?(?:\b(abstract)\s+)?(?:\b(async)\s+)?(?:(?:\s*\b(new)\b(?!:)(?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.)))|(?:(\*)\s*)?)(?=\s*((&lt;\s*([_$[:alpha:]]|(\{([^\{\}]|(\{[^\{\}]*\}))*\})|(\(([^\(\)]|(\([^\(\)]*\)))*\))|(\[([^\[\]]|(\[[^\[\]]*\]))*\]))([^=&lt;&gt;]|=[^&lt;]|\&lt;\s*([_$[:alpha:]]|(\{([^\{\}]|(\{[^\{\}]*\}))*\})|(\(([^\(\)]|(\([^\(\)]*\)))*\))|(\[([^\[\]]|(\[[^\[\]]*\]))*\]))([^=&lt;&gt;]|=[^&lt;]|\&lt;\s*([_$[:alpha:]]|(\{([^\{\}]|(\{[^\{\}]*\}))*\})|(\(([^\(\)]|(\([^\(\)]*\)))*\))|(\[([^\[\]]|(\[[^\[\]]*\]))*\]))([^=&lt;&gt;]|=[^&lt;])*\&gt;)*\&gt;)*&gt;\s*))?[\(])</string>
-            <key>beginCaptures</key>
-            <dict>
-              <key>1</key>
-              <dict>
-                <key>name</key>
-                <string>storage.modifier.imba</string>
-              </dict>
-              <key>2</key>
-              <dict>
-                <key>name</key>
-                <string>storage.modifier.imba</string>
-              </dict>
-              <key>3</key>
-              <dict>
-                <key>name</key>
-                <string>storage.modifier.async.imba</string>
-              </dict>
-              <key>4</key>
-              <dict>
-                <key>name</key>
-                <string>keyword.operator.new.imba</string>
-              </dict>
-              <key>5</key>
-              <dict>
-                <key>name</key>
-                <string>keyword.generator.asterisk.imba</string>
-              </dict>
-            </dict>
-            <key>end</key>
-            <string>(?=\}|;|,|$)|(?&lt;=\})</string>
-            <key>patterns</key>
-            <array>
-              <dict>
-                <key>include</key>
-                <string>#method-declaration-name</string>
-              </dict>
-              <dict>
-                <key>include</key>
-                <string>#function-body</string>
-              </dict>
-            </array>
-          </dict>
-          <dict>
-            <key>name</key>
-            <string>meta.method.declaration.imba</string>
-            <key>begin</key>
-            <string>(\s*)(?x)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:\b(static)\s+)?(get|set|def)\s+(((\b(?&lt;!\$)0(?:x|X)[0-9a-fA-F][0-9a-fA-F_]*(n)?\b(?!\$))|(\b(?&lt;!\$)0(?:b|B)[01][01_]*(n)?\b(?!\$))|(\b(?&lt;!\$)0(?:o|O)?[0-7][0-7_]*(n)?\b(?!\$))|((?&lt;!\$)(?:
-  (?:\b[0-9][0-9_]*(\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)| # 1.1E+3
-  (?:\b[0-9][0-9_]*(\.)[eE][+-]?[0-9][0-9_]*(n)?\b)|             # 1.E+3
-  (?:\B(\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)|             # .1E+3
-  (?:\b[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)|                 # 1E+3
-  (?:\b[0-9][0-9_]*(\.)[0-9][0-9_]*(n)?\b)|                      # 1.1
-  (?:\b[0-9][0-9_]*(\.)(n)?\B)|                                  # 1.
-  (?:\B(\.)[0-9][0-9_]*(n)?\b)|                                  # .1
-  (?:\b[0-9][0-9_]*(n)?\b(?!\.))                                 # 1
-)(?!\$))|([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)|(\'([^\'\\]|\\.)*\')|(\"([^\"\\]|\\.)*\")|(\`([^\`\\]|\\.)*\`)|(\[([^\[\]]|\[[^\[\]]*\])+\])))</string>
-            <key>beginCaptures</key>
-            <dict>
-              <key>2</key>
-              <dict>
-                <key>name</key>
-                <string>storage.modifier.imba</string>
-              </dict>
-              <key>3</key>
-              <dict>
-                <key>name</key>
-                <string>storage.type.property.imba</string>
-              </dict>
-              <key>4</key>
-              <dict>
-                <key>name</key>
-                <string>meta.definition.method.imba entity.name.function.imba</string>
-              </dict>
-            </dict>
-            <key>end</key>
-            <string>^(?!(\1\s+|\s*$))</string>
-            <key>patterns</key>
-            <array>
-              <dict>
-                <key>name</key>
-                <string>meta.method.body</string>
-                <key>begin</key>
-                <string>(\s+)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))</string>
-                <key>end</key>
-                <string>^(?!(\1\s+|\s*$))</string>
-                <key>patterns</key>
-                <array>
-                  <dict>
-                    <key>include</key>
-                    <string>#statements</string>
-                  </dict>
-                </array>
-              </dict>
-            </array>
+            <key>include</key>
+            <string>#function-declaration</string>
           </dict>
         </array>
       </dict>
@@ -3119,7 +2999,7 @@
             <key>name</key>
             <string>meta.class.imba</string>
             <key>begin</key>
-            <string>(\s*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(tag)\s+(\w+(?:\-\w+)*)\s+(\&lt;)\s+(\w+(?:\-\w+)*)</string>
+            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(tag)\s+(\w+(?:\-\w+)*)\s+(\&lt;)\s+(\w+(?:\-\w+)*)</string>
             <key>beginCaptures</key>
             <dict>
               <key>2</key>
@@ -3149,7 +3029,7 @@
               </dict>
             </dict>
             <key>end</key>
-            <string>^(?!(\1\s+|\s*$))</string>
+            <string>^(?!(\1\t+|\s*$))</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -3162,7 +3042,7 @@
             <key>name</key>
             <string>meta.class.imba</string>
             <key>begin</key>
-            <string>(\s*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(tag)\s+(\w+(?:\-\w+)*)</string>
+            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(tag)\s+(\w+(?:\-\w+)*)</string>
             <key>beginCaptures</key>
             <dict>
               <key>2</key>
@@ -3182,7 +3062,7 @@
               </dict>
             </dict>
             <key>end</key>
-            <string>^(?!(\1\s+|\s*$))</string>
+            <string>^(?!(\1\t+|\s*$))</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -3195,39 +3075,83 @@
       </dict>
       <key>class-declaration</key>
       <dict>
-        <key>name</key>
-        <string>meta.class.imba</string>
-        <key>begin</key>
-        <string>(\s*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(class)\s+(\w+(?:\-\w+)*)</string>
-        <key>beginCaptures</key>
-        <dict>
-          <key>2</key>
-          <dict>
-            <key>name</key>
-            <string>keyword.control.export.imba</string>
-          </dict>
-          <key>3</key>
-          <dict>
-            <key>name</key>
-            <string>storage.type.class.imba</string>
-          </dict>
-          <key>4</key>
-          <dict>
-            <key>name</key>
-            <string>entity.name.type.class.imba</string>
-          </dict>
-        </dict>
-        <key>end</key>
-        <string>^(?!(\1\s+|\s*$))</string>
         <key>patterns</key>
         <array>
           <dict>
-            <key>include</key>
-            <string>#class-or-interface-heritage</string>
+            <key>name</key>
+            <string>meta.class.imba</string>
+            <key>begin</key>
+            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(class)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s+(\&lt;)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.export.imba</string>
+              </dict>
+              <key>3</key>
+              <dict>
+                <key>name</key>
+                <string>storage.type.class.imba</string>
+              </dict>
+              <key>4</key>
+              <dict>
+                <key>name</key>
+                <string>entity.name.type.class.imba</string>
+              </dict>
+              <key>5</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.extends.imba</string>
+              </dict>
+              <key>6</key>
+              <dict>
+                <key>name</key>
+                <string>entity.name.type.class.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>^(?!(\1\t+|\s*$))</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#class-or-tag-body</string>
+              </dict>
+            </array>
           </dict>
           <dict>
-            <key>include</key>
-            <string>#class-or-tag-body</string>
+            <key>name</key>
+            <string>meta.class.imba</string>
+            <key>begin</key>
+            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(class)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.export.imba</string>
+              </dict>
+              <key>3</key>
+              <dict>
+                <key>name</key>
+                <string>storage.type.class.imba</string>
+              </dict>
+              <key>4</key>
+              <dict>
+                <key>name</key>
+                <string>entity.name.type.class.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>^(?!(\1\t+|\s*$))</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#class-or-tag-body</string>
+              </dict>
+            </array>
           </dict>
         </array>
       </dict>
@@ -3391,7 +3315,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(?:(\.)|(\?\.(?!\s*[[:digit:]])))(?=\s*[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?(\s*\??\.\s*[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)*\s*)</string>
+            <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))(?=\s*[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?(\s*\??\.\s*[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)*\s*)</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -3465,7 +3389,7 @@
             <key>begin</key>
             <string>(?&lt;=:)\s*</string>
             <key>end</key>
-            <string>(?=\s|[;),}\]:\-\+]|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b))</string>
+            <string>(?=\s|[;),}\]:\-\+]|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b))</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -3767,7 +3691,7 @@
           </dict>
         </dict>
         <key>end</key>
-        <string>(?&lt;=\})|(?=;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b))</string>
+        <string>(?&lt;=\})|(?=;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b))</string>
         <key>patterns</key>
         <array>
           <dict>
@@ -3824,7 +3748,7 @@
           </dict>
         </dict>
         <key>end</key>
-        <string>(?=\}|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b))</string>
+        <string>(?=\}|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b))</string>
         <key>patterns</key>
         <array>
           <dict>
@@ -3847,7 +3771,7 @@
               </dict>
             </dict>
             <key>end</key>
-            <string>(?=\}|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b))</string>
+            <string>(?=\}|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b))</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -3984,7 +3908,7 @@
               </dict>
               <dict>
                 <key>match</key>
-                <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(?:(\.)|(\?\.(?!\s*[[:digit:]])))</string>
+                <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))</string>
                 <key>captures</key>
                 <dict>
                   <key>1</key>
@@ -4146,7 +4070,7 @@
               </dict>
             </dict>
             <key>end</key>
-            <string>(?=$|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b))</string>
+            <string>(?=$|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b))</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -4163,7 +4087,7 @@
             <key>name</key>
             <string>meta.export.imba</string>
             <key>begin</key>
-            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(export)(?:\s+(type))?\b(?!(\$)|(\s*:))((?=\s*[\{*])|((?=\s*[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?(\s|,))(?!\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b)))</string>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(export)(?:\s+(type))?\b(?!(\$)|(\s*:))((?=\s*[\{*])|((?=\s*[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?(\s|,))(?!\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b)))</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -4178,7 +4102,7 @@
               </dict>
             </dict>
             <key>end</key>
-            <string>(?=$|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var)\b))</string>
+            <string>(?=$|;|(?:^\s*(?:abstract|async|class|const|declare|enum|export|function|import|interface|let|module|namespace|return|type|var|def)\b))</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -4667,7 +4591,7 @@
         <key>name</key>
         <string>meta.block.imba</string>
         <key>begin</key>
-        <string>(?!(\1\s+|\s*$))</string>
+        <string>(\s)</string>
         <key>beginCaptures</key>
         <dict>
           <key>0</key>
@@ -4699,7 +4623,7 @@
         <key>name</key>
         <string>meta.objectliteral.imba</string>
         <key>begin</key>
-        <string>(?&lt;!\+\+|--)(?&lt;=[:=(,\[?+!&gt;]|^await|[^\._$[:alnum:]]await|^return|[^\._$[:alnum:]]return|^yield|[^\._$[:alnum:]]yield|^throw|[^\._$[:alnum:]]throw|^in|[^\._$[:alnum:]]in|^of|[^\._$[:alnum:]]of|^typeof|[^\._$[:alnum:]]typeof|&amp;&amp;|\|\||\*)\s*(\{)</string>
+        <string>(?&lt;!\+\+|--)(?&lt;=[:=(,\[?+!&gt;]|^await|[^\._$[:alnum:]]await|^return|[^\._$[:alnum:]]return|^yield|[^\._$[:alnum:]]yield|^throw|[^\._$[:alnum:]]throw|^in|[^\._$[:alnum:]]in|^of|[^\._$[:alnum:]]of|^typeof|[^\._$[:alnum:]]typeof|&amp;&amp;|and|or|\|\||\*)\s*(\{)</string>
         <key>beginCaptures</key>
         <dict>
           <key>1</key>
@@ -4999,7 +4923,7 @@
               </dict>
             </dict>
             <key>end</key>
-            <string>(?=$|^|[,}]|\|\||\&amp;\&amp;|((?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(as)\s+))</string>
+            <string>(?=$|^|[,}]|\|\||\&amp;\&amp;|and|or|((?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(as)\s+))</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -5305,6 +5229,10 @@
           <dict>
             <key>include</key>
             <string>#object-identifiers</string>
+          </dict>
+          <dict>
+            <key>include</key>
+            <string>#plain-identifiers</string>
           </dict>
           <dict>
             <key>include</key>
@@ -5969,7 +5897,7 @@
             <key>name</key>
             <string>keyword.operator.logical.imba</string>
             <key>match</key>
-            <string>\!|&amp;&amp;|\|\||\?\?</string>
+            <string>\!|&amp;&amp;|\|\||\?\?|or|and</string>
           </dict>
           <dict>
             <key>name</key>
@@ -6361,7 +6289,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?x)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(Math)(?:\s*(?:(\.)|(\?\.(?!\s*[[:digit:]])))\s*(?:
+            <string>(?x)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(Math)(?:\s*(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*(?:
   (abs|acos|acosh|asin|asinh|atan|atan2|atanh|cbrt|ceil|clz32|cos|cosh|exp|
   expm1|floor|fround|hypot|imul|log|log10|log1p|log2|max|min|pow|random|
   round|sign|sin|sinh|sqrt|tan|tanh|trunc)
@@ -6398,7 +6326,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?x)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(console)(?:\s*(?:(\.)|(\?\.(?!\s*[[:digit:]])))\s*(
+            <string>(?x)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(console)(?:\s*(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*(
   assert|clear|count|debug|dir|error|group|groupCollapsed|groupEnd|info|log
   |profile|profileEnd|table|time|timeEnd|timeStamp|trace|warn))?\b(?!\$)</string>
             <key>captures</key>
@@ -6427,7 +6355,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(JSON)(?:\s*(?:(\.)|(\?\.(?!\s*[[:digit:]])))\s*(parse|stringify))?\b(?!\$)</string>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(JSON)(?:\s*(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*(parse|stringify))?\b(?!\$)</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -6454,7 +6382,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(import)\s*(?:(\.)|(\?\.(?!\s*[[:digit:]])))\s*(meta)\b(?!\$)</string>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(import)\s*(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*(meta)\b(?!\$)</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -6481,7 +6409,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(new)\s*(?:(\.)|(\?\.(?!\s*[[:digit:]])))\s*(target)\b(?!\$)</string>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(new)\s*(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*(target)\b(?!\$)</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -6508,7 +6436,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?x) (?:(\.)|(\?\.(?!\s*[[:digit:]]))) \s* (?:
+            <string>(?x) (?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+))) \s* (?:
   (?:(constructor|length|prototype|__proto__)\b(?!\$|\s*(&lt;\s*([_$[:alpha:]]|(\{([^\{\}]|(\{[^\{\}]*\}))*\})|(\(([^\(\)]|(\([^\(\)]*\)))*\))|(\[([^\[\]]|(\[[^\[\]]*\]))*\]))([^=&lt;&gt;]|=[^&lt;]|\&lt;\s*([_$[:alpha:]]|(\{([^\{\}]|(\{[^\{\}]*\}))*\})|(\(([^\(\)]|(\([^\(\)]*\)))*\))|(\[([^\[\]]|(\[[^\[\]]*\]))*\]))([^=&lt;&gt;]|=[^&lt;]|\&lt;\s*([_$[:alpha:]]|(\{([^\{\}]|(\{[^\{\}]*\}))*\})|(\(([^\(\)]|(\([^\(\)]*\)))*\))|(\[([^\[\]]|(\[[^\[\]]*\]))*\]))([^=&lt;&gt;]|=[^&lt;])*\&gt;)*\&gt;)*&gt;\s*)?\())
   |
   (?:(EPSILON|MAX_SAFE_INTEGER|MAX_VALUE|MIN_SAFE_INTEGER|MIN_VALUE|NEGATIVE_INFINITY|POSITIVE_INFINITY)\b(?!\$)))</string>
@@ -6616,7 +6544,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?x) (?:(\.)|(\?\.(?!\s*[[:digit:]])))disabled \s* (?:
+            <string>(?x) (?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))disabled \s* (?:
   (ATTRIBUTE_NODE|CDATA_SECTION_NODE|COMMENT_NODE|DOCUMENT_FRAGMENT_NODE|DOCUMENT_NODE|DOCUMENT_TYPE_NODE
   |DOMSTRING_SIZE_ERR|ELEMENT_NODE|ENTITY_NODE|ENTITY_REFERENCE_NODE|HIERARCHY_REQUEST_ERR|INDEX_SIZE_ERR
   |INUSE_ATTRIBUTE_ERR|INVALID_CHARACTER_ERR|NO_DATA_ALLOWED_ERR|NO_MODIFICATION_ALLOWED_ERR|NOT_FOUND_ERR
@@ -6681,7 +6609,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?x)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(process)(?:(?:(\.)|(\?\.(?!\s*[[:digit:]])))(?:
+            <string>(?x)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(process)(?:(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))(?:
   (arch|argv|config|connected|env|execArgv|execPath|exitCode|mainModule|pid|platform|release|stderr|stdin|stdout|title|version|versions)
   |
   (abort|chdir|cwd|disconnect|exit|[sg]ete?[gu]id|send|[sg]etgroups|initgroups|kill|memoryUsage|nextTick|umask|uptime|hrtime)
@@ -6717,7 +6645,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(exports)|(module)(?:(?:(\.)|(\?\.(?!\s*[[:digit:]])))(exports|id|filename|loaded|parent|children))?)\b(?!\$)</string>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(exports)|(module)(?:(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))(exports|id|filename|loaded|parent|children))?)\b(?!\$)</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -6755,7 +6683,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?x) (?:(\.)|(\?\.(?!\s*[[:digit:]]))) \s*
+            <string>(?x) (?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+))) \s*
 (?:
  (on(?:Rowsinserted|Rowsdelete|Rowenter|Rowexit|Resize|Resizestart|Resizeend|Reset|
    Readystatechange|Mouseout|Mouseover|Mousedown|Mouseup|Mousemove|
@@ -6868,6 +6796,54 @@
           </dict>
         </array>
       </dict>
+      <key>plain-identifiers</key>
+      <dict>
+        <key>patterns</key>
+        <array>
+          <dict>
+            <key>name</key>
+            <string>variable.other.constant.imba</string>
+            <key>match</key>
+            <string>([[:upper:]][_$[:digit:][:upper:]]*)(?![_$[:alnum:]])</string>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>variable.other.class.imba</string>
+            <key>match</key>
+            <string>[[:upper:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*</string>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>variable.special.imba</string>
+            <key>match</key>
+            <string>\$\d+</string>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>variable.other.internal.imba</string>
+            <key>match</key>
+            <string>\$[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>variable.other.readwrite.imba</string>
+            <key>match</key>
+            <string>[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>variable.other.instance.imba</string>
+            <key>match</key>
+            <string>\@[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>variable.other.private.imba</string>
+            <key>match</key>
+            <string>\#[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
+          </dict>
+        </array>
+      </dict>
       <key>identifiers</key>
       <dict>
         <key>patterns</key>
@@ -6878,7 +6854,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?x)(?:(?:(\.)|(\?\.(?!\s*[[:digit:]])))\s*)?([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(?=\s*=\s*(
+            <string>(?x)(?:(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*)?([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(?=\s*=\s*(
   ((async\s+)?(
     (function\s*[(&lt;*]) |
     (function\s+) |
@@ -6920,13 +6896,13 @@
               <key>3</key>
               <dict>
                 <key>name</key>
-                <string>entity.name.function.imba</string>
+                <string>entity.name.function.property.imba</string>
               </dict>
             </dict>
           </dict>
           <dict>
             <key>match</key>
-            <string>(?:(\.)|(\?\.(?!\s*[[:digit:]])))\s*(\#?[[:upper:]][_$[:digit:][:upper:]]*)(?![_$[:alnum:]])</string>
+            <string>(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*(\#?[[:upper:]][_$[:digit:][:upper:]]*)(?![_$[:alnum:]])</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -6948,7 +6924,29 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?:(\.)|(\?\.(?!\s*[[:digit:]])))(\#?[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
+            <string>(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))([[:upper:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*)</string>
+            <key>captures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.accessor.imba</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.accessor.optional.imba</string>
+              </dict>
+              <key>3</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.class.property.imba</string>
+              </dict>
+            </dict>
+          </dict>
+          <dict>
+            <key>match</key>
+            <string>(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))(\#?[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -6970,45 +6968,19 @@
           </dict>
           <dict>
             <key>name</key>
-            <string>variable.other.constant.imba</string>
-            <key>match</key>
-            <string>([[:upper:]][_$[:digit:][:upper:]]*)(?![_$[:alnum:]])</string>
-          </dict>
-          <dict>
-            <key>name</key>
             <string>keyword.other</string>
             <key>match</key>
-            <string>for own|for</string>
+            <string>for own|for|if|unless|when</string>
           </dict>
           <dict>
             <key>name</key>
-            <string>variable.special.imba</string>
+            <string>support.function.require</string>
             <key>match</key>
-            <string>\$\d+</string>
+            <string>require</string>
           </dict>
           <dict>
-            <key>name</key>
-            <string>variable.other.instance.imba</string>
-            <key>match</key>
-            <string>\$[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
-          </dict>
-          <dict>
-            <key>name</key>
-            <string>variable.other.readwrite.imba</string>
-            <key>match</key>
-            <string>[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
-          </dict>
-          <dict>
-            <key>name</key>
-            <string>variable.other.instance.imba</string>
-            <key>match</key>
-            <string>\@[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
-          </dict>
-          <dict>
-            <key>name</key>
-            <string>variable.other.private.imba</string>
-            <key>match</key>
-            <string>\#[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
+            <key>include</key>
+            <string>#plain-identifiers</string>
           </dict>
         </array>
       </dict>
@@ -7024,8 +6996,12 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(?x)(?:(\.)|(\?\.(?!\s*[[:digit:]])))\s*(?:
+            <string>(?x)(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*(?:
   (\#?[[:upper:]][_$[:digit:][:upper:]]*) |
+  ([[:upper:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*) |
+  (\#[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?) |
+  (\$[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?) |
+  (\@[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?) |
   (\#?[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)
 )(?=\s*\??\.\s*\#?[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
             <key>captures</key>
@@ -7048,6 +7024,26 @@
               <key>4</key>
               <dict>
                 <key>name</key>
+                <string>variable.other.class.object.property.imba</string>
+              </dict>
+              <key>5</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.private.object.property.imba</string>
+              </dict>
+              <key>6</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.internal.object.property.imba</string>
+              </dict>
+              <key>7</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.instance.object.property.imba</string>
+              </dict>
+              <key>8</key>
+              <dict>
+                <key>name</key>
                 <string>variable.other.object.property.imba</string>
               </dict>
             </dict>
@@ -7056,6 +7052,10 @@
             <key>match</key>
             <string>(?x)(?:
   ([[:upper:]][_$[:digit:][:upper:]]*) |
+  ([[:upper:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*) |
+  (\#[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?) |
+  (\$[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?) |
+  (\@[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?) |
   ([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)
 )(?=\s*\??\.\s*\#?[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
             <key>captures</key>
@@ -7066,6 +7066,26 @@
                 <string>variable.other.constant.object.imba</string>
               </dict>
               <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.class.object.imba</string>
+              </dict>
+              <key>3</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.private.object.imba</string>
+              </dict>
+              <key>4</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.internal.object.imba</string>
+              </dict>
+              <key>5</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.instance.object.imba</string>
+              </dict>
+              <key>6</key>
               <dict>
                 <key>name</key>
                 <string>variable.other.object.imba</string>
@@ -7134,7 +7154,7 @@
             <key>name</key>
             <string>meta.type.annotation.imba</string>
             <key>begin</key>
-            <string>(:)</string>
+            <string>(\\)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -7144,7 +7164,7 @@
               </dict>
             </dict>
             <key>end</key>
-            <string>(?=[,)])|(?==[^&gt;])</string>
+            <string>(?=[,)])|(?==[^&gt;])|$</string>
             <key>patterns</key>
             <array>
               <dict>
@@ -8111,7 +8131,7 @@
         <array>
           <dict>
             <key>begin</key>
-            <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(?:(\.)|(\?\.(?!\s*[[:digit:]])))\s*(&lt;)</string>
+            <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*(&lt;)</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -8193,7 +8213,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(?:(\.)|(\?\.(?!\s*[[:digit:]])))</string>
+            <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -8238,7 +8258,7 @@
       <key>punctuation-accessor</key>
       <dict>
         <key>match</key>
-        <string>(?:(\.)|(\?\.(?!\s*[[:digit:]])))</string>
+        <string>(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))</string>
         <key>captures</key>
         <dict>
           <key>1</key>
@@ -8888,8 +8908,51 @@
             </dict>
           </dict>
           <dict>
+            <key>name</key>
+            <string>meta.embedded.block</string>
             <key>begin</key>
-            <string>(^[ \t]+)?((//)(?:\s*((@)internal)(?=\s|$))?)</string>
+            <string>(###)\s(css)(?:\s+(scoped))?</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.comment.imba</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>storage.type.css.imba</string>
+              </dict>
+              <key>3</key>
+              <dict>
+                <key>name</key>
+                <string>storage.type.css.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>###(?:[ \t]*\n)</string>
+            <key>contentName</key>
+            <string>meta.embedded.block.css</string>
+            <key>endCaptures</key>
+            <dict>
+              <key>0</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.comment.imba</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>source.css</string>
+              </dict>
+            </array>
+          </dict>
+          <dict>
+            <key>begin</key>
+            <string>(^[ \t]+)?((//|#\s)(?:\s*((@)internal)(?=\s|$))?)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
