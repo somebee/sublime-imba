@@ -187,7 +187,6 @@ export var scopes = [
 	['meta.definition.property variable.object.property',colors.prop]
 	
 	['meta.object-literal.key',colors.prop]
-	['meta.object.member',colors.prop]
 	
 	['meta.tag',darken(colors.tag,1)]
 	['meta.tag.attributes',darken(colors.tag,0)]

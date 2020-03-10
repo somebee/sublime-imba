@@ -356,7 +356,7 @@ repository:
     - include: '#string'
     - include: '#regex'
     - include: '#comment'
-    - include: '#function-expression'
+    # - include: '#function-expression'
     - include: '#class-expression'
     - include: '#arrow-function'
     - include: '#paren-expression-possibly-arrow'
@@ -798,17 +798,18 @@ repository:
   #functions, methods, function expressions, arrows, indexers
   function-declaration:
     name: meta.function.imba
-    begin: ^(\t*)(?=(export\s+)?(static\s+)?(def|get|set)\b)
-    end: ^(?!(\1\t+|\s*$))
+    begin: ^(\t*)(?:(export)\s+)?(?:(static)\s+)?(def|get|set)(?=\s{{identifier}})
+    beginCaptures:
+        '2': { name: keyword.control.export.imba }
+        '3': { name: storage.modifier.imba }
+        '4': { name: storage.type.function.imba }
+    end: ^(?!(\1\t|\s*$))
     patterns:
     - name: meta.function.head
-      begin: '{{startOfDeclaration}}(?:(static)\s+)?(def\b|set\b|get\b)(?:\s*(\*))?(?:(?:\s+|(?<=\*))({{identifier}}))?\s*'
+      # begin: '{{startOfDeclaration}}(?:(static)\s+)?(def|set|get)\b(?:\s*(\*))?(?:(?:\s+|(?<=\*))({{identifier}}))?\s*'
+      begin: '(?<=def|get|set)\s({{identifier}})'
       beginCaptures:
-        '1': { name: keyword.control.export.imba }
-        '2': { name: storage.modifier.imba }
-        '3': { name: storage.type.function.imba }
-        '4': { name: keyword.generator.asterisk.imba }
-        '5': { name: meta.definition.function.imba entity.name.function.imba }
+        '1': { name: meta.definition.function.imba entity.name.function.imba }
       end: (?=$)|(?=do\s)
       patterns:
       - include: '#function-parameters-body'
@@ -1505,16 +1506,13 @@ repository:
       - include: '#comment'
       - include: '#string'
     - name: meta.object.member.imba meta.object-literal.key.imba
+      match: ({{identifier}})\s*(?=:)
+    - name: meta.object.member.imba meta.object-literal.key.imba
       begin: (?x)(?={{anyNumber}})
       end: (?=:)|(?=\s*([\(\<,}])|(\s+as\s+))
       patterns:
       - include: '#comment'
       - include: '#numeric-literal'
-    - name: meta.method.declaration.imba
-      begin: (?<=[\]\'\"\`])(?=\s*[\(\<])
-      end: (?=\}|;|,)|(?<=\})
-      patterns:
-      - include: '#function-body'
     - name: meta.object.member.imba
       match: (?![_$[:alpha:]])([[:digit:]]+)\s*(?=({{inlineComment}}\s*)*:)
       captures:
@@ -1559,8 +1557,10 @@ repository:
       patterns:
       - include: '#expression'
     - name: meta.object.member.imba
-      begin: ^(\s*)({{identifier}})\s*(\:)
-      end: ^(?!(\1\s+|\s*$))
+      begin: ^(\t*)({{identifier}})\s*(\:)
+      beginCaptures:
+        '2': { name: meta.object-literal.key.imba }
+      end: ^(?!(\1\t|\s*$))
       patterns:
       - include: '#expression'
     # object member body:
@@ -1568,7 +1568,7 @@ repository:
       begin: ':'
       beginCaptures:
         '0': { name: meta.object-literal.key.imba punctuation.separator.key-value.imba }
-      end: (?=,|\})
+      end: (?=,|\}|$)
       patterns:
       - begin: '{{lookBehindOfObjectMemberPossiblyMultilineArrow}}\s*(async)?(?=\s*{{typeParameters}}\(\s*{{possiblyMultilineArrowWParamters}})'
         beginCaptures:

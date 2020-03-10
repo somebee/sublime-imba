@@ -163,11 +163,6 @@
       "foreground": "#90cdf4"
     },
     {
-      "name": "meta.object.member",
-      "scope": "meta.object.member",
-      "foreground": "#90cdf4"
-    },
-    {
       "name": "meta.tag",
       "scope": "meta.tag",
       "foreground": "#c5bd6c"
