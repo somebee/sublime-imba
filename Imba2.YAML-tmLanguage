@@ -13,6 +13,7 @@ variables:
   identifier: '[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?'
   pascalIdentifier: '[[:upper:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*'
   internalIdentifier: '\${{identifier}}'
+  symbolIdentifier: '\:{{identifier}}'
   instanceIdentifier: '\@{{identifier}}'
   privateIdentifier: '\#{{identifier}}'
   tagTypeIdentifier: '\w+(?:\-\w+)*'
@@ -342,8 +343,8 @@ repository:
     - include: '#comment'
     - include: '#function-expression'
     - include: '#class-expression'
-    - include: '#arrow-function'
-    - include: '#paren-expression-possibly-arrow'
+    # - include: '#arrow-function'
+    # - include: '#paren-expression-possibly-arrow'
     # - include: '#cast'
     - include: '#ternary-expression'
     - include: '#new-expr'
@@ -737,10 +738,10 @@ repository:
 
   field-declaration:
     name: meta.field.declaration.imba
-    begin: (?x)(?<!\()(?:{{startOfIdentifier}}(readonly|prop|attr)\s+)?(?=\s*{{propertyNameWithPrivate}}\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|\}|\\|$))
+    begin: (?x)(?<!\()(?:{{startOfIdentifier}}(readonly|prop|attr)\s+)?(?=\s*{{propertyNameWithPrivate}}\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|\}|\\|$|\s\#\s|\s\/\/))
     beginCaptures:
       '1': { name: storage.modifier.imba }
-    end: (?x)(?=\}|;|,|$|(^(?!\s*{{propertyNameWithPrivate}}\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|$))))|(?<=\})
+    end: (?x)(?=\}|\/\/|\#\s|;|,|$|(^(?!\s*{{propertyNameWithPrivate}}\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|$))))|(?<=\})
     patterns:
     - include: '#variable-initializer'
     - include: '#type-annotation'
@@ -802,6 +803,14 @@ repository:
 
   function-expression:
     patterns:
+    - name: meta.function.expression.imba
+      begin: '(?<=\()(ƒ|do(?=\||$|\s))'
+      beginCaptures:
+        '1': { name: keyword.function }
+      end: (?=$)|(?=\))
+      patterns:
+      - include: '#function-expression-parameters'
+      - include: '#statements'
     - name: meta.function.expression.imba
       begin: 'ƒ|do(?=\||$|\s)'
       beginCaptures:
@@ -1887,6 +1896,7 @@ repository:
     - include: '#numericConstant-literal'
     - include: '#array-literal'
     - include: '#this-literal'
+    - include: '#global-literal'
     - include: '#super-literal'
 
   array-literal:
@@ -1952,6 +1962,10 @@ repository:
   this-literal:
     name: variable.language.this.imba
     match: '{{startOfIdentifier}}(this|self)\b(?!\$)'
+
+  global-literal:
+    name: variable.language.global.imba
+    match: '{{startOfIdentifier}}(global)\b(?!\$)'
 
   super-literal:
     name: variable.language.super.imba
@@ -2278,6 +2292,8 @@ repository:
       match: '{{instanceIdentifier}}'
     - name: variable.other.private.imba
       match: '{{privateIdentifier}}'
+    - name: string.symbol.imba
+      match: '{{symbolIdentifier}}'
 
   identifiers:
     patterns:
@@ -2972,7 +2988,7 @@ repository:
       patterns:
       - include: 'source.css'
 
-    - begin: (^[ \t]+)?((//|#\s)(?:\s*((@)internal)(?=\s|$))?)
+    - begin: (^[ \t]+)?((//|\#\s)(?:\s*((@)internal)(?=\s|$))?)
       beginCaptures:
         '1': { name: punctuation.whitespace.comment.leading.imba }
         '2': { name: comment.line.double-slash.imba }
@@ -2983,7 +2999,7 @@ repository:
       contentName: comment.line.double-slash.imba
 
   single-line-comment-consuming-line-ending:
-    begin: (^[ \t]+)?((//)(?:\s*((@)internal)(?=\s|$))?)
+    begin: (^[ \t]+)?((//|\#\s)(?:\s*((@)internal)(?=\s|$))?)
     beginCaptures:
       '1': { name: punctuation.whitespace.comment.leading.imba }
       '2': { name: comment.line.double-slash.imba }

@@ -14,7 +14,7 @@
     {
       "name": "source.imba",
       "scope": "source.imba",
-      "foreground": "#dedde3"
+      "foreground": "#f2f2f2"
     },
     {
       "name": "comment",
@@ -70,7 +70,7 @@
     {
       "name": "support.function",
       "scope": "support.function",
-      "foreground": "#dedde3"
+      "foreground": "#f2f2f2"
     },
     {
       "name": "support.function.require",
@@ -80,7 +80,7 @@
     {
       "name": "variable.parameter",
       "scope": "variable.parameter",
-      "foreground": "#cbd0c3"
+      "foreground": "#e5ecc7"
     },
     {
       "name": "variable.special",
@@ -88,14 +88,14 @@
       "foreground": "#faf089"
     },
     {
-      "name": "variable.other.readwrite",
-      "scope": "variable.other.readwrite",
-      "foreground": "#cbd0c3"
+      "name": "variable.other",
+      "scope": "variable.other",
+      "foreground": "#f0f0f0"
     },
     {
       "name": "variable.other.object",
       "scope": "variable.other.object",
-      "foreground": "#cbd0c3"
+      "foreground": "#f0f0f0"
     },
     {
       "name": "variable.other.instance",
@@ -105,7 +105,7 @@
     {
       "name": "variable.other.internal",
       "scope": "variable.other.internal",
-      "foreground": "#a5cae5"
+      "foreground": "#f0f0f0"
     },
     {
       "name": "variable.other.private",
@@ -138,9 +138,19 @@
       "foreground": "#63b3ed"
     },
     {
+      "name": "variable.language.global",
+      "scope": "variable.language.global",
+      "foreground": "#c5badc"
+    },
+    {
       "name": "meta.import variable.other",
       "scope": "meta.import variable.other",
       "foreground": "#c5badc"
+    },
+    {
+      "name": "meta.definition.variable variable.other.readwrite",
+      "scope": "meta.definition.variable variable.other.readwrite",
+      "foreground": "#e5ecc7"
     },
     {
       "name": "meta.embedded.line",
@@ -221,6 +231,11 @@
       "name": "string.regexp",
       "scope": "string.regexp",
       "foreground": "#f6ad55"
+    },
+    {
+      "name": "string.symbol",
+      "scope": "string.symbol",
+      "foreground": "#c6f6d5"
     },
     {
       "name": "meta.type.annotation",

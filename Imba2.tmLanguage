@@ -620,14 +620,6 @@
           </dict>
           <dict>
             <key>include</key>
-            <string>#arrow-function</string>
-          </dict>
-          <dict>
-            <key>include</key>
-            <string>#paren-expression-possibly-arrow</string>
-          </dict>
-          <dict>
-            <key>include</key>
             <string>#ternary-expression</string>
           </dict>
           <dict>
@@ -2154,7 +2146,7 @@
   (?:\b[0-9][0-9_]*(\.)(n)?\B)|                                  # 1.
   (?:\B(\.)[0-9][0-9_]*(n)?\b)|                                  # .1
   (?:\b[0-9][0-9_]*(n)?\b(?!\.))                                 # 1
-)(?!\$))|(\#?[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)|(\'([^\'\\]|\\.)*\')|(\"([^\"\\]|\\.)*\")|(\`([^\`\\]|\\.)*\`)|(\[([^\[\]]|\[[^\[\]]*\])+\]))\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|\}|\\|$))</string>
+)(?!\$))|(\#?[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)|(\'([^\'\\]|\\.)*\')|(\"([^\"\\]|\\.)*\")|(\`([^\`\\]|\\.)*\`)|(\[([^\[\]]|\[[^\[\]]*\])+\]))\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|\}|\\|$|\s\#\s|\s\/\/))</string>
         <key>beginCaptures</key>
         <dict>
           <key>1</key>
@@ -2164,7 +2156,7 @@
           </dict>
         </dict>
         <key>end</key>
-        <string>(?x)(?=\}|;|,|$|(^(?!\s*((\b(?&lt;!\$)0(?:x|X)[0-9a-fA-F][0-9a-fA-F_]*(n)?\b(?!\$))|(\b(?&lt;!\$)0(?:b|B)[01][01_]*(n)?\b(?!\$))|(\b(?&lt;!\$)0(?:o|O)?[0-7][0-7_]*(n)?\b(?!\$))|((?&lt;!\$)(?:
+        <string>(?x)(?=\}|\/\/|\#\s|;|,|$|(^(?!\s*((\b(?&lt;!\$)0(?:x|X)[0-9a-fA-F][0-9a-fA-F_]*(n)?\b(?!\$))|(\b(?&lt;!\$)0(?:b|B)[01][01_]*(n)?\b(?!\$))|(\b(?&lt;!\$)0(?:o|O)?[0-7][0-7_]*(n)?\b(?!\$))|((?&lt;!\$)(?:
   (?:\b[0-9][0-9_]*(\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)| # 1.1E+3
   (?:\b[0-9][0-9_]*(\.)[eE][+-]?[0-9][0-9_]*(n)?\b)|             # 1.E+3
   (?:\B(\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)|             # .1E+3
@@ -2420,6 +2412,33 @@
       <dict>
         <key>patterns</key>
         <array>
+          <dict>
+            <key>name</key>
+            <string>meta.function.expression.imba</string>
+            <key>begin</key>
+            <string>(?&lt;=\()(ƒ|do(?=\||$|\s))</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.function</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>(?=$)|(?=\))</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#function-expression-parameters</string>
+              </dict>
+              <dict>
+                <key>include</key>
+                <string>#statements</string>
+              </dict>
+            </array>
+          </dict>
           <dict>
             <key>name</key>
             <string>meta.function.expression.imba</string>
@@ -6032,6 +6051,10 @@
           </dict>
           <dict>
             <key>include</key>
+            <string>#global-literal</string>
+          </dict>
+          <dict>
+            <key>include</key>
             <string>#super-literal</string>
           </dict>
         </array>
@@ -6243,6 +6266,13 @@
         <string>variable.language.this.imba</string>
         <key>match</key>
         <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(this|self)\b(?!\$)</string>
+      </dict>
+      <key>global-literal</key>
+      <dict>
+        <key>name</key>
+        <string>variable.language.global.imba</string>
+        <key>match</key>
+        <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(global)\b(?!\$)</string>
       </dict>
       <key>super-literal</key>
       <dict>
@@ -6868,6 +6898,12 @@
             <string>variable.other.private.imba</string>
             <key>match</key>
             <string>\#[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>string.symbol.imba</string>
+            <key>match</key>
+            <string>\:[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?</string>
           </dict>
         </array>
       </dict>
@@ -8975,7 +9011,7 @@
           </dict>
           <dict>
             <key>begin</key>
-            <string>(^[ \t]+)?((//|#\s)(?:\s*((@)internal)(?=\s|$))?)</string>
+            <string>(^[ \t]+)?((//|\#\s)(?:\s*((@)internal)(?=\s|$))?)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -9014,7 +9050,7 @@
       <key>single-line-comment-consuming-line-ending</key>
       <dict>
         <key>begin</key>
-        <string>(^[ \t]+)?((//)(?:\s*((@)internal)(?=\s|$))?)</string>
+        <string>(^[ \t]+)?((//|\#\s)(?:\s*((@)internal)(?=\s|$))?)</string>
         <key>beginCaptures</key>
         <dict>
           <key>1</key>

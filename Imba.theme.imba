@@ -101,34 +101,29 @@ def darken color, amount = 0.2
 def mix color, other, amount = 0.5
 	chroma.mix(color,other,amount).hex()
 
-// run through and desaturate all the colors
-for own name,hex of colors
-	let color = chroma(hex)
-	// if name.match(/orange/)
-	//	color = color.saturate(-1)
-	// colors[name] = dim() color.hex()
-	//console.log('dimmed',hex,color)
+colors.base = "#f2f2f2"
+colors.identifier = "#f0f0f0" # cbd0c3 #F8F8F8 #8bc3dc
+colors.variable = "#e5ecc7" # cbd0c3 #F8F8F8
+colors.comment = "#718096"
 
-
-colors.base = "#dedde3"
-colors.identifier = "#F8F8F8"
-colors.identifier = "#cbd0c3"
 colors.prop = "#8ab9ff" # colors.blue300 # dim(colors.blue300,-0.1)
 colors.keyword = dim(colors.red500,0.8)
 colors.keyword = mix(colors.red400,colors.orange400,0.5)
 colors.keyword = "#e88f76"
-colors.parameter = colors.identifier # "#cad7eb" # "#eae0ce"
-colors.comment = colors.gray600
+
+colors.parameter = colors.variable # "#cad7eb" # "#eae0ce"
+
 
 colors.special = dim(colors.yellow300,0) # dim(colors.yellow300,0.5)
 colors.private = dim(colors.yellow200,0.5) # dim(colors.yellow300,0.5)
 colors.ivar = dim(colors.blue300,0.3)
-colors.internal = dim(colors.blue300,0.5)
+colors.internal = colors.identifier #  dim(colors.blue300,0.5)
 colors.private = dim(colors.blue300,1) # dim(colors.yellow300,0.5)
 
 colors.pascal = "#c5badc" # darken(colors.purple300,0.2)
 colors.imports = colors.pascal # darken(colors.purple300,0.2)
 colors.string = colors.green200
+colors.symbol = colors.string # "#d9f7ba"
 colors.regexp = colors.orange400
 
 colors.event-modifier = "#f99d72"
@@ -170,7 +165,7 @@ export var scopes = [
 	
 	['variable.parameter',colors.parameter]
 	['variable.special',colors.special]
-	['variable.other.readwrite',colors.identifier]
+	['variable.other',colors.identifier]
 	['variable.other.object',colors.identifier]
 	['variable.other.instance',colors.ivar]
 	['variable.other.internal',colors.internal]
@@ -181,7 +176,9 @@ export var scopes = [
 
 	['variable.language.super',colors.keyword]
 	['variable.language.this',colors.blue400]
+	['variable.language.global',colors.imports]
 	['meta.import variable.other',colors.imports]
+	['meta.definition.variable variable.other.readwrite',colors.variable]
 			
 	['meta.embedded.line',colors.gray200]
 	['meta.definition.function entity.name.function',colors.prop]
@@ -208,6 +205,7 @@ export var scopes = [
 	['string.quoted',colors.string]
 	['string.template',colors.string]
 	['string.regexp',colors.regexp]
+	['string.symbol',colors.symbol]
 	
 	['meta.type.annotation',colors.type]
 	['meta.type.annotation entity.name',colors.type]
