@@ -110,23 +110,24 @@ for own name,hex of colors
 	//console.log('dimmed',hex,color)
 
 
-colors.base = "#F8F8F8"
+colors.base = "#dedde3"
 colors.identifier = "#F8F8F8"
-colors.identifier = "#dfe9dc"
-colors.prop = colors.blue300 # dim(colors.blue300,-0.1)
+colors.identifier = "#cbd0c3"
+colors.prop = "#8ab9ff" # colors.blue300 # dim(colors.blue300,-0.1)
 colors.keyword = dim(colors.red500,0.8)
 colors.keyword = mix(colors.red400,colors.orange400,0.5)
 colors.keyword = "#e88f76"
 colors.parameter = colors.identifier # "#cad7eb" # "#eae0ce"
 colors.comment = colors.gray600
 
-
+colors.special = dim(colors.yellow300,0) # dim(colors.yellow300,0.5)
 colors.private = dim(colors.yellow200,0.5) # dim(colors.yellow300,0.5)
 colors.ivar = dim(colors.blue300,0.3)
 colors.internal = dim(colors.blue300,0.5)
 colors.private = dim(colors.blue300,1) # dim(colors.yellow300,0.5)
-colors.imports = darken(colors.purple300,0.2)
-colors.pascal = darken(colors.purple300,0.2)
+
+colors.pascal = "#c5badc" # darken(colors.purple300,0.2)
+colors.imports = colors.pascal # darken(colors.purple300,0.2)
 colors.string = colors.green200
 colors.regexp = colors.orange400
 
@@ -148,7 +149,7 @@ export var globals = {
 }
 
 export var vstheme = {
-	"editor.background": '#111111'
+	# "editor.background": '#111111'
 }
 
 export var scopes = [
@@ -161,13 +162,14 @@ export var scopes = [
 	['constant.language.undefined',colors.blue500]
 	['constant.language.null',colors.blue500]
 	['constant.language.super',colors.keyword]
-	['entity.name.type',colors.blue400]
+	['entity.name.type',colors.prop]
 	['invalid.whitespace',background: colors.red400]
 	
 	['support.function',colors.base]
 	['support.function.require',colors.keyword]
 	
 	['variable.parameter',colors.parameter]
+	['variable.special',colors.special]
 	['variable.other.readwrite',colors.identifier]
 	['variable.other.object',colors.identifier]
 	['variable.other.instance',colors.ivar]
@@ -201,6 +203,7 @@ export var scopes = [
 	['support.variable -support.variable.property',colors.pascal]
 	// ['support.function',colors.pascal]
 	['support.constant',colors.pascal]
+	['support.type.property-name',colors.prop]
 	
 	['string.quoted',colors.string]
 	['string.template',colors.string]

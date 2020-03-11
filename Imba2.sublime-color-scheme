@@ -14,7 +14,7 @@
     {
       "name": "source.imba",
       "scope": "source.imba",
-      "foreground": "#F8F8F8"
+      "foreground": "#dedde3"
     },
     {
       "name": "comment",
@@ -60,7 +60,7 @@
     {
       "name": "entity.name.type",
       "scope": "entity.name.type",
-      "foreground": "#63b3ed"
+      "foreground": "#8ab9ff"
     },
     {
       "name": "invalid.whitespace",
@@ -70,7 +70,7 @@
     {
       "name": "support.function",
       "scope": "support.function",
-      "foreground": "#F8F8F8"
+      "foreground": "#dedde3"
     },
     {
       "name": "support.function.require",
@@ -80,17 +80,22 @@
     {
       "name": "variable.parameter",
       "scope": "variable.parameter",
-      "foreground": "#dfe9dc"
+      "foreground": "#cbd0c3"
+    },
+    {
+      "name": "variable.special",
+      "scope": "variable.special",
+      "foreground": "#faf089"
     },
     {
       "name": "variable.other.readwrite",
       "scope": "variable.other.readwrite",
-      "foreground": "#dfe9dc"
+      "foreground": "#cbd0c3"
     },
     {
       "name": "variable.other.object",
       "scope": "variable.other.object",
-      "foreground": "#dfe9dc"
+      "foreground": "#cbd0c3"
     },
     {
       "name": "variable.other.instance",
@@ -115,12 +120,12 @@
     {
       "name": "variable.other.class",
       "scope": "variable.other.class",
-      "foreground": "#ccb2f0"
+      "foreground": "#c5badc"
     },
     {
       "name": "variable.other.constant",
       "scope": "variable.other.constant",
-      "foreground": "#ccb2f0"
+      "foreground": "#c5badc"
     },
     {
       "name": "variable.language.super",
@@ -135,7 +140,7 @@
     {
       "name": "meta.import variable.other",
       "scope": "meta.import variable.other",
-      "foreground": "#ccb2f0"
+      "foreground": "#c5badc"
     },
     {
       "name": "meta.embedded.line",
@@ -145,22 +150,22 @@
     {
       "name": "meta.definition.function entity.name.function",
       "scope": "meta.definition.function entity.name.function",
-      "foreground": "#90cdf4"
+      "foreground": "#8ab9ff"
     },
     {
       "name": "meta.definition entity.name.function",
       "scope": "meta.definition entity.name.function",
-      "foreground": "#90cdf4"
+      "foreground": "#8ab9ff"
     },
     {
       "name": "meta.definition.property variable.object.property",
       "scope": "meta.definition.property variable.object.property",
-      "foreground": "#90cdf4"
+      "foreground": "#8ab9ff"
     },
     {
       "name": "meta.object-literal.key",
       "scope": "meta.object-literal.key",
-      "foreground": "#90cdf4"
+      "foreground": "#8ab9ff"
     },
     {
       "name": "meta.tag",
@@ -185,17 +190,22 @@
     {
       "name": "support.class",
       "scope": "support.class",
-      "foreground": "#ccb2f0"
+      "foreground": "#c5badc"
     },
     {
       "name": "support.variable -support.variable.property",
       "scope": "support.variable -support.variable.property",
-      "foreground": "#ccb2f0"
+      "foreground": "#c5badc"
     },
     {
       "name": "support.constant",
       "scope": "support.constant",
-      "foreground": "#ccb2f0"
+      "foreground": "#c5badc"
+    },
+    {
+      "name": "support.type.property-name",
+      "scope": "support.type.property-name",
+      "foreground": "#8ab9ff"
     },
     {
       "name": "string.quoted",

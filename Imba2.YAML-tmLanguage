@@ -155,7 +155,6 @@ repository:
     - include: '#control-statement'
     - include: '#after-operator-block-as-object-literal'
     - include: '#decl-block'
-    - include: '#label'
     - include: '#tag-tree'
     - include: '#expression'
     - include: '#punctuation-semicolon'
@@ -329,21 +328,6 @@ repository:
     patterns:
       - include: '#expression'
 
-  label:
-    patterns:
-    # handle declaration block followed by label so as to not confuse it with { followed by ternary operator which would be object literal
-    - begin: '{{label}}(?=\s*\{)'
-      beginCaptures:
-        '1': { name: entity.name.label.imba }
-        '2': { name: punctuation.separator.label.imba }
-      end: (?<=\})
-      patterns:
-        - include: '#decl-block'
-    - match: '{{label}}'
-      captures:
-        '1': { name: entity.name.label.imba }
-        '2': { name: punctuation.separator.label.imba }
-
   expression:
     patterns:
     - include: '#tag-instance'
@@ -356,7 +340,7 @@ repository:
     - include: '#string'
     - include: '#regex'
     - include: '#comment'
-    # - include: '#function-expression'
+    - include: '#function-expression'
     - include: '#class-expression'
     - include: '#arrow-function'
     - include: '#paren-expression-possibly-arrow'
@@ -370,6 +354,7 @@ repository:
     - include: '#literal'
     - include: '#support-objects'
     - include: '#paren-expression'
+    - include: '#plain-object-member'
 
   expressionPunctuations:
     patterns:
@@ -816,18 +801,15 @@ repository:
     - include: '#statements'
 
   function-expression:
-    name: meta.function.expression.imba
-    begin: '{{startOfIdentifier}}(?:(async)\s+)?(function\b)(?:\s*(\*))?(?:(?:\s+|(?<=\*))({{identifier}}))?\s*'
-    beginCaptures:
-      '1': { name: storage.modifier.async.imba }
-      '2': { name: storage.type.function.imba }
-      '3': { name: keyword.generator.asterisk.imba }
-      '4': { name: meta.definition.function.imba entity.name.function.imba }
-    end: (?=;)|(?<=\})
     patterns:
-    - include: '#function-name'
-    - include: '#single-line-comment-consuming-line-ending'
-    - include: '#function-body'
+    - name: meta.function.expression.imba
+      begin: 'ƒ|do(?=\||$|\s)'
+      beginCaptures:
+        '0': { name: keyword.function }
+      end: (?=$)|(?<=\))
+      patterns:
+      - include: '#function-expression-parameters'
+      - include: '#statements'
 
   function-name:
     name: meta.definition.function.imba entity.name.function.imba
@@ -961,6 +943,27 @@ repository:
       '0': { name: punctuation.definition.parameters.end.imba }
     patterns:
     - include: '#function-parameters-body'
+    
+  function-expression-parameters:
+    patterns:
+    - name: meta.parameters.imba
+      begin: (?<=\ƒ)\(
+      beginCaptures:
+        '0': { name: punctuation.definition.parameters.begin.imba }
+      end: \)
+      endCaptures:
+        '0': { name: punctuation.definition.parameters.end.imba }
+      patterns:
+      - include: '#function-parameters-body'
+    - name: meta.parameters.imba
+      begin: (?<=do)\s?\|
+      beginCaptures:
+        '0': { name: punctuation.definition.parameters.begin.imba }
+      end: \|
+      endCaptures:
+        '0': { name: punctuation.definition.parameters.end.imba }
+      patterns:
+      - include: '#function-parameters-body'
 
   # When updating this, also update the expression-inside-possibly-arrow-parens where this is inlined so that parameter-name can also be inlined
   function-parameters-body:
@@ -1488,6 +1491,16 @@ repository:
       '0': { name: punctuation.definition.block.imba }
     patterns:
     - include: '#object-member'
+    
+  plain-object-member:
+    patterns:
+    - name: meta.object.member.imba
+      begin: ({{identifier}})(:)
+      beginCaptures:
+        '1': { name: meta.object-literal.key.imba }
+      end: (?=,|\}|$|\/\/|\/\*|\#\s|\)|\])
+      patterns:
+      - include: '#expression'
 
   object-member:
     patterns:
@@ -1646,7 +1659,7 @@ repository:
     patterns:
     - include: '#literal'
     - include: '#support-objects'
-    - include: '#object-identifiers'
+    # - include: '#object-identifiers'
     - include: '#plain-identifiers'
     - include: '#punctuation-accessor'
     - name: keyword.operator.expression.import.imba
@@ -2268,7 +2281,7 @@ repository:
 
   identifiers:
     patterns:
-    - include: '#object-identifiers'
+    # - include: '#object-identifiers'
     # function and method assignment
     - match: |-
         (?x)(?:{{propertyAccess}}\s*)?({{identifier}})(?=\s*={{functionOrArrowLookup}})
@@ -2295,7 +2308,7 @@ repository:
         '3': { name: variable.other.property.imba }
 
     - name: keyword.other
-      match: 'for own|for|if|unless|when'
+      match: '(for own|for|if|unless|when)\b'
     - name: support.function.require
       match: 'require'
     - include: '#plain-identifiers'

@@ -65,10 +65,6 @@
           </dict>
           <dict>
             <key>include</key>
-            <string>#label</string>
-          </dict>
-          <dict>
-            <key>include</key>
             <string>#tag-tree</string>
           </dict>
           <dict>
@@ -576,55 +572,6 @@
           </dict>
         </array>
       </dict>
-      <key>label</key>
-      <dict>
-        <key>patterns</key>
-        <array>
-          <dict>
-            <key>begin</key>
-            <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(:)(?=\s*\{)</string>
-            <key>beginCaptures</key>
-            <dict>
-              <key>1</key>
-              <dict>
-                <key>name</key>
-                <string>entity.name.label.imba</string>
-              </dict>
-              <key>2</key>
-              <dict>
-                <key>name</key>
-                <string>punctuation.separator.label.imba</string>
-              </dict>
-            </dict>
-            <key>end</key>
-            <string>(?&lt;=\})</string>
-            <key>patterns</key>
-            <array>
-              <dict>
-                <key>include</key>
-                <string>#decl-block</string>
-              </dict>
-            </array>
-          </dict>
-          <dict>
-            <key>match</key>
-            <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s*(:)</string>
-            <key>captures</key>
-            <dict>
-              <key>1</key>
-              <dict>
-                <key>name</key>
-                <string>entity.name.label.imba</string>
-              </dict>
-              <key>2</key>
-              <dict>
-                <key>name</key>
-                <string>punctuation.separator.label.imba</string>
-              </dict>
-            </dict>
-          </dict>
-        </array>
-      </dict>
       <key>expression</key>
       <dict>
         <key>patterns</key>
@@ -662,6 +609,10 @@
           <dict>
             <key>include</key>
             <string>#comment</string>
+          </dict>
+          <dict>
+            <key>include</key>
+            <string>#function-expression</string>
           </dict>
           <dict>
             <key>include</key>
@@ -710,6 +661,10 @@
           <dict>
             <key>include</key>
             <string>#paren-expression</string>
+          </dict>
+          <dict>
+            <key>include</key>
+            <string>#plain-object-member</string>
           </dict>
         </array>
       </dict>
@@ -2463,48 +2418,34 @@
       </dict>
       <key>function-expression</key>
       <dict>
-        <key>name</key>
-        <string>meta.function.expression.imba</string>
-        <key>begin</key>
-        <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(async)\s+)?(function\b)(?:\s*(\*))?(?:(?:\s+|(?&lt;=\*))([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?))?\s*</string>
-        <key>beginCaptures</key>
-        <dict>
-          <key>1</key>
-          <dict>
-            <key>name</key>
-            <string>storage.modifier.async.imba</string>
-          </dict>
-          <key>2</key>
-          <dict>
-            <key>name</key>
-            <string>storage.type.function.imba</string>
-          </dict>
-          <key>3</key>
-          <dict>
-            <key>name</key>
-            <string>keyword.generator.asterisk.imba</string>
-          </dict>
-          <key>4</key>
-          <dict>
-            <key>name</key>
-            <string>meta.definition.function.imba entity.name.function.imba</string>
-          </dict>
-        </dict>
-        <key>end</key>
-        <string>(?=;)|(?&lt;=\})</string>
         <key>patterns</key>
         <array>
           <dict>
-            <key>include</key>
-            <string>#function-name</string>
-          </dict>
-          <dict>
-            <key>include</key>
-            <string>#single-line-comment-consuming-line-ending</string>
-          </dict>
-          <dict>
-            <key>include</key>
-            <string>#function-body</string>
+            <key>name</key>
+            <string>meta.function.expression.imba</string>
+            <key>begin</key>
+            <string>ƒ|do(?=\||$|\s)</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>0</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.function</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>(?=$)|(?&lt;=\))</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#function-expression-parameters</string>
+              </dict>
+              <dict>
+                <key>include</key>
+                <string>#statements</string>
+              </dict>
+            </array>
           </dict>
         </array>
       </dict>
@@ -2942,6 +2883,74 @@
           <dict>
             <key>include</key>
             <string>#function-parameters-body</string>
+          </dict>
+        </array>
+      </dict>
+      <key>function-expression-parameters</key>
+      <dict>
+        <key>patterns</key>
+        <array>
+          <dict>
+            <key>name</key>
+            <string>meta.parameters.imba</string>
+            <key>begin</key>
+            <string>(?&lt;=\ƒ)\(</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>0</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.parameters.begin.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>\)</string>
+            <key>endCaptures</key>
+            <dict>
+              <key>0</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.parameters.end.imba</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#function-parameters-body</string>
+              </dict>
+            </array>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>meta.parameters.imba</string>
+            <key>begin</key>
+            <string>(?&lt;=do)\s?\|</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>0</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.parameters.begin.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>\|</string>
+            <key>endCaptures</key>
+            <dict>
+              <key>0</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.parameters.end.imba</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#function-parameters-body</string>
+              </dict>
+            </array>
           </dict>
         </array>
       </dict>
@@ -4676,6 +4685,35 @@
           </dict>
         </array>
       </dict>
+      <key>plain-object-member</key>
+      <dict>
+        <key>patterns</key>
+        <array>
+          <dict>
+            <key>name</key>
+            <string>meta.object.member.imba</string>
+            <key>begin</key>
+            <string>([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(:)</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>meta.object-literal.key.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>(?=,|\}|$|\/\/|\/\*|\#\s|\)|\])</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#expression</string>
+              </dict>
+            </array>
+          </dict>
+        </array>
+      </dict>
       <key>object-member</key>
       <dict>
         <key>patterns</key>
@@ -5218,10 +5256,6 @@
           <dict>
             <key>include</key>
             <string>#support-objects</string>
-          </dict>
-          <dict>
-            <key>include</key>
-            <string>#object-identifiers</string>
           </dict>
           <dict>
             <key>include</key>
@@ -6842,10 +6876,6 @@
         <key>patterns</key>
         <array>
           <dict>
-            <key>include</key>
-            <string>#object-identifiers</string>
-          </dict>
-          <dict>
             <key>match</key>
             <string>(?x)(?:(?:(\.)|(\.\.(?!\s*[[:digit:]]|\s+)))\s*)?([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(?=\s*=\s*(
   ((async\s+)?(
@@ -6963,7 +6993,7 @@
             <key>name</key>
             <string>keyword.other</string>
             <key>match</key>
-            <string>for own|for|if|unless|when</string>
+            <string>(for own|for|if|unless|when)\b</string>
           </dict>
           <dict>
             <key>name</key>
