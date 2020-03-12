@@ -582,6 +582,10 @@
           </dict>
           <dict>
             <key>include</key>
+            <string>#annotated-assignment</string>
+          </dict>
+          <dict>
+            <key>include</key>
             <string>#expressionWithoutIdentifiers</string>
           </dict>
           <dict>
@@ -3064,7 +3068,7 @@
             <key>name</key>
             <string>meta.class.imba</string>
             <key>begin</key>
-            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(tag)\s+(\w+(?:\-\w+)*)</string>
+            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?(?:(extend)\s+)?\b(tag)\s+(\w+(?:\-\w+)*)</string>
             <key>beginCaptures</key>
             <dict>
               <key>2</key>
@@ -3075,9 +3079,14 @@
               <key>3</key>
               <dict>
                 <key>name</key>
-                <string>storage.type.class.imba</string>
+                <string>keyword.control.extend.imba</string>
               </dict>
               <key>4</key>
+              <dict>
+                <key>name</key>
+                <string>storage.type.class.imba</string>
+              </dict>
+              <key>5</key>
               <dict>
                 <key>name</key>
                 <string>entity.name.type.class.tag.imba</string>
@@ -3103,7 +3112,7 @@
             <key>name</key>
             <string>meta.class.imba</string>
             <key>begin</key>
-            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(class)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s+(\&lt;)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
+            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?(class)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)\s+(\&lt;)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
             <key>beginCaptures</key>
             <dict>
               <key>2</key>
@@ -3146,7 +3155,7 @@
             <key>name</key>
             <string>meta.class.imba</string>
             <key>begin</key>
-            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(class)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
+            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?(?:(extend)\s+)?\b(class)\s+([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
             <key>beginCaptures</key>
             <dict>
               <key>2</key>
@@ -3157,9 +3166,14 @@
               <key>3</key>
               <dict>
                 <key>name</key>
-                <string>storage.type.class.imba</string>
+                <string>keyword.control.extend.imba</string>
               </dict>
               <key>4</key>
+              <dict>
+                <key>name</key>
+                <string>storage.type.class.imba</string>
+              </dict>
+              <key>5</key>
               <dict>
                 <key>name</key>
                 <string>entity.name.type.class.imba</string>
@@ -3801,6 +3815,30 @@
                 <string>#type</string>
               </dict>
             </array>
+          </dict>
+        </array>
+      </dict>
+      <key>annotated-assignment</key>
+      <dict>
+        <key>name</key>
+        <string>meta.assignment</string>
+        <key>begin</key>
+        <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))\b([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(?=\\)\s*</string>
+        <key>beginCaptures</key>
+        <dict>
+          <key>1</key>
+          <dict>
+            <key>name</key>
+            <string>variable.other.readwrite.imba</string>
+          </dict>
+        </dict>
+        <key>end</key>
+        <string>(?=\=)</string>
+        <key>patterns</key>
+        <array>
+          <dict>
+            <key>include</key>
+            <string>#type-annotation</string>
           </dict>
         </array>
       </dict>
@@ -5337,7 +5375,7 @@
           </dict>
         </dict>
         <key>end</key>
-        <string>(?&lt;=\))|(?=[;),}\]:?]|\|\||\&amp;\&amp;|$|((?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))function((\s+[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)|(\s*[\(]))))</string>
+        <string>(?&lt;=\))|(?=[;),}\]:?]|\|\||\&amp;\&amp;|or|and|$|((?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))function((\s+[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)|(\s*[\(]))))</string>
         <key>patterns</key>
         <array>
           <dict>

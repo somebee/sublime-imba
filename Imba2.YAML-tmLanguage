@@ -332,6 +332,7 @@ repository:
   expression:
     patterns:
     - include: '#tag-instance'
+    - include: '#annotated-assignment'
     - include: '#expressionWithoutIdentifiers'
     - include: '#identifiers'
     - include: '#expressionPunctuations'
@@ -1001,11 +1002,12 @@ repository:
       patterns:
       - include: '#class-or-tag-body'
     - name: meta.class.imba
-      begin: '(\t*){{startOfDeclaration}}\b(tag)\s+({{tagTypeIdentifier}})'
+      begin: '(\t*){{startOfDeclaration}}(?:(extend)\s+)?\b(tag)\s+({{tagTypeIdentifier}})'
       beginCaptures:
         '2': { name: keyword.control.export.imba }
-        '3': { name: storage.type.class.imba }
-        '4': { name: entity.name.type.class.tag.imba}
+        '3': { name: keyword.control.extend.imba }
+        '4': { name: storage.type.class.imba }
+        '5': { name: entity.name.type.class.tag.imba}
       end: ^(?!(\1\t+|\s*$))
       patterns:
       - include: '#class-or-tag-body'
@@ -1014,7 +1016,7 @@ repository:
   class-declaration:
     patterns:
     - name: meta.class.imba
-      begin: '(\t*){{startOfDeclaration}}\b(class)\s+({{identifier}})\s+(\<)\s+({{identifier}})'
+      begin: '(\t*){{startOfDeclaration}}(class)\s+({{identifier}})\s+(\<)\s+({{identifier}})'
       beginCaptures:
         '2': { name: keyword.control.export.imba }
         '3': { name: storage.type.class.imba }
@@ -1025,11 +1027,12 @@ repository:
       patterns:
       - include: '#class-or-tag-body'
     - name: meta.class.imba
-      begin: '(\t*){{startOfDeclaration}}\b(class)\s+({{identifier}})'
+      begin: '(\t*){{startOfDeclaration}}(?:(extend)\s+)?\b(class)\s+({{identifier}})'
       beginCaptures:
         '2': { name: keyword.control.export.imba }
-        '3': { name: storage.type.class.imba }
-        '4': { name: entity.name.type.class.imba}
+        '3': { name: keyword.control.extend.imba }
+        '4': { name: storage.type.class.imba }
+        '5': { name: entity.name.type.class.imba}
       end: ^(?!(\1\t+|\s*$))
       patterns:
       - include: '#class-or-tag-body'
@@ -1228,6 +1231,17 @@ repository:
         end: (?=\}|{{endOfStatement}})
         patterns:
         - include: '#type'
+
+  # 
+  annotated-assignment:
+    name: meta.assignment
+    begin: '{{startOfIdentifier}}\b({{identifier}})(?=\\)\s*'
+    beginCaptures:
+      '1': { name: variable.other.readwrite.imba }
+    end: (?=\=)
+    patterns:
+      - include: '#type-annotation'
+
 
   #import and export
   import-equals-declaration:
@@ -1689,7 +1703,7 @@ repository:
     begin: '{{startOfIdentifier}}(instanceof|\!?isa){{endOfIdentifier}}'
     beginCaptures:
       '1': { name: keyword.operator.expression.instanceof.imba }
-    end: (?<=\))|(?=[;),}\]:?]|\|\||\&\&|$|({{startOfIdentifier}}function((\s+{{identifier}})|(\s*[\(]))))
+    end: (?<=\))|(?=[;),}\]:?]|\|\||\&\&|or|and|$|({{startOfIdentifier}}function((\s+{{identifier}})|(\s*[\(]))))
     patterns:
     - include: '#type'
 
