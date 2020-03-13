@@ -4,7 +4,7 @@
     "activeGuide": "#3b5567",
     "background": "#111111",
     "caret": "#A7A7A7",
-    "foreground": "#F8F8F8",
+    "foreground": "#e3e3e3",
     "guide": "#202e37",
     "invisibles": "#CAE2FB2B",
     "selection": "#2b383f",
@@ -14,7 +14,7 @@
     {
       "name": "source.imba",
       "scope": "source.imba",
-      "foreground": "#f2f2f2"
+      "foreground": "#e3e3e3"
     },
     {
       "name": "comment",
@@ -70,12 +70,17 @@
     {
       "name": "support.function",
       "scope": "support.function",
-      "foreground": "#f2f2f2"
+      "foreground": "#f7fafc"
     },
     {
       "name": "support.function.require",
       "scope": "support.function.require",
       "foreground": "#e88f76"
+    },
+    {
+      "name": "support.variable.property",
+      "scope": "support.variable.property",
+      "foreground": "#f7fafc"
     },
     {
       "name": "variable.parameter",
@@ -95,7 +100,7 @@
     {
       "name": "variable.other.private",
       "scope": "variable.other.private",
-      "foreground": "#b7c8d5"
+      "foreground": "#e7a5a6"
     },
     {
       "name": "variable.other.property",
@@ -165,22 +170,22 @@
     {
       "name": "meta.tag",
       "scope": "meta.tag",
-      "foreground": "#c5bd6c"
+      "foreground": "#9d9755"
     },
     {
       "name": "meta.tag.attributes",
       "scope": "meta.tag.attributes",
-      "foreground": "#f9ef9b"
+      "foreground": "#e9e19b"
     },
     {
       "name": "entity.name.tag",
       "scope": "entity.name.tag",
-      "foreground": "#f9ef9b"
+      "foreground": "#e9e19b"
     },
     {
       "name": "meta.selector",
       "scope": "meta.selector",
-      "foreground": "#f9ef9b"
+      "foreground": "#e9e19b"
     },
     {
       "name": "support.class",
@@ -250,6 +255,11 @@
     {
       "name": "punctuation.accessor",
       "scope": "punctuation.accessor",
+      "foreground": "#e88f76"
+    },
+    {
+      "name": "punctuation.definition.parameters",
+      "scope": "punctuation.definition.parameters",
       "foreground": "#e88f76"
     }
   ]

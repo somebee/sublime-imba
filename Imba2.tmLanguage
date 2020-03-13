@@ -523,11 +523,11 @@
               </dict>
             </array>
             <key>end</key>
-            <string>(?=[\.\[\&gt;\s])</string>
+            <string>(?=[\.\[\&gt;\s]|$)</string>
           </dict>
         </array>
         <key>end</key>
-        <string>(?=[\[\&gt;])</string>
+        <string>(?=[\[\&gt;\s])</string>
         <key>contentName</key>
         <string>entity.other.tag.event</string>
       </dict>
@@ -3825,25 +3825,76 @@
       </dict>
       <key>annotated-assignment</key>
       <dict>
-        <key>name</key>
-        <string>meta.assignment</string>
-        <key>begin</key>
-        <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))\b([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(?=\\)\s*</string>
-        <key>beginCaptures</key>
-        <dict>
-          <key>1</key>
-          <dict>
-            <key>name</key>
-            <string>variable.other.readwrite.imba</string>
-          </dict>
-        </dict>
-        <key>end</key>
-        <string>(?=\=)</string>
         <key>patterns</key>
         <array>
           <dict>
-            <key>include</key>
-            <string>#type-annotation</string>
+            <key>name</key>
+            <string>meta.assignment</string>
+            <key>begin</key>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(\$[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(?=\\)\s*</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.internal.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>(?=\=)</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#type-annotation</string>
+              </dict>
+            </array>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>meta.assignment</string>
+            <key>begin</key>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(\#[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(?=\\)\s*</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.private.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>(?=\=)</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#type-annotation</string>
+              </dict>
+            </array>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>meta.assignment</string>
+            <key>begin</key>
+            <string>(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))\b([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)(?=\\)\s*</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.readwrite.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>(?=\=)</string>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#type-annotation</string>
+              </dict>
+            </array>
           </dict>
         </array>
       </dict>

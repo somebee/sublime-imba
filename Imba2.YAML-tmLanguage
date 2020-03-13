@@ -308,9 +308,8 @@ repository:
       patterns:
       - include: '#tag-interpolated-parens'
       - include: '#tag-interpolated-content'
-      end: (?=[\.\[\>\s])
-
-    end: (?=[\[\>])
+      end: (?=[\.\[\>\s]|$)
+    end: (?=[\[\>\s])
     contentName: entity.other.tag.event
 
   tag-attr-name:
@@ -1234,15 +1233,29 @@ repository:
         patterns:
         - include: '#type'
 
-  # 
   annotated-assignment:
-    name: meta.assignment
-    begin: '{{startOfIdentifier}}\b({{identifier}})(?=\\)\s*'
-    beginCaptures:
-      '1': { name: variable.other.readwrite.imba }
-    end: (?=\=)
     patterns:
-      - include: '#type-annotation'
+    - name: meta.assignment
+      begin: '{{startOfIdentifier}}({{internalIdentifier}})(?=\\)\s*'
+      beginCaptures:
+        '1': { name: variable.other.internal.imba }
+      end: (?=\=)
+      patterns:
+        - include: '#type-annotation'
+    - name: meta.assignment
+      begin: '{{startOfIdentifier}}({{privateIdentifier}})(?=\\)\s*'
+      beginCaptures:
+        '1': { name: variable.other.private.imba }
+      end: (?=\=)
+      patterns:
+        - include: '#type-annotation'
+    - name: meta.assignment
+      begin: '{{startOfIdentifier}}\b({{identifier}})(?=\\)\s*'
+      beginCaptures:
+        '1': { name: variable.other.readwrite.imba }
+      end: (?=\=)
+      patterns:
+        - include: '#type-annotation'
 
 
   #import and export

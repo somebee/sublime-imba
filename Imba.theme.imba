@@ -101,7 +101,7 @@ def darken color, amount = 0.2
 def mix color, other, amount = 0.5
 	chroma.mix(color,other,amount).hex()
 
-colors.base = "#f2f2f2"
+colors.base = "#e3e3e3" # f2f2f2
 colors.identifier = "#f0f0f0" # cbd0c3 #F8F8F8 #8bc3dc
 colors.variable = "#e5ecc7" # cbd0c3 #F8F8F8
 colors.comment = "#718096"
@@ -118,7 +118,8 @@ colors.special = dim(colors.yellow300,0) # dim(colors.yellow300,0.5)
 colors.private = dim(colors.yellow200,0.5) # dim(colors.yellow300,0.5)
 colors.ivar = dim(colors.blue300,0.3)
 colors.internal = colors.identifier #  dim(colors.blue300,0.5)
-colors.private = dim(colors.blue300,1) # dim(colors.yellow300,0.5)
+colors.private = "#e7a5a6" # dim(colors.yellow300,0.5)
+colors.accessor = colors.gray100
 
 colors.pascal = "#c5badc" # darken(colors.purple300,0.2)
 colors.imports = colors.pascal # darken(colors.purple300,0.2)
@@ -128,14 +129,14 @@ colors.regexp = colors.orange400
 
 colors.event-modifier = "#f99d72"
 
-colors.tag = dim(colors.yellow300,0.5)
+colors.tag = "#e9e19b" # dim(colors.yellow300,0.5)
 colors.type = colors.comment # "#a0aec0" // mix(colors.purple400,colors.blue400) // dim(colors.purple400,2)
 
 export var globals = {
 	activeGuide: '#3b5567'
 	background: '#111111'
 	caret: '#A7A7A7'
-	foreground: '#F8F8F8'
+	foreground: colors.base
 	guide: '#202e37'
 	invisibles: '#CAE2FB2B'
 	// lineHighlight: '#FFFFFF1C'
@@ -160,8 +161,9 @@ export var scopes = [
 	['entity.name.type',colors.prop]
 	['invalid.whitespace',background: colors.red400]
 	
-	['support.function',colors.base]
+	['support.function',colors.accessor]
 	['support.function.require',colors.keyword]
+	['support.variable.property',colors.accessor]
 	
 	['variable.parameter',colors.parameter]
 	['variable.special',colors.special]
@@ -170,7 +172,7 @@ export var scopes = [
 	# ['variable.other.instance',colors.ivar]
 	# ['variable.other.internal',colors.internal]
 	['variable.other.private',colors.private]
-	['variable.other.property',colors.gray100]
+	['variable.other.property',colors.accessor]
 	['variable.other.class',colors.imports]
 	['variable.other.constant',colors.imports]
 
@@ -187,7 +189,7 @@ export var scopes = [
 	
 	['meta.object-literal.key',colors.prop]
 	
-	['meta.tag',darken(colors.tag,1)]
+	['meta.tag',darken(colors.tag,1.5)]
 	['meta.tag.attributes',darken(colors.tag,0)]
 	['entity.name.tag',colors.tag]
 	
@@ -214,6 +216,7 @@ export var scopes = [
 	['keyword.operator.type',colors.type]
 	['keyword.operator.type.annotation',darken(colors.type,1.5)]
 	['punctuation.accessor',colors.keyword]
+	['punctuation.definition.parameters',colors.keyword]
 	
 	
 	// ['meta.tagtree string.quoted',colors.string]
