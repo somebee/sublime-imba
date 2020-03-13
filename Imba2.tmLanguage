@@ -49,6 +49,10 @@
           </dict>
           <dict>
             <key>include</key>
+            <string>#tag-tree</string>
+          </dict>
+          <dict>
+            <key>include</key>
             <string>#declaration</string>
           </dict>
           <dict>
@@ -62,10 +66,6 @@
           <dict>
             <key>include</key>
             <string>#decl-block</string>
-          </dict>
-          <dict>
-            <key>include</key>
-            <string>#tag-tree</string>
           </dict>
           <dict>
             <key>include</key>
@@ -641,10 +641,6 @@
           <dict>
             <key>include</key>
             <string>#expression-operators</string>
-          </dict>
-          <dict>
-            <key>include</key>
-            <string>#function-call</string>
           </dict>
           <dict>
             <key>include</key>
@@ -2387,10 +2383,15 @@
             <key>name</key>
             <string>meta.function.head</string>
             <key>begin</key>
-            <string>(?&lt;=def|get|set)\s([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)</string>
+            <string>(?&lt;=def|get|set)\s([_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)((\.)[_$[:alpha:]][_$[:alnum:]]*(?:\-[_$[:alnum:]]+)*[\?\!]?)?</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>meta.definition.function.imba entity.name.function.imba</string>
+              </dict>
+              <key>2</key>
               <dict>
                 <key>name</key>
                 <string>meta.definition.function.imba entity.name.function.imba</string>
@@ -3496,6 +3497,10 @@
       <dict>
         <key>patterns</key>
         <array>
+          <dict>
+            <key>include</key>
+            <string>#tag-tree</string>
+          </dict>
           <dict>
             <key>include</key>
             <string>#method-declaration</string>

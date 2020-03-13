@@ -152,11 +152,11 @@ repository:
   statements:
     patterns:
     - include: '#invalid-indentation'
+    - include: '#tag-tree'
     - include: '#declaration'
     - include: '#control-statement'
     - include: '#after-operator-block-as-object-literal'
     - include: '#decl-block'
-    - include: '#tag-tree'
     - include: '#expression'
     - include: '#punctuation-semicolon'
     - include: '#string'
@@ -352,7 +352,7 @@ repository:
     - include: '#instanceof-expr'
     - include: '#object-literal'
     - include: '#expression-operators'
-    - include: '#function-call'
+    # - include: '#function-call'
     - include: '#literal'
     - include: '#support-objects'
     - include: '#paren-expression'
@@ -794,9 +794,10 @@ repository:
     patterns:
     - name: meta.function.head
       # begin: '{{startOfDeclaration}}(?:(static)\s+)?(def|set|get)\b(?:\s*(\*))?(?:(?:\s+|(?<=\*))({{identifier}}))?\s*'
-      begin: '(?<=def|get|set)\s({{identifier}})'
+      begin: '(?<=def|get|set)\s({{identifier}})((\.){{identifier}})?'
       beginCaptures:
         '1': { name: meta.definition.function.imba entity.name.function.imba }
+        '2': { name: meta.definition.function.imba entity.name.function.imba }
       end: (?=$)|(?=do\s)
       patterns:
       - include: '#function-parameters-body'
@@ -1131,6 +1132,7 @@ repository:
 
   class-or-tag-body:
     patterns:
+    - include: '#tag-tree'
     - include: '#method-declaration'
     - include: '#indexer-declaration'
     - include: '#field-declaration'

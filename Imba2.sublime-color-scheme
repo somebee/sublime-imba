@@ -90,22 +90,7 @@
     {
       "name": "variable.other",
       "scope": "variable.other",
-      "foreground": "#f0f0f0"
-    },
-    {
-      "name": "variable.other.object",
-      "scope": "variable.other.object",
-      "foreground": "#f0f0f0"
-    },
-    {
-      "name": "variable.other.instance",
-      "scope": "variable.other.instance",
       "foreground": "#9dcbeb"
-    },
-    {
-      "name": "variable.other.internal",
-      "scope": "variable.other.internal",
-      "foreground": "#f0f0f0"
     },
     {
       "name": "variable.other.private",
