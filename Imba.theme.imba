@@ -109,7 +109,7 @@ colors.comment = "#718096"
 colors.prop = "#8ab9ff" # colors.blue300 # dim(colors.blue300,-0.1)
 colors.keyword = dim(colors.red500,0.8)
 colors.keyword = mix(colors.red400,colors.orange400,0.5)
-colors.keyword = "#e88f76"
+colors.keyword = "#e88376" # "#e88f76"
 
 colors.parameter = colors.variable # "#cad7eb" # "#eae0ce"
 
@@ -375,6 +375,7 @@ export var scopes = [
 	['keyword.operator.type.annotation',darken(colors.type,1.5)]
 	['punctuation.accessor',colors.keyword]
 	['punctuation.definition.parameters',colors.keyword]
+	['punctuation.definition.comment',colors.gray600,'italic']
 	
 	
 	// ['meta.tagtree string.quoted',colors.string]

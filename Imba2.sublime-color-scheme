@@ -25,12 +25,12 @@
     {
       "name": "keyword",
       "scope": "keyword",
-      "foreground": "#e88f76"
+      "foreground": "#e88376"
     },
     {
       "name": "storage",
       "scope": "storage",
-      "foreground": "#e88f76"
+      "foreground": "#e88376"
     },
     {
       "name": "constant.numeric",
@@ -55,7 +55,7 @@
     {
       "name": "constant.language.super",
       "scope": "constant.language.super",
-      "foreground": "#e88f76"
+      "foreground": "#e88376"
     },
     {
       "name": "entity.name.type",
@@ -75,7 +75,7 @@
     {
       "name": "support.function.require",
       "scope": "support.function.require",
-      "foreground": "#e88f76"
+      "foreground": "#e88376"
     },
     {
       "name": "support.variable.property",
@@ -120,7 +120,7 @@
     {
       "name": "variable.language.super",
       "scope": "variable.language.super",
-      "foreground": "#e88f76"
+      "foreground": "#e88376"
     },
     {
       "name": "variable.language.this",
@@ -255,12 +255,18 @@
     {
       "name": "punctuation.accessor",
       "scope": "punctuation.accessor",
-      "foreground": "#e88f76"
+      "foreground": "#e88376"
     },
     {
       "name": "punctuation.definition.parameters",
       "scope": "punctuation.definition.parameters",
-      "foreground": "#e88f76"
+      "foreground": "#e88376"
+    },
+    {
+      "name": "punctuation.definition.comment",
+      "scope": "punctuation.definition.comment",
+      "foreground": "#718096",
+      "font_style": "italic"
     }
   ]
 }

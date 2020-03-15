@@ -6037,7 +6037,7 @@
             <key>name</key>
             <string>keyword.operator.logical.imba</string>
             <key>match</key>
-            <string>\!|&amp;&amp;|\|\||\?\?|or|and</string>
+            <string>\!|&amp;&amp;|\|\||\?\?|or\b(?=\s|$)|and\b(?=\s|$)</string>
           </dict>
           <dict>
             <key>name</key>
@@ -9075,12 +9075,12 @@
               <key>2</key>
               <dict>
                 <key>name</key>
-                <string>storage.type.css.imba</string>
+                <string>comment.line.imba</string>
               </dict>
               <key>3</key>
               <dict>
                 <key>name</key>
-                <string>storage.type.css.imba</string>
+                <string>comment.line.imba</string>
               </dict>
             </dict>
             <key>end</key>

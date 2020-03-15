@@ -1889,7 +1889,7 @@ repository:
         '1': { name: keyword.operator.logical.imba }
         '2': { name: keyword.operator.arithmetic.imba }
     - name: keyword.operator.logical.imba
-      match: \!|&&|\|\||\?\?|or|and
+      match: \!|&&|\|\||\?\?|or\b(?=\s|$)|and\b(?=\s|$)
     - name: keyword.operator.bitwise.imba
       match: \&|~|\^|\|
     - name: keyword.operator.assignment.imba
@@ -3008,8 +3008,8 @@ repository:
       begin: (###)\s(css)(?:\s+(scoped))?
       beginCaptures:
         '1': { name: punctuation.definition.comment.imba }
-        '2': { name: storage.type.css.imba }
-        '3': { name: storage.type.css.imba }
+        '2': { name: comment.line.imba }
+        '3': { name: comment.line.imba }
       end: '###(?:[ \t]*\n)'
       contentName: meta.embedded.block.css
       endCaptures:
