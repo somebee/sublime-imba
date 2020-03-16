@@ -252,7 +252,7 @@
             <key>name</key>
             <string>meta.tagtree.imba</string>
             <key>begin</key>
-            <string>^(\s*)(?=\&lt;[\w\{\[])</string>
+            <string>^(\s*)(?=\&lt;[\w\{\[\.\#\$])</string>
             <key>end</key>
             <string>^(?!(\1\s+|\s*$))</string>
             <key>patterns</key>
@@ -277,7 +277,7 @@
             <key>name</key>
             <string>meta.tag.imba</string>
             <key>begin</key>
-            <string>(&lt;)(?=[\w\{\[])</string>
+            <string>(&lt;)(?=[\w\{\[\.\#\$])</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -349,7 +349,7 @@
       <key>tag-expr-name</key>
       <dict>
         <key>begin</key>
-        <string>(?&lt;=&lt;)</string>
+        <string>(?&lt;=&lt;)(?=[\w\{])</string>
         <key>contentName</key>
         <string>entity.name.tag.imba</string>
         <key>end</key>
@@ -9102,6 +9102,30 @@
                 <string>source.css</string>
               </dict>
             </array>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>comment.block.imba</string>
+            <key>begin</key>
+            <string>(###)</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.comment.imba</string>
+              </dict>
+            </dict>
+            <key>end</key>
+            <string>###(?:[ \t]*\n)</string>
+            <key>endCaptures</key>
+            <dict>
+              <key>0</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.comment.imba</string>
+              </dict>
+            </dict>
           </dict>
           <dict>
             <key>begin</key>

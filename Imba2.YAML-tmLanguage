@@ -215,7 +215,7 @@ repository:
   tag-tree:
     patterns:
     - name: meta.tagtree.imba
-      begin: '^(\s*)(?=\<[\w\{\[])'
+      begin: '^(\s*)(?=\<[\w\{\[\.\#\$])'
       end: ^(?!(\1\s+|\s*$))
       patterns:
       - include: '#tag-instance'
@@ -224,7 +224,7 @@ repository:
   tag-instance:
     patterns:
     - name: meta.tag.imba
-      begin: '(<)(?=[\w\{\[])'
+      begin: '(<)(?=[\w\{\[\.\#\$])'
       beginCaptures:
         '1': { name: punctuation.section.tag.open.imba }
       end: '(>)'
@@ -246,7 +246,7 @@ repository:
       - include: '#tag-attr-name'
 
   tag-expr-name:
-    begin: '(?<=<)'
+    begin: '(?<=<)(?=[\w\{])'
     contentName: entity.name.tag.imba
     end: '(?=[\.\[\>\s\(])'
     patterns:
@@ -3016,7 +3016,14 @@ repository:
         '0': { name: punctuation.definition.comment.imba }
       patterns:
       - include: 'source.css'
-
+    - name: comment.block.imba
+      begin: (###)
+      beginCaptures:
+        '1': { name: punctuation.definition.comment.imba }
+      end: '###(?:[ \t]*\n)'
+      endCaptures:
+        '0': { name: punctuation.definition.comment.imba }
+        
     - begin: (^[ \t]+)?((//|\#\s)(?:\s*((@)internal)(?=\s|$))?)
       beginCaptures:
         '1': { name: punctuation.whitespace.comment.leading.imba }
