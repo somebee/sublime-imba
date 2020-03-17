@@ -16,7 +16,7 @@ variables:
   symbolIdentifier: '\:{{identifier}}'
   instanceIdentifier: '\@{{identifier}}'
   privateIdentifier: '\#{{identifier}}'
-  tagTypeIdentifier: '\w+(?:\-\w+)*'
+  tagTypeIdentifier: '\w+(?:\-\w+)*(?:\:\w+(?:\-\w+)*)*'
   tagAttrIdentifier: '[\w$_]+(?:\-[\w$_]+)*'
   constantIdentifier: '[[:upper:]][_$[:digit:][:upper:]]*'
   propertyIdentifier: '\#?{{identifier}}'
@@ -969,7 +969,7 @@ repository:
       begin: (?<=do)\s?\|
       beginCaptures:
         '0': { name: punctuation.definition.parameters.begin.imba }
-      end: \|
+      end: (\||$)
       endCaptures:
         '0': { name: punctuation.definition.parameters.end.imba }
       patterns:
@@ -2820,10 +2820,9 @@ repository:
     begin: '"'
     beginCaptures:
       '0': { name: punctuation.definition.string.begin.imba }
-    end: '(")|((?:[^\\\n])$)'
+    end: '"'
     endCaptures:
-      '1': { name: punctuation.definition.string.end.imba }
-      '2': { name: invalid.illegal.newline.imba }
+      '0': { name: punctuation.definition.string.end.imba }
     patterns:
     - include: '#template-substitution-element'
     - include: '#string-character-escape'

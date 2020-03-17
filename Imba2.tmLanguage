@@ -2959,7 +2959,7 @@
               </dict>
             </dict>
             <key>end</key>
-            <string>\|</string>
+            <string>(\||$)</string>
             <key>endCaptures</key>
             <dict>
               <key>0</key>
@@ -3026,7 +3026,7 @@
             <key>name</key>
             <string>meta.class.imba</string>
             <key>begin</key>
-            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(tag)\s+(\w+(?:\-\w+)*)\s+(\&lt;)\s+(\w+(?:\-\w+)*)</string>
+            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?\b(tag)\s+(\w+(?:\-\w+)*(?:\:\w+(?:\-\w+)*)*)\s+(\&lt;)\s+(\w+(?:\-\w+)*(?:\:\w+(?:\-\w+)*)*)</string>
             <key>beginCaptures</key>
             <dict>
               <key>2</key>
@@ -3069,7 +3069,7 @@
             <key>name</key>
             <string>meta.class.imba</string>
             <key>begin</key>
-            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?(?:(extend)\s+)?\b(tag)\s+(\w+(?:\-\w+)*)</string>
+            <string>(\t*)(?&lt;![_$[:alnum:]])(?:(?&lt;=\.\.\.)|(?&lt;!\.))(?:(\bexport)\s+)?(?:(extend)\s+)?\b(tag)\s+(\w+(?:\-\w+)*(?:\:\w+(?:\-\w+)*)*)</string>
             <key>beginCaptures</key>
             <dict>
               <key>2</key>
@@ -8459,18 +8459,13 @@
           </dict>
         </dict>
         <key>end</key>
-        <string>(")|((?:[^\\\n])$)</string>
+        <string>"</string>
         <key>endCaptures</key>
         <dict>
-          <key>1</key>
+          <key>0</key>
           <dict>
             <key>name</key>
             <string>punctuation.definition.string.end.imba</string>
-          </dict>
-          <key>2</key>
-          <dict>
-            <key>name</key>
-            <string>invalid.illegal.newline.imba</string>
           </dict>
         </dict>
         <key>patterns</key>
