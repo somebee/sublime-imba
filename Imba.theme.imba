@@ -253,57 +253,71 @@ export var vstheme = {
 	"titleBar.inactiveForeground": "#6b717d"
 	
 	# customizations
-	"activityBar.background": colors.background
-	"activityBar.border": colors.bgdark
-	"titleBar.activeBackground": colors.background
-	"sideBarSectionHeader.background": colors.background
-	"editorLineNumber.activeForeground": colors.base
-	"editorGroupHeader.tabsBackground": colors.background
-	"editorIndentGuide.background": colors.bgdark
-	"sideBar.background": colors.background
-	"sideBar.border": colors.bgdark
-	"widget.shadow": "#ffffff00"
-	"tab.inactiveBackground": colors.background
-	"tab.border": colors.bgdark
-	"tab.border": colors.bgdark
-	"editorGroupHeader.tabsBorder": colors.bgdark
-	
-	"scrollbar.shadow": "#21252b",
 	"activityBar.background": "#252930",
+	"editor.rangeHighlightBorder": "#40577a",
+	"editor.selectionHighlightBorder": "#21252b",
+	"editor.symbolHighlightBorder": "#21252b",
 	"editorBracketMatch.background": "#21252b",
 	"editorBracketMatch.border": "#21252b",
-	"editor.selectionHighlightBorder": "#21252b",
-	"editor.rangeHighlightBorder": "#40577a",
-	"editor.symbolHighlightBorder": "#21252b",
-	"menu.background": "#21252b",
-	"titleBar.border": "#252930",
-	"titleBar.activeBackground": "#252930",
-	"panel.border": "#1d2227",
-	"editorLineNumber.activeForeground": "#9bb5dd",
-	"tree.indentGuidesStroke": "#21252bcc",
-	"editorIndentGuide.background": "#00000011",
-	"editorIndentGuide.activeBackground": "#0000002f",
-	"quickInput.background": "#282c34",
-	"widget.shadow": "#0000007c",
-	"focusBorder": "#ff000000",
-	"editorWhitespace.foreground": "#ffffff0e",
-	"editorGroupHeader.tabsBackground": "#252930",
-	"tab.activeBackground": "#282c34",
-	"tab.inactiveBackground": "#252930",
-	"tab.activeBorder": "#00000000",
-	"tab.inactiveForeground": "#d0e0ff65",
-	"editorGroupHeader.tabsBorder": "#ff000000",
-	"sideBar.background": "#252930",
-	"sideBarSectionHeader.background": "#ff000000",
-	"sideBar.foreground": "#788296",
-	"editorWidget.border": "#788296",
-	"gitDecoration.modifiedResourceForeground": "#9ea38a",
-	"gitDecoration.addedResourceForeground": "#8aa395",
-	"gitDecoration.untrackedResourceForeground": "#94a38a",
 	"editorError.foreground":"#ff8f8f",
+	"editorGroupHeader.tabsBackground": "#252930",
+	"editorGroupHeader.tabsBorder": "#21252b",
+	"editorIndentGuide.activeBackground": "#0000002f",
+	"editorIndentGuide.background": "#00000011",
+	"editorLineNumber.activeForeground": "#9bb5dd",
 	"editorOverviewRuler.errorForeground": "#f36161",
+	"editorWhitespace.foreground": "#ffffff0e",
+	"editorWidget.border": "#788296",
+	"editorGroup.border": "#21252b",
+	"tab.border": "#21252b",
+	"tab.activeBorderTop": "#21252b",
+	"focusBorder": "#ff000000",
+	"gitDecoration.addedResourceForeground": "#8aa395",
+	"gitDecoration.modifiedResourceForeground": "#9ea38a",
+	"gitDecoration.untrackedResourceForeground": "#94a38a",
 	"input.background": "#20242b",
-	"input.placeholderForeground": "#4c5668"
+	"input.placeholderForeground": "#4c5668",
+	"list.activeSelectionForeground": "#ffffff",
+	"menu.background": "#21252b",
+	"panel.border": "#1d2227",
+	"quickInput.background": "#282c34",
+	"scrollbar.shadow": "#21252b",
+	"sideBar.background": "#252930",
+	"sideBar.border": "#21252b",
+	"sideBar.foreground": "#788296",
+	"sideBarSectionHeader.background": "#ff000000",
+	"tab.activeBackground": "#282c34",
+	"tab.activeBorder": "#21252b",
+	"tab.inactiveBackground": "#252930",
+	"tab.inactiveForeground": "#d0e0ff65",
+	"titleBar.activeBackground": "#252930",
+	"titleBar.border": "#252930",
+	"tree.indentGuidesStroke": "#21252bcc",
+	"widget.shadow": "#0000007c",
+	"statusBar.background": "#252930",
+	"statusBar.border": "#21252b",
+	"panelTitle.inactiveForeground":"#788296",
+	"panelTitle.activeBorder":"#ffffff",
+	"panel.background": "#252930",
+	"terminal.ansiBlack": "#2d3139",
+	"terminal.ansiBlue": "#6bbcff",
+	"terminal.ansiBrightBlack": "#7f848e",
+	"terminal.ansiBrightBlue": "#6a9bff",
+	"terminal.ansiBrightCyan": "#70ccd8",
+	"terminal.ansiBrightGreen": "#cbf8ab",
+	"terminal.ansiBrightMagenta": "#d88ce7",
+	"terminal.ansiBrightRed": "#f44747",
+	"terminal.ansiBrightWhite": "#d7dae0",
+	"terminal.ansiBrightYellow": "#ffe2ac",
+	"terminal.ansiCyan": "#56b6c2",
+	"terminal.ansiGreen": "#98c379",
+	"terminal.ansiMagenta": "#c678dd",
+	"terminal.ansiRed": "#e06c75",
+	"terminal.ansiWhite": "#dbdfe7",
+	"terminal.ansiYellow": "#e5c07b",
+	"terminal.foreground": "#c8c8c8",
+	"sideBarSectionHeader.foreground": "#ffffff",
+	"sideBarSectionHeader.border": "#21252b"
 }
 
 export var scopes = [

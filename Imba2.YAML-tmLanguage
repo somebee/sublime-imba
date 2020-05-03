@@ -215,7 +215,7 @@ repository:
   tag-tree:
     patterns:
     - name: meta.tagtree.imba
-      begin: '^(\s*)(?=\<[\w\{\[\.\#\$])'
+      begin: '^(\s*)(?=\<[\w\{\[\.\#\$\@])'
       end: ^(?!(\1\s+|\s*$))
       patterns:
       - include: '#tag-instance'
@@ -224,7 +224,7 @@ repository:
   tag-instance:
     patterns:
     - name: meta.tag.imba
-      begin: '(<)(?=[\w\{\[\.\#\$])'
+      begin: '(<)(?=[\w\{\[\.\#\$\@])'
       beginCaptures:
         '1': { name: punctuation.section.tag.open.imba }
       end: '(>)'
@@ -242,6 +242,7 @@ repository:
       - include: '#tag-interpolated-brackets'
       - include: '#tag-event-handler'
       - include: '#tag-classname'
+      - include: '#tag-ref'
       - include: '#tag-attr-value'
       - include: '#tag-attr-name'
 
@@ -295,12 +296,17 @@ repository:
     end: (?=[\.\[\>\s\(\=])
     contentName: entity.other.attribute-name.class.css
 
+  tag-ref:
+    match: (\@{{identifier}})
+    name: entity.other.attribute-name.reference.css
+
   tag-event-handler:
     begin: (?=\:)
     beginCaptures:
       '0': { name: punctuation.section.tag }
     patterns:
     - include: '#tag-interpolated-content'
+    - include: '#tag-interpolated-parens'
     - name: entity.other.tag.event-modifier
       begin: \.
       beginCaptures:
@@ -364,7 +370,7 @@ repository:
 
   decorator:
     name: meta.decorator.imba
-    begin: '{{startOfIdentifier}}\@\@'
+    begin: '{{startOfIdentifier}}\@'
     beginCaptures:
       '0': { name: punctuation.decorator.imba }
     end: (?=\s)
@@ -738,7 +744,7 @@ repository:
 
   field-declaration:
     name: meta.field.declaration.imba
-    begin: (?x)(?<!\()(?:{{startOfIdentifier}}(readonly|prop|attr)\s+)?(?=\s*{{propertyNameWithPrivate}}\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|\}|\\|$|\s\#\s|\s\/\/))
+    begin: (?x)(?<!\()(?:{{startOfIdentifier}}(readonly|prop|attr)\s+)?(?=\s*{{propertyNameWithPrivate}}\s*(=|:|;|,|\}|\\|$|\s\#\s|\s\/\/))
     beginCaptures:
       '1': { name: storage.modifier.imba }
     end: (?x)(?=\}|\/\/|\#\s|;|,|$|(^(?!\s*{{propertyNameWithPrivate}}\s*(?:(?:(\?)|(\!))\s*)?(=|:|;|,|$))))|(?<=\})
@@ -784,7 +790,7 @@ repository:
   #functions, methods, function expressions, arrows, indexers
   function-declaration:
     name: meta.function.imba
-    begin: ^(\t*)(?:(export)\s+)?(?:(static)\s+)?(def|get|set)(?=\s{{identifier}})
+    begin: ^(\t*)(?:(export)\s+)?(?:(static)\s+)?(def|get|set)(?=\s\@?{{identifier}})
     beginCaptures:
         '2': { name: keyword.control.export.imba }
         '3': { name: storage.modifier.imba }
@@ -793,7 +799,7 @@ repository:
     patterns:
     - name: meta.function.head
       # begin: '{{startOfDeclaration}}(?:(static)\s+)?(def|set|get)\b(?:\s*(\*))?(?:(?:\s+|(?<=\*))({{identifier}}))?\s*'
-      begin: '(?<=def|get|set)\s({{identifier}})((\.){{identifier}})?'
+      begin: '(?<=def|get|set)\s(\@?{{identifier}})((\.){{identifier}})?'
       beginCaptures:
         '1': { name: meta.definition.function.imba entity.name.function.imba }
         '2': { name: meta.definition.function.imba entity.name.function.imba }
@@ -2877,7 +2883,7 @@ repository:
 
   template-substitution-element:
     name: meta.template.expression.imba
-    begin: \{
+    begin: (?<!\\)\{
     beginCaptures:
       '0': { name: punctuation.definition.template-expression.begin.imba }
     end: \}
