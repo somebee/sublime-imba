@@ -17,6 +17,8 @@ else:
 
 
 
+debug = False
+
 def getviewcwd(view):
     default = '/' ## What to return if nothing else found
     cwd     = view.file_name() ## Try to get the current view's filename
