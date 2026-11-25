@@ -6,7 +6,7 @@ import subprocess
 import threading
 import _thread as thread
 from time import time, sleep
-from distutils.spawn import find_executable
+from shutil import which
 
 
 
@@ -263,7 +263,7 @@ def get_annotations_for_file(path):
 	start = time()
 	args = ['imba','analyze',path]
 
-	executable = find_executable("imbac", path="/usr/local/bin:$PATH")
+	executable = which("imbac", path=os.pathsep.join(["/usr/local/bin", os.environ.get("PATH", "")]))
 
 	if executable:
 		args = ['imbac','--analyze','--print',path]
